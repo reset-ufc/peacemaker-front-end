@@ -1,0 +1,13 @@
+services:
+  nextjs-boilerplate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
+        NEXT_PUBLIC_VERCEL_REVALIDATE_TIME: ${NEXT_PUBLIC_VERCEL_REVALIDATE_TIME}
+        NEXT_PUBLIC_STATIC_EXPORT: ${NEXT_PUBLIC_STATIC_EXPORT}
+    env_file:
+      - ".env"
+    ports:
+      - "3001:3000"
