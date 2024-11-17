@@ -46,7 +46,8 @@ export default function ModerationsFlagsChart({
       <CardHeader className="items-center pb-4">
         <CardTitle>Moderations Flags</CardTitle>
         <CardDescription>
-         Moderations are actions taken by moderators to flag inappropriate content.
+          Moderations are actions taken by moderators to flag inappropriate
+          content.
         </CardDescription>
       </CardHeader>
 
