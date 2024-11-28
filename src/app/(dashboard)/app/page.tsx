@@ -9,6 +9,7 @@ import { DateRangeFilter } from "@/components/elements/common/DateRangeFilter";
 import ModerationsFlagsChart from "@/components/elements/layout/ModerationsFlagsChart";
 import { QuickInsightsInfos } from "@/components/elements/layout/QuickInsightsInfos";
 import { parseAsString, useQueryState } from "nuqs";
+import { TypeModerationAcceptedGraph } from "@/components/elements/layout/TypeModerationAcceptedGraph";
 
 export default function AppPage() {
   const [dateRange, setDateRange] = useQueryState(
@@ -16,7 +17,7 @@ export default function AppPage() {
     parseAsString.withDefault("30d").withOptions({
       clearOnDefault: true,
       shallow: true,
-    }),
+    })
   );
 
   return (
@@ -36,13 +37,17 @@ export default function AppPage() {
           <RecentFlaggedCommentsTable className="lg:col-span-3 col-span-5" />
         </div>
         {/* Bottom Section */}
-        <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-8">
+        <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
           <ModerationsFlagsChart className="md:col-span-3 col-span-2" />
-
           {/* Moderation Types Distribution */}
           <ModerationActionsChart className="md:col-span-3 col-span-2" />
           {/* Quick Insights */}
           <QuickInsightsInfos className="col-span-2" />
+          {/* Type Moderation Accepted Graph */}
+          <TypeModerationAcceptedGraph className="col-span-2" />
+          {/* Novos gráficos */}
+          {/* <GraphTwo className="md:col-span-3 col-span-2" />
+          <GraphTree className="md:col-span-3 col-span-2" />'{" "} */}
         </div>
       </div>
     </main>

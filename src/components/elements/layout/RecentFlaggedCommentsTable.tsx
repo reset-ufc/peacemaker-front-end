@@ -18,8 +18,12 @@ import { cn } from "@/lib/utils";
 import { ArrowUpRightIcon } from "lucide-react";
 
 export function RecentFlaggedCommentsTable({
+  users,
   className,
-}: { className?: string }) {
+}: {
+  users: { username: string; last_comment_date: string }[];
+  className?: string;
+}) {
   return (
     <Card className={cn("shadow-none rounded-lg", className)}>
       <CardHeader>
@@ -65,7 +69,7 @@ export function RecentFlaggedCommentsTable({
                       severity === "medium" &&
                         "bg-amber-500 hover:bg-amber-600/90",
                       severity === "low" &&
-                        "bg-emerald-600 hover:bg-emerald-500/90",
+                        "bg-emerald-600 hover:bg-emerald-500/90"
                     )}
                   >
                     {severity}
