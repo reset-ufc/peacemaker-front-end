@@ -44,7 +44,7 @@ export default function AppPage() {
           {/* Quick Insights */}
           <QuickInsightsInfos className="col-span-2" />
           {/* Type Moderation Accepted Graph */}
-          <TypeModerationAcceptedGraph className="col-span-2" />
+          <TypeModerationAcceptedGraph className="md:col-span-4 col-span-2" />
           {/* Novos gráficos */}
           {/* <GraphTwo className="md:col-span-3 col-span-2" />
           <GraphTree className="md:col-span-3 col-span-2" />'{" "} */}

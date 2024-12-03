@@ -25,24 +25,23 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
+  { classification: "positive", type: 120 },
+  { classification: "neutral", type: 80 },
+  { classification: "negative", type: 60 },
+  { classification: "question", type: 30 },
+  { classification: "suggestion", type: 20 },
+  { classification: "clarification", type: 15 },
+  { classification: "correction", type: 10 },
+  { classification: "feedback", type: 8 },
+  { classification: "incivity", type: 7 },
 ];
 
-// Need to adjust the metrics
+// Need to adjust the graph size
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  type: {
+    label: "type",
     color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
   },
   label: {
     color: "hsl(var(--background))",
@@ -72,7 +71,7 @@ export function TypeModerationAcceptedGraph({
           >
             <CartesianGrid horizontal={false} />
             <YAxis
-              dataKey="month"
+              dataKey="classification"
               type="category"
               tickLine={false}
               tickMargin={10}
@@ -80,26 +79,26 @@ export function TypeModerationAcceptedGraph({
               tickFormatter={(value) => value.slice(0, 3)}
               hide
             />
-            <XAxis dataKey="desktop" type="number" hide />
+            <XAxis dataKey="type" type="number" hide />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
             <Bar
-              dataKey="desktop"
+              dataKey="type"
               layout="vertical"
-              fill="var(--color-desktop)"
+              fill="var(--color-type)"
               radius={4}
             >
               <LabelList
-                dataKey="month"
+                dataKey="classification"
                 position="insideLeft"
                 offset={8}
                 className="fill-[--color-label]"
                 fontSize={12}
               />
               <LabelList
-                dataKey="desktop"
+                dataKey="type"
                 position="right"
                 offset={8}
                 className="fill-foreground"
