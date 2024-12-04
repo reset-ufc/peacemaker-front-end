@@ -25,15 +25,10 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 const chartData = [
-  { classification: "positive", type: 120 },
-  { classification: "neutral", type: 80 },
-  { classification: "negative", type: 60 },
-  { classification: "question", type: 30 },
-  { classification: "suggestion", type: 20 },
-  { classification: "clarification", type: 15 },
-  { classification: "correction", type: 10 },
-  { classification: "feedback", type: 8 },
-  { classification: "incivity", type: 7 },
+  { moderation: "deleted", type: 5 },
+  { moderation: "edited", type: 10 },
+  { moderation: "flagged", type: 3 },
+  { moderation: "ignored", type: 2 },
 ];
 
 // Need to adjust the graph size
@@ -48,7 +43,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function TypeModerationAcceptedGraph({
+export function TypeModerationCountGraph({
   className,
 }: {
   className?: string;
@@ -57,7 +52,7 @@ export function TypeModerationAcceptedGraph({
     <Card>
       <CardHeader>
         <CardTitle>Bar Chart - Custom Label</CardTitle>
-        <CardDescription>Classification</CardDescription>
+        <CardDescription>Count Type</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -71,7 +66,7 @@ export function TypeModerationAcceptedGraph({
           >
             <CartesianGrid horizontal={false} />
             <YAxis
-              dataKey="classification"
+              dataKey="moderation"
               type="category"
               tickLine={false}
               tickMargin={10}
@@ -91,7 +86,7 @@ export function TypeModerationAcceptedGraph({
               radius={4}
             >
               <LabelList
-                dataKey="classification"
+                dataKey="moderation"
                 position="insideLeft"
                 offset={8}
                 className="fill-[--color-label]"
@@ -110,11 +105,10 @@ export function TypeModerationAcceptedGraph({
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Filtred by classification <TrendingUp className="h-4 w-4" />
+          Filtred by type moderation
+          <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total classification for the last month
-        </div>
+        <div className="leading-none text-muted-foreground">Showing total</div>
       </CardFooter>
     </Card>
   );

@@ -4,12 +4,14 @@ import { MetricsCards } from "@/components/elements/layout/MetricsCards";
 import { ModerationActionsChart } from "@/components/elements/layout/ModerationActionsChart";
 import { ModerationActivityGraph } from "@/components/elements/layout/ModerationActivityGraph";
 import { RecentFlaggedCommentsTable } from "@/components/elements/layout/RecentFlaggedCommentsTable";
+import { TypeModerationAcceptedGraph } from "@/components/elements/layout/TypeModerationAcceptedGraph";
+import { TypeModerationCountGraph } from "@/components/elements/layout/TypeModerationCountGraph";
+import { LikeDeslikeGraph } from "@/components/elements/layout/LikeDeslikeGraph";
 
 import { DateRangeFilter } from "@/components/elements/common/DateRangeFilter";
 import ModerationsFlagsChart from "@/components/elements/layout/ModerationsFlagsChart";
 import { QuickInsightsInfos } from "@/components/elements/layout/QuickInsightsInfos";
 import { parseAsString, useQueryState } from "nuqs";
-import { TypeModerationAcceptedGraph } from "@/components/elements/layout/TypeModerationAcceptedGraph";
 
 export default function AppPage() {
   const [dateRange, setDateRange] = useQueryState(
@@ -44,10 +46,11 @@ export default function AppPage() {
           {/* Quick Insights */}
           <QuickInsightsInfos className="col-span-2" />
           {/* Type Moderation Accepted Graph */}
-          <TypeModerationAcceptedGraph className="md:col-span-4 col-span-2" />
-          {/* Novos gráficos */}
-          {/* <GraphTwo className="md:col-span-3 col-span-2" />
-          <GraphTree className="md:col-span-3 col-span-2" />'{" "} */}
+            <TypeModerationAcceptedGraph className="span-2" />
+            {/* Novos gráficos */}
+            <TypeModerationCountGraph className="md:col-span-3 col-span-2" />
+            {/* <GraphTwo className="md:col-span-3 col-span-2" />*/}
+            <LikeDeslikeGraph className="md:col-span-3 col-span-2" />
         </div>
       </div>
     </main>
