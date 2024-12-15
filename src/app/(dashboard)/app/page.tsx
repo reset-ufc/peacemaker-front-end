@@ -6,9 +6,9 @@ import { ModerationActivityGraph } from "@/components/elements/layout/Moderation
 import { RecentFlaggedCommentsTable } from "@/components/elements/layout/RecentFlaggedCommentsTable";
 
 import { DateRangeFilter } from "@/components/elements/common/DateRangeFilter";
+import ModerationsFlagsChart from "@/components/elements/layout/ModerationsFlagsChart";
 import { QuickInsightsInfos } from "@/components/elements/layout/QuickInsightsInfos";
 import { parseAsString, useQueryState } from "nuqs";
-import ModerationsFlagsChart from "@/components/elements/layout/ModerationsFlagsChart";
 
 export default function AppPage() {
   const [dateRange, setDateRange] = useQueryState(
