@@ -19,11 +19,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from "@/components/ui/chart";
+import { cn } from "@/lib/utils";
 const chartData = [
   { moderation: "deleted", type: 5 },
   { moderation: "edited", type: 10 },
@@ -49,7 +50,7 @@ export function TypeModerationCountGraph({
   className?: string;
 }) {
   return (
-    <Card>
+    <Card className={cn("shadow-none rounded-lg", className)}>
       <CardHeader>
         <CardTitle>Bar Chart - Custom Label</CardTitle>
         <CardDescription>Count Type</CardDescription>

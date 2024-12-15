@@ -21,7 +21,7 @@ export function RecentFlaggedCommentsTable({
   users,
   className,
 }: {
-  users: { username: string; last_comment_date: string }[];
+  users: { username: string; severity: string; link: string }[];
   className?: string;
 }) {
   return (
@@ -42,25 +42,9 @@ export function RecentFlaggedCommentsTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[
-              {
-                user: "John Doe",
-                severity: "high",
-                link: "https://github.com/github/contributors/issues/91#issuecomment-2111250942",
-              },
-              {
-                user: "John Doe 2",
-                severity: "low",
-                link: "https://github.com/github/contributors/issues/91#issuecomment-2111250942",
-              },
-              {
-                user: "John Doe 3",
-                severity: "medium",
-                link: "https://github.com/github/contributors/issues/91#issuecomment-2111250942",
-              },
-            ].map(({ user, severity, link }) => (
-              <TableRow key={user}>
-                <TableCell className="font-medium">{user}</TableCell>
+            {users.map(({ username, severity, link }) => (
+              <TableRow key={username}>
+                <TableCell className="font-medium">{username}</TableCell>
                 <TableCell>
                   <Badge
                     className={cn(
@@ -69,7 +53,7 @@ export function RecentFlaggedCommentsTable({
                       severity === "medium" &&
                         "bg-amber-500 hover:bg-amber-600/90",
                       severity === "low" &&
-                        "bg-emerald-600 hover:bg-emerald-500/90"
+                        "bg-emerald-600 hover:bg-emerald-500/90",
                     )}
                   >
                     {severity}

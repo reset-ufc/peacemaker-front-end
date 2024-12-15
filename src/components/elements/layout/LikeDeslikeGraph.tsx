@@ -12,11 +12,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from "@/components/ui/chart";
+import { cn } from "@/lib/utils";
+
 const chartData = [
   { avaliation: "total_likes", visitors: 12 },
   { avaliation: "total_deslikes", visitors: 5 },
@@ -31,7 +33,7 @@ const chartConfig = {
 
 export function LikeDeslikeGraph({ className }: { className?: string }) {
   return (
-    <Card>
+    <Card className={cn("shadow-none rounded-lg", className)}>
       <CardHeader>
         <CardTitle>Bar Chart - Negative</CardTitle>
         <CardDescription>Like and Deslikes</CardDescription>

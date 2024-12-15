@@ -19,11 +19,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from "@/components/ui/chart";
+import { cn } from "@/lib/utils";
+
 const chartData = [
   { classification: "positive", type: 120 },
   { classification: "neutral", type: 80 },
@@ -35,8 +37,6 @@ const chartData = [
   { classification: "feedback", type: 8 },
   { classification: "incivity", type: 7 },
 ];
-
-// Need to adjust the graph size
 
 const chartConfig = {
   type: {
@@ -54,7 +54,7 @@ export function TypeModerationAcceptedGraph({
   className?: string;
 }) {
   return (
-    <Card>
+    <Card className={cn("shadow-none rounded-lg", className)}>
       <CardHeader>
         <CardTitle>Bar Chart - Custom Label</CardTitle>
         <CardDescription>Classification</CardDescription>
