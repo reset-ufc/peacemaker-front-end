@@ -7,6 +7,7 @@ import {
 } from "@/components/elements/common/Header";
 // import { NavItem } from "@/components/elements/common/NavItem";
 import { ThemeToggle } from "@/components/elements/common/ThemeToggle";
+import { PeaceMakeLogo } from "@/components/elements/svg/logo-v2";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -23,7 +24,8 @@ export function Header() {
       <HeaderNav>
         <HeaderSide className="gap-8">
           <Link href="/">
-            <h1 className="text-2xl font-bold">PeaceMakerBot</h1>
+            {/* <h1 className="text-2xl font-bold">PeaceMakerBot</h1> */}
+            <PeaceMakeLogo className="w-auto h-10" />
           </Link>
 
           {/* <ul className="md:flex flex-row gap-4 hidden">
