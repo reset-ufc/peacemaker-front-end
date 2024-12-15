@@ -18,8 +18,12 @@ import { cn } from "@/lib/utils";
 import { ArrowUpRightIcon } from "lucide-react";
 
 export function RecentFlaggedCommentsTable({
+  users,
   className,
-}: { className?: string }) {
+}: {
+  users: { username: string; severity: string; link: string }[];
+  className?: string;
+}) {
   return (
     <Card className={cn("shadow-none rounded-lg", className)}>
       <CardHeader>
@@ -38,25 +42,9 @@ export function RecentFlaggedCommentsTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[
-              {
-                user: "John Doe",
-                severity: "high",
-                link: "https://github.com/github/contributors/issues/91#issuecomment-2111250942",
-              },
-              {
-                user: "John Doe 2",
-                severity: "low",
-                link: "https://github.com/github/contributors/issues/91#issuecomment-2111250942",
-              },
-              {
-                user: "John Doe 3",
-                severity: "medium",
-                link: "https://github.com/github/contributors/issues/91#issuecomment-2111250942",
-              },
-            ].map(({ user, severity, link }) => (
-              <TableRow key={user}>
-                <TableCell className="font-medium">{user}</TableCell>
+            {users.map(({ username, severity, link }) => (
+              <TableRow key={username}>
+                <TableCell className="font-medium">{username}</TableCell>
                 <TableCell>
                   <Badge
                     className={cn(
