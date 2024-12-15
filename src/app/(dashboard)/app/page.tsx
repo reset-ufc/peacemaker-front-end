@@ -11,7 +11,6 @@ import { TypeModerationCountGraph } from "@/components/elements/layout/TypeModer
 import { DateRangeFilter } from "@/components/elements/common/DateRangeFilter";
 import ModerationsFlagsChart from "@/components/elements/layout/ModerationsFlagsChart";
 import { QuickInsightsInfos } from "@/components/elements/layout/QuickInsightsInfos";
-import { parseAsString, useQueryState } from "nuqs";
 
 const usersComments = [
   {
@@ -32,20 +31,12 @@ const usersComments = [
 ];
 
 export default function AppPage() {
-  const [dateRange, setDateRange] = useQueryState(
-    "range",
-    parseAsString.withDefault("30d").withOptions({
-      clearOnDefault: true,
-      shallow: true,
-    }),
-  );
-
   return (
     <main className="flex-1 overflow-auto py-8">
       <div className="px-12">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-          <DateRangeFilter value={dateRange} setValue={setDateRange} />
+          <DateRangeFilter />
         </div>
         {/* KPI Cards */}
         <MetricsCards />
@@ -66,12 +57,12 @@ export default function AppPage() {
           <ModerationActionsChart className="md:col-span-3 col-span-2" />
           {/* Quick Insights */}
           <QuickInsightsInfos className="col-span-2" />
+          {/* <GraphTwo className="md:col-span-3 col-span-2" />*/}
+          <LikeDeslikeGraph className="md:col-span-3 col-span-2 h-fit" />
           {/* Type Moderation Accepted Graph */}
           <TypeModerationAcceptedGraph className="md:col-span-4 col-span-3" />
           {/* Novos gráficos */}
           <TypeModerationCountGraph className="md:col-span-3 col-span-2" />
-          {/* <GraphTwo className="md:col-span-3 col-span-2" />*/}
-          <LikeDeslikeGraph className="md:col-span-3 col-span-2" />
         </div>
       </div>
     </main>
