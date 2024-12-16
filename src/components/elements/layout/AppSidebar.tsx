@@ -18,14 +18,8 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import {
-  BarChart3,
-  ChevronRight,
-  Home,
-  MessageSquare,
-  Settings,
-  Users,
-} from "lucide-react";
+import { BarChart3, ChevronRight, CodeIcon, Home } from "lucide-react";
+import Link from "next/link";
 
 // Sample data for the sidebar
 const sibarmenu = {
@@ -36,76 +30,18 @@ const sibarmenu = {
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "#",
+      title: "Home",
+      url: "/app",
       icon: Home,
       isActive: true,
-    },
-    {
-      title: "Comments",
-      url: "#",
-      icon: MessageSquare,
       items: [
         {
-          title: "All Comments",
-          url: "#",
+          title: "Dashboard",
+          url: "/app",
         },
         {
-          title: "Flagged",
-          url: "#",
-        },
-        {
-          title: "Deleted",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Users",
-      url: "#",
-      icon: Users,
-      items: [
-        {
-          title: "All Users",
-          url: "#",
-        },
-        {
-          title: "Banned Users",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: BarChart3,
-      items: [
-        {
-          title: "Overview",
-          url: "#",
-        },
-        {
-          title: "Reports",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Moderation Rules",
-          url: "#",
-        },
-        {
-          title: "Integrations",
-          url: "#",
+          title: "Repositories",
+          url: "/app/repositories",
         },
       ],
     },
@@ -160,9 +96,9 @@ export function AppSidebar() {
                         {item.items.map((subItem) => (
                           <SidebarMenuSubItem key={subItem.title}>
                             <SidebarMenuSubButton asChild>
-                              <a href={subItem.url}>
+                              <Link href={subItem.url}>
                                 <span>{subItem.title}</span>
-                              </a>
+                              </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
