@@ -1,16 +1,35 @@
-"use client";
-
 import { LikeDeslikeGraph } from "@/components/elements/layout/LikeDeslikeGraph";
 import { MetricsCards } from "@/components/elements/layout/MetricsCards";
 import { ModerationActionsChart } from "@/components/elements/layout/ModerationActionsChart";
 import { ModerationActivityGraph } from "@/components/elements/layout/ModerationActivityGraph";
+import { ModerationsFlagsChart } from "@/components/elements/layout/ModerationsFlagsChart";
+import { QuickInsightsInfos } from "@/components/elements/layout/QuickInsightsInfos";
 import { RecentFlaggedCommentsTable } from "@/components/elements/layout/RecentFlaggedCommentsTable";
 import { TypeModerationAcceptedGraph } from "@/components/elements/layout/TypeModerationAcceptedGraph";
 import { TypeModerationCountGraph } from "@/components/elements/layout/TypeModerationCountGraph";
 
 import { DateRangeFilter } from "@/components/elements/common/DateRangeFilter";
-import ModerationsFlagsChart from "@/components/elements/layout/ModerationsFlagsChart";
-import { QuickInsightsInfos } from "@/components/elements/layout/QuickInsightsInfos";
+import type { Metadata } from "next";
+
+/**
+ * Force the page to be static and only change with a new build.
+ *
+ * read more about the Route Segment Config here:
+ * https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
+ */
+export const dynamic = "force-static";
+
+/**
+ * Generate the metadata with dynamic information.
+ *
+ * Read more about the Dynamic Metadata here:
+ * https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
+ */
+export function generateMetadata(): Metadata {
+  return {
+    title: "Dashboard",
+  };
+}
 
 const usersComments = [
   {
@@ -50,7 +69,6 @@ export default function AppPage() {
             className="lg:col-span-3 col-span-5"
           />
         </div>
-        {/* Bottom Section */}
         <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
           <ModerationsFlagsChart className="md:col-span-3 col-span-2" />
           {/* Moderation Types Distribution */}
