@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { RepositoriesTable } from "./components/repositories-table";
 
 /**
  * Force the page to be static and only change with a new build.
@@ -17,10 +16,10 @@ export const dynamic = "force-static";
  */
 export function generateMetadata(): Metadata {
   return {
-    title: "Repositories",
+    title: "Settings",
   };
 }
 
 export default function Page() {
-  return <RepositoriesTable />;
+  return <div>Settings</div>;
 }
