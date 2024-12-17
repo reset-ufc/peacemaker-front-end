@@ -46,38 +46,48 @@ export default function Page() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-3">
           <div className="space-y-2">
             <Label htmlFor="firstName">First name</Label>
-            <Input id="firstName" placeholder="Juan" />
+            <Input
+              id="firstName"
+              placeholder="Juan"
+              className="w-full md:w-[350px]"
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="lastName">Last name</Label>
-            <Input id="lastName" placeholder="Very good" />
+            <Input
+              id="lastName"
+              placeholder="Very good"
+              className="w-full md:w-[350px]"
+            />
           </div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="birthDate">Birth date</Label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                id="birthDate"
-                variant="outline"
-                className="w-full justify-start text-left font-normal md:w-[280px]"
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : "Pick a date"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
+          <div className="space-y-2">
+            <Label htmlFor="birthDate">Birth date</Label>
+            <div className="space-y-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    id="birthDate"
+                    variant="outline"
+                    className="w-full md:w-[350px] justify-start text-left font-normal"
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, "PPP") : "Pick a date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
         </div>
         <Button className="bg-orange-500 hover:bg-orange-600">
           Save changes
