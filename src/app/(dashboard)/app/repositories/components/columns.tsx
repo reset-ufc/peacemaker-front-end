@@ -88,8 +88,8 @@ export const columns: Array<ColumnDef<Repo>> = [
     header: "Install Bot",
     cell: ({ row }) => (
       <Button size="sm" variant="outline">
-        Install Bot
         <GitHubIcon className="ml-2 h-4 w-4" />
+        Install Bot on {row.original.name} repository
       </Button>
     ),
   },
