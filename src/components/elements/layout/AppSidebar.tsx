@@ -11,7 +11,12 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import { BarChart3Icon, FolderGit2Icon, Home } from "lucide-react";
+import {
+  BarChart3Icon,
+  CircleAlertIcon,
+  FolderGit2Icon,
+  Home,
+} from "lucide-react";
 import Link from "next/link";
 import { NavUser } from "./NavUser";
 
@@ -33,6 +38,11 @@ const sidebarmenu = {
           title: "Dashboard",
           icon: BarChart3Icon,
           url: "/app",
+        },
+        {
+          title: "Incivilities",
+          icon: CircleAlertIcon,
+          url: "/app/incivilities",
         },
         {
           title: "Repositories",
@@ -72,7 +82,7 @@ export function AppSidebar() {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild tooltip={item.title}>
                       <Link href={item.url}>
                         {item.icon && <item.icon className="mr-2 size-4" />}
                         {item.title}
