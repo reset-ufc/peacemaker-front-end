@@ -1,46 +1,42 @@
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-
-import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
+  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import { BarChart3, ChevronRight, CodeIcon, Home } from "lucide-react";
+import { BarChart3Icon, FolderGit2Icon, Home } from "lucide-react";
 import Link from "next/link";
+import { NavUser } from "./NavUser";
+
+const user = {
+  name: "Emanuel Avila",
+  email: "avilaemanueel@gmail.com",
+  avatar: "https://avatars.githubusercontent.com/u/76269418?v=4",
+};
 
 // Sample data for the sidebar
-const sibarmenu = {
-  user: {
-    name: "John Doe",
-    email: "john@example.com",
-    avatar: "/placeholder-avatar.jpg",
-  },
+const sidebarmenu = {
   navMain: [
     {
       title: "Home",
       url: "/app",
       icon: Home,
-      isActive: true,
       items: [
         {
           title: "Dashboard",
+          icon: BarChart3Icon,
           url: "/app",
         },
         {
           title: "Repositories",
+          icon: FolderGit2Icon,
           url: "/app/repositories",
         },
       ],
@@ -69,95 +65,29 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader> */}
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-          <SidebarMenu>
-            {sibarmenu.navMain.map((item) => (
-              <Collapsible
-                key={item.title}
-                asChild
-                // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                defaultOpen={item.isActive!}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={item.title}>
-                      {item?.icon && <item.icon />}
-                      <span>{item.title}</span>
-                      {item?.items && (
-                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                      )}
+        {sidebarmenu.navMain.map((item) => (
+          <SidebarGroup key={item.title}>
+            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {item.items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.url}>
+                        {item.icon && <item.icon className="mr-2 size-4" />}
+                        {item.title}
+                      </Link>
                     </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {item?.items && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {item.items.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton asChild>
-                              <Link href={subItem.url}>
-                                <span>{subItem.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
-      {/* <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                >
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage
-                      src={sibarmenu?.user?.avatar}
-                      alt={sibarmenu?.user?.name}
-                    />
-                    <AvatarFallback className="rounded-lg">JD</AvatarFallback>
-                  </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">
-                      {sibarmenu?.user?.name}
-                    </span>
-                    <span className="truncate text-xs">
-                      {sibarmenu?.user?.email}
-                    </span>
-                  </div>
-                  <ChevronsUpDown className="ml-auto size-4" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                side="top"
-                align="start"
-                sideOffset={4}
-              >
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter> */}
+      <SidebarFooter>
+        <NavUser data={user} />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
