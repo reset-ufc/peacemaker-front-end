@@ -79,9 +79,7 @@ export default function Page() {
             </PopoverContent>
           </Popover>
         </div>
-        <Button className="bg-orange-500 hover:bg-orange-600">
-          Save changes
-        </Button>
+        <Button>Save changes</Button>
       </CardContent>
     </Card>
   );
