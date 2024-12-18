@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 "use client";
 
 import { useTheme } from "next-themes";
