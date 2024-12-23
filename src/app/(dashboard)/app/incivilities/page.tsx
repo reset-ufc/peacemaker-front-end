@@ -96,10 +96,6 @@ export default function Page() {
   return (
     <section className="flex flex-row h-[calc(100vh-4rem)]">
       <div className="min-w-52 w-1/3">
-        <div className="flex items-center  px-4 py-2">
-          <h1 className="text-xl font-bold">Incivilities</h1>
-        </div>
-        <Separator />
         <ScrollArea>
           <div className="flex flex-col gap-2 p-4 py-3">
             {incivilities.map((item) => (
