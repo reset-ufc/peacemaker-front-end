@@ -40,14 +40,14 @@ const sidebarmenu = {
           url: "/app",
         },
         {
-          title: "Incivilities",
-          icon: CircleAlertIcon,
-          url: "/app/incivilities",
-        },
-        {
           title: "Repositories",
           icon: FolderGit2Icon,
           url: "/app/repositories",
+        },
+        {
+          title: "Incivilities",
+          icon: CircleAlertIcon,
+          url: "/app/incivilities",
         },
       ],
     },
