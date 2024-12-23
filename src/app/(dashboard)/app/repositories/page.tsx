@@ -1,5 +1,8 @@
+import {
+  RepositoriesTable,
+  type Repository,
+} from "@/components/elements/layout/RepositoriesTable";
 import type { Metadata } from "next";
-import { RepositoriesTable } from "./components/repositories-table";
 
 /**
  * Force the page to be static and only change with a new build.
@@ -20,7 +23,12 @@ export function generateMetadata(): Metadata {
     title: "Repositories",
   };
 }
+const data: Array<Repository> = [];
 
 export default function Page() {
-  return <RepositoriesTable />;
+  return (
+    <main className="p-4">
+      <RepositoriesTable data={data} />
+    </main>
+  );
 }
