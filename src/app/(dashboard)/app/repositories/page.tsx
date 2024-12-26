@@ -2,6 +2,7 @@ import {
   RepositoriesTable,
   type Repository,
 } from "@/components/elements/layout/RepositoriesTable";
+import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 
 /**
@@ -23,11 +24,15 @@ export function generateMetadata(): Metadata {
     title: "Repositories",
   };
 }
+
 const data: Array<Repository> = [];
 
 export default function Page() {
   return (
-    <main className="p-4">
+    <main className="flex flex-col gap-4 p-4">
+      <div className="flex items-center justify-end ">
+        <Button>Load Repositories</Button>
+      </div>
       <RepositoriesTable data={data} />
     </main>
   );

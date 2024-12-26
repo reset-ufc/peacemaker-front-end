@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { format, formatDistanceToNow } from "date-fns";
 import { useQueryState } from "nuqs";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 /**
  * Force the page to be static and only change with a new build.
@@ -25,7 +25,7 @@ import { useState } from "react";
  * read more about the Route Segment Config here:
  * https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
  */
-export const dynamic = "force-static";
+// export const dynamic = "force-static";
 
 /**
  * Generate the metadata with dynamic information.
@@ -40,8 +40,8 @@ export const dynamic = "force-static";
 // }
 
 export interface Incivility {
-  repo_name: string;
   id: string;
+  repo_name: string;
   comment: string;
   classification_type: string;
   resolved: boolean;
@@ -49,89 +49,75 @@ export interface Incivility {
   read: boolean;
 }
 
-const incivilitiesData = [
-  {
-    id: "1",
-    comment:
-      "YOUR COMMENT: \n\nHelp. I have same problem. I can't wait 3 hours! Very slow! Stupid!",
-    classification_type: "Impatience",
-    created_at: "2024-08-26T18:43:19.000Z",
-    read: false,
-    repo_name: "ThePeacemakerBot/peacemaker-test-repo",
-    resolved: false,
-  },
-  {
-    id: "2",
-    comment:
-      "Damn, I'm having the same issue. Waiting 3 hours is too slow, this is unacceptable.",
-    classification_type: "Impatience",
-    created_at: "2024-08-26T18:43:19.000Z",
-    read: false,
-    repo_name: "ThePeacemakerBot/peacemaker-test-repo",
-    resolved: false,
-  },
-];
+const incivilitiesData: Array<Incivility> = [];
 
-const suggestions = [
-  "I'm experiencing the same issue. Waiting for 3 hours is simply too slow and frustrating. It's incredibly unacceptable.",
-  "I'm having the same issue. Waiting 3 hours is too frustrating.",
-  "I'm having the same issue, 3 hours is too slow, this is unacceptable.",
-];
+const suggestions: Array<string> = [];
+
+export function IncivilityCart({ item }: { item: Incivility }) {
+  const [_, setIncivilyId] = useQueryState("incivilyId", {
+    clearOnDefault: true,
+    shallow: true,
+  });
+
+  const handleSelect = (item: Incivility) => {
+    setIncivilyId(item.id);
+  };
+  return (
+    <button
+      type="button"
+      key={item.id}
+      onClick={() => handleSelect(item)}
+      className={cn(
+        "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
+      )}
+    >
+      <div className="flex w-full flex-col gap-1">
+        <div className="flex items-center">
+          <div className="flex items-center gap-2">
+            <div className="font-semibold">{item.classification_type}</div>
+            {!item.resolved && (
+              <span className="flex h-2 w-2 rounded-full bg-blue-600" />
+            )}
+          </div>
+          <div className={cn("ml-auto text-xs")}>
+            {formatDistanceToNow(new Date(item.created_at), {
+              addSuffix: true,
+            })}
+          </div>
+        </div>
+        <div className="text-xs font-medium">{item.comment}</div>
+      </div>
+    </button>
+  );
+}
 
 export default function Page() {
   const [incivilities] = useState<Incivility[]>(incivilitiesData);
   const [invility, setInvility] = useState<Incivility | null>(null);
   const [like] = useState<boolean>(false);
   const [dislike] = useState<boolean>(false);
-  const [incivilyId, setIncivilyId] = useQueryState("incivilyId", {
-    clearOnDefault: true,
-    shallow: true,
-  });
-
-  const handleSelect = (item: Incivility) => {
-    setInvility(item);
-    setIncivilyId(item.id);
-  };
 
   return (
     <section className="flex flex-row h-[calc(100vh-4rem)]">
-      <div className="min-w-52 w-1/3">
+      <div className="min-w-52 w-1/3 border-r">
         <ScrollArea>
           <div className="flex flex-col gap-2 p-4 py-3">
-            {incivilities.map((item) => (
-              <button
-                type="button"
-                key={item.id}
-                onClick={() => handleSelect(item)}
-                className={cn(
-                  "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
-                )}
-              >
-                <div className="flex w-full flex-col gap-1">
-                  <div className="flex items-center">
-                    <div className="flex items-center gap-2">
-                      <div className="font-semibold">
-                        {item.classification_type}
-                      </div>
-                      {!item.resolved && (
-                        <span className="flex h-2 w-2 rounded-full bg-blue-600" />
-                      )}
-                    </div>
-                    <div className={cn("ml-auto text-xs")}>
-                      {formatDistanceToNow(new Date(item.created_at), {
-                        addSuffix: true,
-                      })}
-                    </div>
-                  </div>
-                  <div className="text-xs font-medium">{item.comment}</div>
-                </div>
-              </button>
-            ))}
+            {invility ? (
+              incivilities.map((item) => (
+                <Suspense key={item.id}>
+                  <IncivilityCart item={item} />
+                </Suspense>
+              ))
+            ) : (
+              <div className="p-8 text-center text-muted-foreground">
+                no incivilities detected
+              </div>
+            )}
           </div>
         </ScrollArea>
       </div>
 
-      <div className="w-2/3 border">
+      <div className="w-2/3">
         {invility ? (
           <div className="flex flex-1 flex-col">
             <div className="flex items-start p-4">
