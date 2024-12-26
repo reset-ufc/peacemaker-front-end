@@ -1,5 +1,7 @@
+import { RepositoriesTable } from "@/components/elements/layout/RepositoriesTable";
+import { Button } from "@/components/ui/button";
+import { getRepositories } from "@/services/repositories/action";
 import type { Metadata } from "next";
-import { RepositoriesTable } from "./components/repositories-table";
 
 /**
  * Force the page to be static and only change with a new build.
@@ -21,6 +23,15 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function Page() {
-  return <RepositoriesTable />;
+export default async function Page() {
+  const response = await getRepositories();
+
+  return (
+    <main className="flex flex-col gap-4 p-4">
+      <div className="flex items-center justify-end ">
+        <Button>Load Repositories</Button>
+      </div>
+      <RepositoriesTable data={response} />
+    </main>
+  );
 }

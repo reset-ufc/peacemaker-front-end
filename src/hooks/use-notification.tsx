@@ -17,7 +17,11 @@ export const useNotification = () => {
     );
   };
 
-  const notifyError = (title: string, description: string, duration = 3000) => {
+  const notifyError = (
+    title: string,
+    description?: string,
+    duration = 3000,
+  ) => {
     return toast.error(
       <div>
         <h3 className="text-sm font-medium">{title}</h3>
