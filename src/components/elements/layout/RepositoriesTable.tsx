@@ -8,44 +8,43 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { Repository } from "@/services/repositories/action";
 import {
   type ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
-export type Repository = {
-  id: string;
-  name: string;
-  description: string;
-  link: string;
-};
+import { ExternalLinkIcon } from "lucide-react";
 
 export const columns: Array<ColumnDef<Repository>> = [
   {
-    accessorKey: "id",
-    header: "ID",
+    accessorKey: "repository_id",
+    header: () => <div className="font-semibold text-sm">Repository Id</div>,
+  },
+
+  {
+    accessorKey: "repository_name",
+    header: () => <div className="font-semibold text-sm">Repository Name</div>,
   },
   {
-    accessorKey: "name",
-    header: "Name",
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
-  },
-  {
-    accessorKey: "link",
-    header: "Link",
+    accessorKey: "repository_full_name",
+    header: () => <div className="font-semibold text-sm">Repository Link</div>,
+    cell: ({ row }) => (
+      <a
+        className="flex items-center gap-2 hover:underline"
+        href={`https://github.com/${row.getValue("repository_full_name")}`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {row.getValue("repository_full_name")}
+        <ExternalLinkIcon className="size-4" />
+      </a>
+    ),
   },
 ];
 
-interface RepositoriesTableProps {
-  data: Array<Repository>;
-}
-
-export function RepositoriesTable({ data }: RepositoriesTableProps) {
+export function RepositoriesTable({ data }: { data: Array<Repository> }) {
   const table = useReactTable({
     data,
     columns,
