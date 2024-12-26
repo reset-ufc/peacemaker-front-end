@@ -20,12 +20,6 @@ import {
 import Link from "next/link";
 import { NavUser } from "./NavUser";
 
-const user = {
-  name: "Emanuel Avila",
-  email: "avilaemanueel@gmail.com",
-  avatar: "https://avatars.githubusercontent.com/u/76269418?v=4",
-};
-
 // Sample data for the sidebar
 const sidebarmenu = {
   navMain: [
@@ -96,7 +90,7 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser data={user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
