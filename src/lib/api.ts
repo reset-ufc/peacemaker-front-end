@@ -9,7 +9,9 @@ export const api = axios.create({
     // Authorization:
     // "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NjI2OTQxOCIsImlhdCI6MTczNTE3MjM2NTM0NywiZXhwIjoxNzM1Nzc3MTY1MzQ3LCJ1c2VyIjp7Im5hbWUiOiJFbWFudWVsIEF2aWxhIiwiZ2l0aHViX2lkIjoiNzYyNjk0MTgifX0.kdEUlz5B96_DkvtHfPg1xn2HqdpEhAb3JS3ZITaapkA",
   },
+  withCredentials: true,
 });
 
 // Exporting routes definition
 export const USER_PROFILE_ROUTE = (): string => "/user/profile";
+export const REPOSITORIES_ROUTE = (): string => "/gh-repositories";
