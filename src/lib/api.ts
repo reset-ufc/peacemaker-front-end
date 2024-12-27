@@ -15,3 +15,6 @@ export const api = axios.create({
 // Exporting routes definition
 export const USER_PROFILE_ROUTE = (): string => "/user/profile";
 export const REPOSITORIES_ROUTE = (): string => "/gh-repositories";
+export const GITHUB_AUTH_ROUTE = (): string => "/auth/github";
+export const AUTH_GITHUB_CALLBACK_ROUTE = (code: string): string =>
+  `/auth/github/callback?code=${code}`;
