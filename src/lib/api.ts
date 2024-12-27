@@ -13,8 +13,16 @@ export const api = axios.create({
 });
 
 // Exporting routes definition
-export const USER_PROFILE_ROUTE = (): string => "/user/profile";
-export const REPOSITORIES_ROUTE = (): string => "/gh-repositories";
+export const ANALYTICS_ROUTE = (): string => "analytics";
+export const ANALYTIC_REPOSITORY_ROUTE = (repository_id: string): string =>
+  `${repository_id}/analytics`;
+export const PROFILE_ROUTE = (): string => "profile";
+export const REPOSITORIES_ROUTE = (): string => "gh-repositories";
+export const COMMENTS_ROUTE = (): string => "gh-comments";
+export const REPOSITORY_COMMENTS_ROUTE = (repository_id: string): string =>
+  `gh-comments/${repository_id}/`;
+export const INCIVILITIES_COMMENT_SUGGESTION_ROUTE = (): string =>
+  "gh-suggestions";
 export const GITHUB_AUTH_ROUTE = (): string => "/auth/github";
 export const AUTH_GITHUB_CALLBACK_ROUTE = (code: string): string =>
   `/auth/github/callback?code=${code}`;

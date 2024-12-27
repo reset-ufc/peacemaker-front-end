@@ -1,17 +1,16 @@
-import { USER_PROFILE_ROUTE, api } from "@/lib/api";
+import { mockData } from "@/mock-data";
 
 export interface UserProfile {
   avatar_url: string;
   email: string;
   github_id: string;
-  username: string;
+  login: string;
   name: string;
 }
 
 export async function getUserProfile(): Promise<UserProfile> {
   try {
-    const response = await api.get(USER_PROFILE_ROUTE());
-    return response.data.profile;
+    return mockData.userProfile.profile;
   } catch (error) {
     console.error("Error fetching storages:", error);
     throw error;

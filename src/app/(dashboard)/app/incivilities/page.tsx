@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { commentsService } from "@/services/comments";
+import { type Comment, getSugestion } from "@/services/comments/action";
 import { format, formatDistanceToNow } from "date-fns";
 import { useQueryState } from "nuqs";
 import { Suspense, useState } from "react";
@@ -49,24 +51,23 @@ export interface Incivility {
   read: boolean;
 }
 
-const incivilitiesData: Array<Incivility> = [];
+interface IncivilityCartProps {
+  incivility: Comment;
+  setIncivility: (item: Comment) => void;
+  suggestions: Array<string>;
+  setSuggestions: (item: Array<string>) => void;
+}
 
-const suggestions: Array<string> = [];
-
-export function IncivilityCart({ item }: { item: Incivility }) {
-  const [_, setIncivilyId] = useQueryState("incivilyId", {
-    clearOnDefault: true,
-    shallow: true,
-  });
-
-  const handleSelect = (item: Incivility) => {
-    setIncivilyId(item.id);
-  };
+export function IncivilityCart({
+  incivility,
+  suggestions,
+  setIncivility,
+  setSuggestions,
+}: IncivilityCartProps) {
   return (
     <button
       type="button"
-      key={item.id}
-      onClick={() => handleSelect(item)}
+      onClick={() => setIncivility(incivility)}
       className={cn(
         "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
       )}
@@ -74,38 +75,49 @@ export function IncivilityCart({ item }: { item: Incivility }) {
       <div className="flex w-full flex-col gap-1">
         <div className="flex items-center">
           <div className="flex items-center gap-2">
-            <div className="font-semibold">{item.classification_type}</div>
-            {!item.resolved && (
+            <div className="font-semibold">{incivility.classification}</div>
+            {!incivility.solved && (
               <span className="flex h-2 w-2 rounded-full bg-blue-600" />
             )}
           </div>
-          <div className={cn("ml-auto text-xs")}>
-            {formatDistanceToNow(new Date(item.created_at), {
+          {/* <div className={cn("ml-auto text-xs")}>
+            {formatDistanceToNow(new Date(incivility.), {
               addSuffix: true,
             })}
-          </div>
+          </div> */}
         </div>
-        <div className="text-xs font-medium">{item.comment}</div>
+        <div className="text-xs font-medium">{incivility.comment}</div>
       </div>
     </button>
   );
 }
 
 export default function Page() {
-  const [incivilities] = useState<Incivility[]>(incivilitiesData);
-  const [invility, setInvility] = useState<Incivility | null>(null);
+  const { comments: incivilities } = commentsService();
+  const [incivility, setIncivility] = useState<Comment | null>(null);
+  const [suggestions, setSuggestions] = useState<Array<string>>([]);
   const [like] = useState<boolean>(false);
   const [dislike] = useState<boolean>(false);
+
+  const handleSugestions = async () => {
+    const sugestions = await getSugestion();
+    setSuggestions(sugestions.map((sugestion) => sugestion.content));
+  };
 
   return (
     <section className="flex flex-row h-[calc(100vh-4rem)]">
       <div className="min-w-52 w-1/3 border-r">
         <ScrollArea>
           <div className="flex flex-col gap-2 p-4 py-3">
-            {invility ? (
-              incivilities.map((item) => (
-                <Suspense key={item.id}>
-                  <IncivilityCart item={item} />
+            {incivilities ? (
+              incivilities?.map((item) => (
+                <Suspense key={item.comment_id}>
+                  <IncivilityCart
+                    incivility={item}
+                    suggestions={suggestions}
+                    setIncivility={setIncivility}
+                    setSuggestions={setSuggestions}
+                  />
                 </Suspense>
               ))
             ) : (
@@ -114,116 +126,111 @@ export default function Page() {
               </div>
             )}
           </div>
+          {/* {JSON.stringify({ incivilities }, null, 2)} */}
         </ScrollArea>
       </div>
 
       <div className="w-2/3">
-        {invility ? (
+        {incivility ? (
           <div className="flex flex-1 flex-col">
             <div className="flex items-start p-4">
               <div className="flex items-start gap-4 text-sm">
                 <Avatar>
                   <AvatarImage
-                    alt={invility.repo_name}
-                    src={invility.repo_name}
+                    alt={incivility.repo_full_name}
+                    src={incivility.repo_full_name}
                   />
                   <AvatarFallback>
-                    {invility.repo_name
+                    {incivility.repo_full_name
                       .split(" ")
                       .map((chunk) => chunk[0])
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid gap-1">
-                  <div className="font-semibold">{invility.repo_name}</div>
+                  <div className="font-semibold">
+                    {incivility.repo_full_name}
+                  </div>
                   <div className="line-clamp-1 text-xs">
-                    {invility.classification_type}
+                    {incivility.classification}
                   </div>
                 </div>
               </div>
-              {invility.created_at && (
+              {/* {incivility.created_at && (
                 <div className="ml-auto text-xs text-muted-foreground">
-                  {format(new Date(invility.created_at), "PPpp")}
+                  {format(new Date(incivility.created_at), "PPpp")}
                 </div>
-              )}
+              )} */}
             </div>
             <Separator />
             <div className="flex-1 whitespace-pre-wrap p-4 text-sm">
-              {invility.comment}
+              {incivility.comment}
             </div>
             <Separator className="mt-auto" />
             <div className="p-4">
               <form onSubmit={(e) => e.preventDefault()}>
                 <div className="grid gap-4">
-                  <div className="mt-4">
-                    <h2 className="mb-2 text-lg font-bold">
+                  <div
+                    className={cn(
+                      "mt-4 flex flex-col gap-4",
+                      suggestions.length === 0 &&
+                        "flex flex-row justify-between",
+                    )}
+                  >
+                    <h2 className="text-lg font-bold">
                       Suggestions for fixing your comment
                     </h2>
-                    <div className="rounded-md border">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Select</TableHead>
-                            <TableHead>Suggestion</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {suggestions.map((suggestion, index) => (
-                            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                            <TableRow key={index}>
-                              <TableCell>
-                                <input type="checkbox" />
-                              </TableCell>
-                              <TableCell>{suggestion}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
+                    {suggestions.length > 0 ? (
+                      <div className=" flex flex-col gap-6">
+                        <div className="rounded-md border">
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Select</TableHead>
+                                <TableHead>Suggestion</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {suggestions.map((suggestion, index) => (
+                                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                                <TableRow key={index}>
+                                  <TableCell>
+                                    <input type="radio" value={suggestion} />
+                                  </TableCell>
+                                  <TableCell>{suggestion}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                        <Textarea
+                          className="p-4"
+                          placeholder={`Reply ${incivility.repo_full_name}...`}
+                          readOnly
+                        />
+                        <div className="flex items-center">
+                          <Button type="submit" size="sm" className="ml-auto">
+                            Send
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <Button onClick={handleSugestions}>
+                        Loading suggestions
+                      </Button>
+                    )}
                   </div>
-                  <div className="flex flex-wrap items-center space-x-2">
-                    <Button
-                      variant={like ? "default" : "outline"}
-                      className={
-                        like
-                          ? "bg-blue-500 text-white"
-                          : "border-gray-500 text-blue-500"
-                      }
-                    >
-                      👍 Like
+                  {/* <div className="flex flex-wrap items-center space-x-2">
+                    <Button variant={like ? "default" : "outline"} size="icon">
+                      👍
                     </Button>
                     <Button
                       variant={dislike ? "default" : "outline"}
-                      className={
-                        dislike
-                          ? "bg-blue-500 text-white"
-                          : "border-gray-500 text-blue-500"
-                      }
+                      size="icon"
                     >
-                      👎 Dislike
+                      👎
                     </Button>
-                    {/* <Button
-                      onClick={handleReport}
-                      variant={report ? "default" : "outline"}
-                      className={
-                        report
-                          ? "bg-blue-500 text-white"
-                          : "border-gray-500 text-blue-500"
-                      }
-                    >
-                      🚩 Report
-                    </Button> */}
-                  </div>
-                  <Textarea
-                    className="p-4"
-                    placeholder={`Reply ${invility.repo_name}...`}
-                    readOnly
-                  />
-                  <div className="flex items-center">
-                    <Button type="submit" size="sm" className="ml-auto">
-                      Send
-                    </Button>
-                  </div>
+                  </div> */}
                 </div>
               </form>
             </div>
