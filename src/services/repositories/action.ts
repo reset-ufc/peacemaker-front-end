@@ -1,7 +1,7 @@
-import { REPOSITORIES_ROUTE, api } from "@/lib/api";
+import { mockData } from "@/mock-data";
 
 export interface Repository {
-  repository_id: number;
+  repository_id: string;
   repository_name: string;
   repository_full_name: string;
   permissions: object;
@@ -10,8 +10,7 @@ export interface Repository {
 
 export async function getRepositories(): Promise<Array<Repository>> {
   try {
-    const response = await api.get(REPOSITORIES_ROUTE(), {});
-    return response.data.repositories;
+    return mockData.githubRepositories;
   } catch (error) {
     console.error("Error fetching storages:", error);
     throw error;
