@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { parseAsString, useQueryStates } from "nuqs";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { githubAuthCallbackService } from "@/services/auth";
 import { LoaderCircle } from "lucide-react";
 
-export default function GithubCallback() {
+function GithubCallbackInner() {
   const [queries, _] = useQueryStates(
     {
       code: parseAsString,
@@ -52,4 +52,12 @@ export default function GithubCallback() {
   }
 
   return null;
+}
+
+export default function GithubCallbackPage() {
+  return (
+    <Suspense>
+      <GithubCallbackInner />
+    </Suspense>
+  );
 }
