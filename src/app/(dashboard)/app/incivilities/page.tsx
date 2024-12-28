@@ -1,7 +1,7 @@
 "use client";
-// import type { Metadata } from "next";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -13,33 +13,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { commentsService } from "@/services/comments";
 import { type Comment, getSugestion } from "@/services/comments/action";
-import { format, formatDistanceToNow } from "date-fns";
-import { useQueryState } from "nuqs";
 import { Suspense, useState } from "react";
-
-/**
- * Force the page to be static and only change with a new build.
- *
- * read more about the Route Segment Config here:
- * https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
- */
-// export const dynamic = "force-static";
-
-/**
- * Generate the metadata with dynamic information.
- *
- * Read more about the Dynamic Metadata here:
- * https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
- */
-// export function generateMetadata(): Metadata {
-//   return {
-//     title: "Incivilities",
-//   };
-// }
 
 export interface Incivility {
   id: string;
@@ -60,9 +37,7 @@ interface IncivilityCartProps {
 
 export function IncivilityCart({
   incivility,
-  suggestions,
   setIncivility,
-  setSuggestions,
 }: IncivilityCartProps) {
   return (
     <button
@@ -72,21 +47,26 @@ export function IncivilityCart({
         "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
       )}
     >
-      <div className="flex w-full flex-col gap-1">
-        <div className="flex items-center">
-          <div className="flex items-center gap-2">
-            <div className="font-semibold">{incivility.classification}</div>
+      <div className="flex w-full flex-col gap-1 ">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <h1 className="font-semibold ">{incivility.repo_full_name}</h1>
             {!incivility.solved && (
               <span className="flex h-2 w-2 rounded-full bg-blue-600" />
             )}
+          </div>
+          <div>
+            <p className={cn(incivility.solved === true && "font-bold")}>
+              {incivility.comment}
+            </p>
           </div>
           {/* <div className={cn("ml-auto text-xs")}>
             {formatDistanceToNow(new Date(incivility.), {
               addSuffix: true,
             })}
           </div> */}
+          <Badge className="w-fit">{incivility.classification}</Badge>
         </div>
-        <div className="text-xs font-medium">{incivility.comment}</div>
       </div>
     </button>
   );
@@ -96,8 +76,7 @@ export default function Page() {
   const { comments: incivilities } = commentsService();
   const [incivility, setIncivility] = useState<Comment | null>(null);
   const [suggestions, setSuggestions] = useState<Array<string>>([]);
-  const [like] = useState<boolean>(false);
-  const [dislike] = useState<boolean>(false);
+  const [selectedSuggestion, setSelectedSuggestion] = useState<string>("");
 
   const handleSugestions = async () => {
     const sugestions = await getSugestion();
@@ -126,7 +105,6 @@ export default function Page() {
               </div>
             )}
           </div>
-          {/* {JSON.stringify({ incivilities }, null, 2)} */}
         </ScrollArea>
       </div>
 
@@ -137,8 +115,8 @@ export default function Page() {
               <div className="flex items-start gap-4 text-sm">
                 <Avatar>
                   <AvatarImage
-                    alt={incivility.repo_full_name}
-                    src={incivility.repo_full_name}
+                    alt={`https://github.com/${incivility.repo_full_name}`}
+                    src={`https://github.com/${incivility.repo_full_name}.png`}
                   />
                   <AvatarFallback>
                     {incivility.repo_full_name
@@ -147,92 +125,105 @@ export default function Page() {
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
-                <div className="grid gap-1">
-                  <div className="font-semibold">
+                <div className="grid gap-2">
+                  <div className="font-semibold text-2xl">
                     {incivility.repo_full_name}
                   </div>
-                  <div className="line-clamp-1 text-xs">
-                    {incivility.classification}
-                  </div>
+                  <Badge className="w-fit">{incivility.classification}</Badge>
                 </div>
               </div>
-              {/* {incivility.created_at && (
-                <div className="ml-auto text-xs text-muted-foreground">
-                  {format(new Date(incivility.created_at), "PPpp")}
-                </div>
-              )} */}
             </div>
             <Separator />
-            <div className="flex-1 whitespace-pre-wrap p-4 text-sm">
-              {incivility.comment}
-            </div>
+            <div className="flex-1 px-4 py-8 text-md">{incivility.comment}</div>
             <Separator className="mt-auto" />
             <div className="p-4">
-              <form onSubmit={(e) => e.preventDefault()}>
-                <div className="grid gap-4">
-                  <div
-                    className={cn(
-                      "mt-4 flex flex-col gap-4",
-                      suggestions.length === 0 &&
-                        "flex flex-row justify-between",
-                    )}
-                  >
-                    <h2 className="text-lg font-bold">
-                      Suggestions for fixing your comment
-                    </h2>
-                    {suggestions.length > 0 ? (
-                      <div className=" flex flex-col gap-6">
-                        <div className="rounded-md border">
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>Select</TableHead>
-                                <TableHead>Suggestion</TableHead>
+              <div className="grid gap-4">
+                <div
+                  className={cn(
+                    "mt-4 flex flex-col gap-4",
+                    suggestions.length === 0 && "flex flex-row justify-between",
+                  )}
+                >
+                  <h2 className="text-lg font-bold">
+                    Suggestions for fixing your comment
+                  </h2>
+                  {suggestions.length > 0 ? (
+                    <div className=" flex flex-col gap-6">
+                      <div className="rounded-md border">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Select</TableHead>
+                              <TableHead>Suggestion</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {suggestions.map((suggestion, index) => (
+                              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                              <TableRow key={index}>
+                                <TableCell>
+                                  <form>
+                                    <input
+                                      type="radio"
+                                      value={suggestion}
+                                      checked={
+                                        selectedSuggestion === suggestion
+                                      }
+                                      onChange={() =>
+                                        setSelectedSuggestion(suggestion)
+                                      }
+                                    />
+                                  </form>
+                                </TableCell>
+                                <TableCell className="flex flex-row justify-between">
+                                  {suggestion}
+
+                                  {selectedSuggestion === suggestion && (
+                                    <div className="flex flex-wrap items-center space-x-2">
+                                      <button
+                                        type="button"
+                                        data-selected={
+                                          selectedSuggestion === suggestion
+                                        }
+                                        className="px-2.5 py-2 border rounded-full data-[selected=true]:bg-muted"
+                                      >
+                                        👍
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="px-2.5 py-2 border rounded-full data-[selected=true]:bg-muted"
+                                      >
+                                        👎
+                                      </button>
+
+                                      <button
+                                        type="button"
+                                        className="px-2.5 py-2 border rounded-full data-[selected=true]:bg-muted"
+                                      >
+                                        🚩
+                                      </button>
+                                    </div>
+                                  )}
+                                </TableCell>
                               </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {suggestions.map((suggestion, index) => (
-                                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                                <TableRow key={index}>
-                                  <TableCell>
-                                    <input type="radio" value={suggestion} />
-                                  </TableCell>
-                                  <TableCell>{suggestion}</TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </div>
-                        <Textarea
-                          className="p-4"
-                          placeholder={`Reply ${incivility.repo_full_name}...`}
-                          readOnly
-                        />
-                        <div className="flex items-center">
-                          <Button type="submit" size="sm" className="ml-auto">
-                            Send
-                          </Button>
-                        </div>
+                            ))}
+                          </TableBody>
+                        </Table>
                       </div>
-                    ) : (
-                      <Button onClick={handleSugestions}>
-                        Loading suggestions
-                      </Button>
-                    )}
-                  </div>
-                  {/* <div className="flex flex-wrap items-center space-x-2">
-                    <Button variant={like ? "default" : "outline"} size="icon">
-                      👍
+
+                      <div className="flex items-center">
+                        <Button type="submit" size="sm" className="ml-auto">
+                          Send
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <Button onClick={handleSugestions}>
+                      Loading suggestions
                     </Button>
-                    <Button
-                      variant={dislike ? "default" : "outline"}
-                      size="icon"
-                    >
-                      👎
-                    </Button>
-                  </div> */}
+                  )}
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         ) : (
