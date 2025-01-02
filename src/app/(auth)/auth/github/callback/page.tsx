@@ -1,10 +1,10 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
-import { parseAsString, useQueryStates } from "nuqs";
 import { githubAuthCallbackService } from "@/services/auth";
 import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { parseAsString, useQueryStates } from "nuqs";
+import { Suspense, useEffect } from "react";
 
 function GithubCallbackInner() {
   const router = useRouter();
@@ -14,11 +14,11 @@ function GithubCallbackInner() {
     },
     {
       shallow: false,
-    }
+    },
   );
 
   const { data, isLoading, isError } = githubAuthCallbackService(
-    queries.code || ""
+    queries.code || "",
   );
 
   useEffect(() => {
