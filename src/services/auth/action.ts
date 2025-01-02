@@ -1,17 +1,18 @@
-import { api, AUTH_GITHUB_CALLBACK_ROUTE, GITHUB_AUTH_ROUTE } from "@/lib/api";
+import { api } from "@/lib/api";
+import { AUTH_GITHUB_CALLBACK_ROUTE, GITHUB_AUTH_ROUTE } from "@/lib/routes";
 
 interface GithubOAuthResponse {
-  url: string;
+  authorization_url: string;
 }
 
 interface GithubOAuthCallbackResponse {
-  access_token: string;
+  token: string;
 }
 
 export async function githubAuth() {
   try {
     const response = await api.get<GithubOAuthResponse>(GITHUB_AUTH_ROUTE());
-    return response.data.url;
+    return response.data.authorization_url;
   } catch (error) {
     console.error("Error fetching storages:", error);
     throw error;
@@ -21,9 +22,9 @@ export async function githubAuth() {
 export async function githubAuthCallback(code: string) {
   try {
     const response = await api.get<GithubOAuthCallbackResponse>(
-      AUTH_GITHUB_CALLBACK_ROUTE(code)
+      AUTH_GITHUB_CALLBACK_ROUTE(code),
     );
-    return response.data;
+    return response.data.token;
   } catch (error) {
     console.error("Error fetching callback data:", error);
     throw error;
