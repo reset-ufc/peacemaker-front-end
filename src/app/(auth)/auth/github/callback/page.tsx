@@ -2,12 +2,12 @@
 
 import { Suspense, useEffect } from "react";
 import { parseAsString, useQueryStates } from "nuqs";
-import { useRouter } from "next/navigation";
-import { api } from "@/lib/api";
 import { githubAuthCallbackService } from "@/services/auth";
 import { LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 function GithubCallbackInner() {
+  const router = useRouter();
   const [queries, _] = useQueryStates(
     {
       code: parseAsString,
@@ -17,18 +17,12 @@ function GithubCallbackInner() {
     }
   );
 
-  const router = useRouter();
   const { data, isLoading, isError } = githubAuthCallbackService(
     queries.code || ""
   );
 
   useEffect(() => {
     if (data) {
-      const { access_token } = data;
-
-      api.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
-      localStorage.setItem("@Auth:token", access_token);
-
       router.push("/app");
     }
   }, [data, router]);
