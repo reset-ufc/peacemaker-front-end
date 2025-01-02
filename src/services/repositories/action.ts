@@ -1,16 +1,38 @@
-import { mockData } from "@/mock-data";
+import { api } from "@/lib/api";
+import { REPOSITORIES_ROUTE } from "@/lib/routes";
 
 export interface Repository {
-  repository_id: string;
+  repository_id: number;
   repository_name: string;
-  repository_full_name: string;
-  permissions: object;
-  user_id: string;
+  description: string;
+  github_html_url: string;
+  is_private: boolean;
+  is_fork: boolean;
+  is_archived: boolean;
+  is_disabled: boolean;
+  is_template: boolean;
+  visibility: string;
+  user_permissions: UserPermissions;
+  user_id: number;
 }
 
-export async function getRepositories(): Promise<Array<Repository>> {
+export interface UserPermissions {
+  admin: boolean;
+  maintain: boolean;
+  push: boolean;
+  triage: boolean;
+  pull: boolean;
+}
+
+export async function getRepositories(): Promise<{
+  repositories: Array<Repository>;
+}> {
   try {
-    return mockData.githubRepositories;
+    const response = await api.get<{
+      repositories: Array<Repository>;
+    }>(REPOSITORIES_ROUTE());
+
+    return response.data;
   } catch (error) {
     console.error("Error fetching storages:", error);
     throw error;
