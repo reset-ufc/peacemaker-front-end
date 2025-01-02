@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { repositoriesService } from "@/services/repositories";
 import type { Repository } from "@/services/repositories/action";
 import {
   type ColumnDef,
@@ -24,29 +25,37 @@ export const columns: Array<ColumnDef<Repository>> = [
   },
 
   {
+    id: "repository_name",
     accessorKey: "repository_name",
+
     header: () => <div className="font-semibold text-sm">Repository Name</div>,
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <div className="text-sm">{row.getValue("repository_name")}</div>
+      </div>
+    ),
   },
   {
-    accessorKey: "repository_full_name",
+    accessorKey: "github_html_url",
     header: () => <div className="font-semibold text-sm">Repository Link</div>,
     cell: ({ row }) => (
       <a
         className="flex items-center gap-2 hover:underline"
-        href={`https://github.com/${row.getValue("repository_full_name")}`}
+        href={row.getValue("github_html_url")}
         target="_blank"
         rel="noreferrer"
       >
-        {row.getValue("repository_full_name")}
+        {row.getValue("github_html_url")}
         <ExternalLinkIcon className="size-4" />
       </a>
     ),
   },
 ];
 
-export function RepositoriesTable({ data }: { data: Array<Repository> }) {
+export function RepositoriesTable() {
+  const { repositories: data } = repositoriesService();
   const table = useReactTable({
-    data,
+    data: data?.repositories ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
