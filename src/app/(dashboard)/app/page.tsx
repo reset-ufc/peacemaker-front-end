@@ -1,12 +1,8 @@
-import { LikeDeslikeGraph } from "@/components/elements/layout/LikeDeslikeGraph";
 import { MetricsCards } from "@/components/elements/layout/MetricsCards";
 import { ModerationActionsChart } from "@/components/elements/layout/ModerationActionsChart";
 import { ModerationActivityGraph } from "@/components/elements/layout/ModerationActivityGraph";
 import { ModerationsFlagsChart } from "@/components/elements/layout/ModerationsFlagsChart";
-import { QuickInsightsInfos } from "@/components/elements/layout/QuickInsightsInfos";
 import { RecentFlaggedCommentsTable } from "@/components/elements/layout/RecentFlaggedCommentsTable";
-import { TypeModerationAcceptedGraph } from "@/components/elements/layout/TypeModerationAcceptedGraph";
-import { TypeModerationCountGraph } from "@/components/elements/layout/TypeModerationCountGraph";
 
 import { DateRangeFilter } from "@/components/elements/common/DateRangeFilter";
 import type { Metadata } from "next";
@@ -31,23 +27,7 @@ export function generateMetadata(): Metadata {
   };
 }
 
-const usersComments = [
-  {
-    username: "John Doe",
-    severity: "high",
-    link: "https://github.com/github/contributors/issues/91#issuecomment-2111250942",
-  },
-  {
-    username: "John Doe 2",
-    severity: "low",
-    link: "https://github.com/github/contributors/issues/91#issuecomment-2111250942",
-  },
-  {
-    username: "John Doe 3",
-    severity: "medium",
-    link: "https://github.com/github/contributors/issues/91#issuecomment-2111250942",
-  },
-];
+const usersComments = [];
 
 export default function AppPage() {
   return (
@@ -64,6 +44,7 @@ export default function AppPage() {
 
           {/* Problematic Comments Table */}
           <RecentFlaggedCommentsTable
+            // @ts-ignore
             users={usersComments}
             className="lg:col-span-3 col-span-5"
           />
@@ -73,13 +54,7 @@ export default function AppPage() {
           {/* Moderation Types Distribution */}
           <ModerationActionsChart className="md:col-span-3 col-span-2" />
           {/* Quick Insights */}
-          <QuickInsightsInfos className="col-span-2" />
-          {/* <GraphTwo className="md:col-span-3 col-span-2" />*/}
-          <LikeDeslikeGraph className="md:col-span-3 col-span-2 h-fit" />
-          {/* Type Moderation Accepted Graph */}
-          <TypeModerationAcceptedGraph className="md:col-span-4 col-span-3" />
-          {/* Novos gráficos */}
-          <TypeModerationCountGraph className="md:col-span-3 col-span-2" />
+          {/* <QuickInsightsInfos className="col-span-2" /> */}
         </div>
       </div>
     </main>
