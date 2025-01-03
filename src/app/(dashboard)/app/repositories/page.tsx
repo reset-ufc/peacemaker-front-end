@@ -1,5 +1,5 @@
+import { ButtonLoadRepositories } from "@/components/elements/layout/ButtonLoadRepositories";
 import { RepositoriesTable } from "@/components/elements/layout/RepositoriesTable";
-import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 
 /**
@@ -26,7 +26,7 @@ export default async function Page() {
   return (
     <main className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-end">
-        <Button disabled>Load Repositories</Button>
+        <ButtonLoadRepositories />
       </div>
       <RepositoriesTable />
     </main>
