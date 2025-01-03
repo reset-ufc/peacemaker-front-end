@@ -54,6 +54,7 @@ export const columns: Array<ColumnDef<Repository>> = [
 
 export function RepositoriesTable() {
   const { repositories: data } = repositoriesService();
+
   const table = useReactTable({
     data: data?.repositories ?? [],
     columns,
