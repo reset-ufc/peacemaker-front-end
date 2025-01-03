@@ -3,78 +3,62 @@
 ARG NODE_VERSION=20.17.0
 FROM node:${NODE_VERSION}-alpine AS base
 
-# Install dependencies only when needed
+# Dependencies stage
 FROM base AS deps
+
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-
-# Install dependencies
 COPY package.json pnpm-lock.yaml* ./
 RUN corepack enable pnpm && pnpm i --frozen-lockfile
-# Rebuild the source code only when needed
+
+# Builder stage with environment support
 FROM base AS builder
+
 WORKDIR /app
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Declare environment variables to be used in the build process
+ARG NODE_ENV
 ARG NEXT_PUBLIC_BASE_URL
 ARG NEXT_PUBLIC_BASE_API_URL
 ARG NEXT_PUBLIC_VERCEL_REVALIDATE_TIME
 ARG NEXT_PUBLIC_STATIC_EXPORT
-
 ARG NEXT_PUBLIC_GITHUB_ID
 ARG NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
 
-
-# Set environment variables
-ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
-ENV NEXT_PUBLIC_BASE_API_URL=${NEXT_PUBLIC_BASE_API_URL}
-ENV NEXT_PUBLIC_VERCEL_REVALIDATE_TIME=${NEXT_PUBLIC_VERCEL_REVALIDATE_TIME}
-ENV NEXT_PUBLIC_STATIC_EXPORT=${NEXT_PUBLIC_STATIC_EXPORT}
-
-ENV NEXT_PUBLIC_GITHUB_ID=${NEXT_PUBLIC_GITHUB_ID}
-ENV NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=${NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}
-
-
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=${NODE_ENV} \
+    NEXT_TELEMETRY_DISABLED=1 \
+    NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL} \
+    NEXT_PUBLIC_BASE_API_URL=${NEXT_PUBLIC_BASE_API_URL} \
+    NEXT_PUBLIC_VERCEL_REVALIDATE_TIME=${NEXT_PUBLIC_VERCEL_REVALIDATE_TIME} \
+    NEXT_PUBLIC_STATIC_EXPORT=${NEXT_PUBLIC_STATIC_EXPORT} \
+    NEXT_PUBLIC_GITHUB_ID=${NEXT_PUBLIC_GITHUB_ID} \
+    NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=${NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}
 
 RUN corepack enable pnpm && pnpm run build
 
+# Production stage
+FROM base AS production
 
-# # Production image, copy all the files and run next
-FROM base AS runner
 WORKDIR /app
+ENV NODE_ENV=production \
+    # Uncomment the following line in case you want to disable telemetry during runtime.
+    NEXT_TELEMETRY_DISABLED=1 \
+    PORT=3000 \
+    HOSTNAME="0.0.0.0"
 
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-
-# # Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
+# Set the correct permission for prerender cache
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
-
 EXPOSE 3000
-
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
 CMD ["node", "server.js"]
