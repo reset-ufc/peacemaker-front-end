@@ -27,7 +27,7 @@ export const env = createEnv({
     NEXT_PUBLIC_BASE_API_URL: z.string(),
     NEXT_PUBLIC_VERCEL_REVALIDATE_TIME: z.string().transform((v) => Number(v)),
     NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: z.string().optional(),
-    NEXT_PUBLIC_STATIC_EXPORT: z.string().transform((v) => Boolean(v)),
+    NEXT_PUBLIC_STATIC_EXPORT: z.string().transform((v) => v === "true"),
     NEXT_PUBLIC_GITHUB_ID: z.string(),
   },
   /**
