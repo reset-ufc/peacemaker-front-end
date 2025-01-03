@@ -4,6 +4,8 @@ export const ANALYTIC_REPOSITORY_ROUTE = (repository_id: string): string =>
   `${repository_id}/analytics`;
 export const PROFILE_ROUTE = (): string => "api/v1/user/profile";
 export const REPOSITORIES_ROUTE = (): string => "api/v1/repository";
+export const REPOSITORIES_LOADER_ROUTE = (): string =>
+  "api/v1/repository/remote";
 export const COMMENTS_ROUTE = (): string => "api/v1/comments";
 export const REPOSITORY_COMMENTS_ROUTE = (repository_id: string): string =>
   `comments/${repository_id}/`;
