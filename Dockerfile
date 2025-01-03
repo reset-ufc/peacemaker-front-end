@@ -1,3 +1,5 @@
+# syntax=docker.io/docker/dockerfile:1
+
 ARG NODE_VERSION=20.17.0
 FROM node:${NODE_VERSION}-alpine AS base
 
@@ -18,14 +20,22 @@ COPY . .
 
 # Declare environment variables to be used in the build process
 ARG NEXT_PUBLIC_BASE_URL
+ARG NEXT_PUBLIC_BASE_API_URL
 ARG NEXT_PUBLIC_VERCEL_REVALIDATE_TIME
 ARG NEXT_PUBLIC_STATIC_EXPORT
 
+ARG NEXT_PUBLIC_GITHUB_ID
+ARG NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
+
+
 # Set environment variables
 ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+ENV NEXT_PUBLIC_BASE_API_URL=${NEXT_PUBLIC_BASE_API_URL}
 ENV NEXT_PUBLIC_VERCEL_REVALIDATE_TIME=${NEXT_PUBLIC_VERCEL_REVALIDATE_TIME}
 ENV NEXT_PUBLIC_STATIC_EXPORT=${NEXT_PUBLIC_STATIC_EXPORT}
 
+ENV NEXT_PUBLIC_GITHUB_ID=${NEXT_PUBLIC_GITHUB_ID}
+ENV NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=${NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}
 
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -33,7 +43,7 @@ ENV NEXT_PUBLIC_STATIC_EXPORT=${NEXT_PUBLIC_STATIC_EXPORT}
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN corepack enable pnpm && pnpm generate && pnpm build
+RUN corepack enable pnpm && pnpm run build
 
 
 # # Production image, copy all the files and run next
