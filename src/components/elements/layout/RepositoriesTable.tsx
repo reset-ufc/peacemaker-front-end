@@ -17,11 +17,20 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ExternalLinkIcon } from "lucide-react";
+import Link from "next/link";
 
 export const columns: Array<ColumnDef<Repository>> = [
   {
     accessorKey: "repository_id",
     header: () => <div className="font-semibold text-sm">Repository Id</div>,
+    cell: ({ row }) => (
+      <Link
+        href={`/app/dashboard/${row.getValue("repository_id")}`}
+        className="text-sm"
+      >
+        {row.getValue("repository_id")}
+      </Link>
+    ),
   },
 
   {
@@ -74,7 +83,7 @@ export function RepositoriesTable() {
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 );
