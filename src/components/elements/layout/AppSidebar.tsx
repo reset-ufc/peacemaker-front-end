@@ -28,11 +28,11 @@ const sidebarmenu = {
       url: "/app",
       icon: Home,
       items: [
-        {
-          title: "Dashboard",
-          icon: BarChart3Icon,
-          url: "/app",
-        },
+        // {
+        //   title: "Dashboard",
+        //   icon: BarChart3Icon,
+        //   url: "/app",
+        // },
         {
           title: "Repositories",
           icon: FolderGit2Icon,
