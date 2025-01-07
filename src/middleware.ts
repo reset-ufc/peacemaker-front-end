@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
   const token = cookie.get("access_token")?.value;
 
   const protectedRoutes = [
-    "/app",
+    "/app/dashboard",
     "/app/repositories",
     "/app/incivilities",
     "/settings",
