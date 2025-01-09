@@ -1,9 +1,9 @@
 "use client";
 
-import { type Comment } from "@/services/comments/action";
+import type { Comment } from "@/services/comments/action";
 import { useState } from "react";
-import { IncivilityList } from "./components/IncivilityList";
 import { IncivilityDetails } from "./components/IncivilityDetails";
+import { IncivilityList } from "./components/IncivilityList";
 
 export interface Incivility {
   id: string;

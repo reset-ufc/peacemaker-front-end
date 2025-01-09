@@ -1,7 +1,7 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Comment } from "@/services/comments/action";
+import type { Comment } from "@/services/comments/action";
 import { SuggestionTable } from "./SuggestionTable";
 
 interface IncivilityDetailsProps {

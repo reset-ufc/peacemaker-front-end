@@ -1,10 +1,10 @@
 "use client";
 
-import { Suspense, useState } from "react";
-import { Comment } from "@/services/comments/action";
-import { IncivilityCart } from "./IncivilityCard";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { commentsService } from "@/services/comments";
+import type { Comment } from "@/services/comments/action";
+import { Suspense, useState } from "react";
+import { IncivilityCart } from "./IncivilityCard";
 
 interface IncivilitiesListProps {
   setIncivility: (item: Comment) => void;

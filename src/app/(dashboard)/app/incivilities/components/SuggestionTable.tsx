@@ -9,10 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { SuggestionActions } from "./SuggestionActions";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 import { getSuggestion } from "@/services/comments/action";
+import { useState } from "react";
+import { SuggestionActions } from "./SuggestionActions";
 
 export function SuggestionTable() {
   const [selectedSuggestion, setSelectedSuggestion] = useState<string>("");
@@ -27,7 +27,7 @@ export function SuggestionTable() {
     <div
       className={cn(
         "mt-4 flex flex-col gap-4",
-        suggestions.length === 0 && "flex flex-row justify-between"
+        suggestions.length === 0 && "flex flex-row justify-between",
       )}
     >
       <h2 className="text-lg font-bold">Suggestions for fixing your comment</h2>
