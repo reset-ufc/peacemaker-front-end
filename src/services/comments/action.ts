@@ -14,7 +14,7 @@ export type Comment = {
   solution: string | null;
 };
 
-export interface Sugestion {
+export interface Suggestion {
   id: string;
   content: string;
 }
@@ -28,7 +28,7 @@ export async function getComments(): Promise<Array<Comment>> {
   }
 }
 
-export async function getSugestion(): Promise<Array<Sugestion>> {
+export async function getSuggestion(): Promise<Array<Suggestion>> {
   try {
     return mockData.githubSuggestions;
   } catch (error) {
