@@ -1,111 +1,47 @@
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-
-import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
+  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
 
 import {
-  BarChart3,
-  ChevronRight,
+  BarChart3Icon,
+  CircleAlertIcon,
+  FolderGit2Icon,
   Home,
-  MessageSquare,
-  Settings,
-  Users,
 } from "lucide-react";
+import Link from "next/link";
+import { NavUser } from "./NavUser";
 
 // Sample data for the sidebar
-const sibarmenu = {
-  user: {
-    name: "John Doe",
-    email: "john@example.com",
-    avatar: "/placeholder-avatar.jpg",
-  },
+const sidebarmenu = {
   navMain: [
     {
-      title: "Dashboard",
-      url: "#",
+      title: "Home",
+      url: "/app",
       icon: Home,
-      isActive: true,
-    },
-    {
-      title: "Comments",
-      url: "#",
-      icon: MessageSquare,
       items: [
+        // {
+        //   title: "Dashboard",
+        //   icon: BarChart3Icon,
+        //   url: "/app",
+        // },
         {
-          title: "All Comments",
-          url: "#",
+          title: "Repositories",
+          icon: FolderGit2Icon,
+          url: "/app/repositories",
         },
         {
-          title: "Flagged",
-          url: "#",
-        },
-        {
-          title: "Deleted",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Users",
-      url: "#",
-      icon: Users,
-      items: [
-        {
-          title: "All Users",
-          url: "#",
-        },
-        {
-          title: "Banned Users",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: BarChart3,
-      items: [
-        {
-          title: "Overview",
-          url: "#",
-        },
-        {
-          title: "Reports",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Moderation Rules",
-          url: "#",
-        },
-        {
-          title: "Integrations",
-          url: "#",
+          title: "Incivilities",
+          icon: CircleAlertIcon,
+          url: "/app/incivilities",
         },
       ],
     },
@@ -133,95 +69,29 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader> */}
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-          <SidebarMenu>
-            {sibarmenu.navMain.map((item) => (
-              <Collapsible
-                key={item.title}
-                asChild
-                // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                defaultOpen={item.isActive!}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={item.title}>
-                      {item?.icon && <item.icon />}
-                      <span>{item.title}</span>
-                      {item?.items && (
-                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                      )}
+        {sidebarmenu.navMain.map((item) => (
+          <SidebarGroup key={item.title}>
+            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {item.items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild tooltip={item.title}>
+                      <Link href={item.url}>
+                        {item.icon && <item.icon className="mr-2 size-4" />}
+                        {item.title}
+                      </Link>
                     </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  {item?.items && (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {item.items.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton asChild>
-                              <a href={subItem.url}>
-                                <span>{subItem.title}</span>
-                              </a>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  )}
-                </SidebarMenuItem>
-              </Collapsible>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
-      {/* <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                >
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage
-                      src={sibarmenu?.user?.avatar}
-                      alt={sibarmenu?.user?.name}
-                    />
-                    <AvatarFallback className="rounded-lg">JD</AvatarFallback>
-                  </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">
-                      {sibarmenu?.user?.name}
-                    </span>
-                    <span className="truncate text-xs">
-                      {sibarmenu?.user?.email}
-                    </span>
-                  </div>
-                  <ChevronsUpDown className="ml-auto size-4" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                side="top"
-                align="start"
-                sideOffset={4}
-              >
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter> */}
+      <SidebarFooter>
+        <NavUser />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

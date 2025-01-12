@@ -1,3 +1,5 @@
+"use client";
+
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
 import {
@@ -38,9 +40,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export default function ModerationsFlagsChart({
-  className,
-}: { className?: string }) {
+export function ModerationsFlagsChart({ className }: { className?: string }) {
   return (
     <Card className={cn("shadow-none rounded-lg", className)}>
       <CardHeader className="items-center pb-4">

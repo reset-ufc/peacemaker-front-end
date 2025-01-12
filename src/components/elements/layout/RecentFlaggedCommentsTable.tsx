@@ -21,7 +21,7 @@ export function RecentFlaggedCommentsTable({
   users,
   className,
 }: {
-  users: { username: string; severity: string; link: string }[];
+  users: { username: string; severity: string; link: string }[] | [];
   className?: string;
 }) {
   return (
@@ -42,36 +42,44 @@ export function RecentFlaggedCommentsTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.map(({ username, severity, link }) => (
-              <TableRow key={username}>
-                <TableCell className="font-medium">{username}</TableCell>
-                <TableCell>
-                  <Badge
-                    className={cn(
-                      "font-bold",
-                      severity === "high" && "bg-red-500 hover:bg-red-600/90",
-                      severity === "medium" &&
-                        "bg-amber-500 hover:bg-amber-600/90",
-                      severity === "low" &&
-                        "bg-emerald-600 hover:bg-emerald-500/90",
-                    )}
-                  >
-                    {severity}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <a
-                    href={link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="border px-2 py-1 rounded-md flex items-center gap-1 w-fit"
-                  >
-                    Review
-                    <ArrowUpRightIcon className="size-4" />
-                  </a>
+            {users.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={3} className="h-24 text-center">
+                  No results.
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              users.map(({ username, severity, link }) => (
+                <TableRow key={username}>
+                  <TableCell className="font-medium">{username}</TableCell>
+                  <TableCell>
+                    <Badge
+                      className={cn(
+                        "font-bold",
+                        severity === "high" && "bg-red-500 hover:bg-red-600/90",
+                        severity === "medium" &&
+                          "bg-amber-500 hover:bg-amber-600/90",
+                        severity === "low" &&
+                          "bg-emerald-600 hover:bg-emerald-500/90",
+                      )}
+                    >
+                      {severity}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <a
+                      href={link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="border px-2 py-1 rounded-md flex items-center gap-1 w-fit"
+                    >
+                      Review
+                      <ArrowUpRightIcon className="size-4" />
+                    </a>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </CardContent>
