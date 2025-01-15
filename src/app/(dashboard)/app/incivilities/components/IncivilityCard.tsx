@@ -1,6 +1,6 @@
-import { type Comment } from "@/services/comments/action";
-import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import type { Comment } from "@/services/comments/action";
 
 interface IncivilityCartProps {
   incivility: Comment;
@@ -18,7 +18,7 @@ export function IncivilityCart({
       type="button"
       onClick={() => setIncivility(incivility)}
       className={cn(
-        "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent"
+        "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
       )}
     >
       <div className="flex w-full flex-col gap-1 ">
