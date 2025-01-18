@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { getComments } from "./action";
 
 export function commentsService() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data: comments, isLoading: loading } = useQuery({
     queryKey: ["user-comments"],
     queryFn: getComments,

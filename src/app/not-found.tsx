@@ -1,8 +1,9 @@
+import type { Metadata } from "next";
+
+import { ArrowUpRightIcon } from "lucide-react";
+
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ArrowUpRightIcon } from "lucide-react";
-import type { Metadata } from "next";
-import React from "react";
 
 /**
  * Force the page to be static and only change with a new build.
@@ -26,15 +27,14 @@ export function generateMetadata(): Metadata {
 
 export default function NotFoundPage() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center gap-y-8">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-y-8">
       <section className="container flex flex-col justify-center space-y-8 text-center">
-        <h1 className="text-5xl font-extrabold tracking-tighter text-pretty md:text-7xl">
+        <h1 className="text-pretty text-5xl font-extrabold tracking-tighter md:text-7xl">
           404 - Page not found
         </h1>
-        <p className="mx-auto max-w-sm text-muted-foreground text-lg md:text-xl text-pretty">
+        <p className="mx-auto max-w-sm text-pretty text-lg text-muted-foreground md:text-xl">
           Sorry, we couldn&apos;t find the page you&apos;re looking for.
         </p>
-
         <a
           href="/"
           className={cn(
@@ -42,7 +42,7 @@ export default function NotFoundPage() {
               variant: "secondary",
               size: "lg",
             }),
-            "w-fit m-auto",
+            "m-auto w-fit",
           )}
         >
           Go back home

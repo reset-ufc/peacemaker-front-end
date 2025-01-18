@@ -1,5 +1,9 @@
 "use client";
 
+import Link from "next/link";
+
+import { LogOutIcon } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +18,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { userService } from "@/services/user";
-import { LogOutIcon } from "lucide-react";
-import Link from "next/link";
 
 export function NavUser() {
   const { user } = userService();
@@ -27,7 +29,7 @@ export function NavUser() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground border border-primary"
+              className="border border-primary data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <img
                 src={user?.profile?.avatar_url}
@@ -40,7 +42,7 @@ export function NavUser() {
                     {user?.profile?.name}
                   </span>
                 ) : (
-                  <span className="bg-muted py-2 animate-pulse" />
+                  <span className="animate-pulse bg-muted py-2" />
                 )}
                 {user?.profile?.email ? (
                   <span className="truncate text-xs">

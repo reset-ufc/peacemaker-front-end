@@ -1,7 +1,9 @@
 "use client";
 
-import type { Comment } from "@/services/comments/action";
 import { useState } from "react";
+
+import type { Comment } from "@/services/comments/action";
+
 import { IncivilityDetails } from "./components/IncivilityDetails";
 import { IncivilityList } from "./components/IncivilityList";
 
@@ -19,7 +21,7 @@ export default function IncivilitiesPage() {
   const [incivility, setIncivility] = useState<Comment | null>(null);
 
   return (
-    <section className="flex flex-row h-[calc(100vh-4rem)]">
+    <section className="flex h-[calc(100vh-4rem)] flex-row">
       <IncivilityList setIncivility={setIncivility} />
       <IncivilityDetails incivility={incivility} />
     </section>

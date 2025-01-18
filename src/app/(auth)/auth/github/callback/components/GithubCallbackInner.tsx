@@ -1,10 +1,12 @@
 "use client";
 
-import { githubAuthCallbackService } from "@/services/auth";
-import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { parseAsString, useQueryStates } from "nuqs";
 import { useEffect } from "react";
+
+import { LoaderCircle } from "lucide-react";
+import { parseAsString, useQueryStates } from "nuqs";
+
+import { githubAuthCallbackService } from "@/services/auth";
 
 export function GithubCallbackInner() {
   const router = useRouter();
@@ -30,8 +32,8 @@ export function GithubCallbackInner() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <LoaderCircle className="h-8 w-8 animate-spin mb-4" />
+      <div className="flex min-h-screen flex-col items-center justify-center p-4">
+        <LoaderCircle className="mb-4 h-8 w-8 animate-spin" />
         <p className="text-lg font-medium">Loading...</p>
       </div>
     );
@@ -39,8 +41,8 @@ export function GithubCallbackInner() {
 
   if (isError || !data) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <p className="text-lg font-medium mb-2">Failed to load data.</p>
+      <div className="flex min-h-screen flex-col items-center justify-center p-4">
+        <p className="mb-2 text-lg font-medium">Failed to load data.</p>
         <p className="text-sm">Please try again later.</p>
       </div>
     );

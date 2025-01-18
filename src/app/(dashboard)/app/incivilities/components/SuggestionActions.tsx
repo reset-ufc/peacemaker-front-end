@@ -3,29 +3,26 @@ interface SuggestionActionsProps {
   suggestion: string;
 }
 
-export function SuggestionActions({
-  selectedSuggestion,
-  suggestion,
-}: SuggestionActionsProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function SuggestionActions(props: SuggestionActionsProps) {
   return (
     <div className="flex flex-wrap items-center space-x-2">
       <button
         type="button"
-        data-selected={selectedSuggestion === suggestion}
-        className="px-2.5 py-2 border rounded-full data-[selected=true]:bg-muted"
+        className="rounded-full border px-2.5 py-2 data-[selected=true]:bg-muted"
       >
         👍
       </button>
       <button
         type="button"
-        className="px-2.5 py-2 border rounded-full data-[selected=true]:bg-muted"
+        className="rounded-full border px-2.5 py-2 data-[selected=true]:bg-muted"
       >
         👎
       </button>
 
       <button
         type="button"
-        className="px-2.5 py-2 border rounded-full data-[selected=true]:bg-muted"
+        className="rounded-full border px-2.5 py-2 data-[selected=true]:bg-muted"
       >
         🚩
       </button>

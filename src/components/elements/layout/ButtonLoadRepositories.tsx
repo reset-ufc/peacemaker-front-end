@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
 import { SubmitButton } from "@/components/elements/common/SubmitButton";
 import { useNotification } from "@/hooks/use-notification";
 import { api } from "@/lib/api";
 import { REPOSITORIES_LOADER_ROUTE } from "@/lib/routes";
-import { useState } from "react";
 
 export function ButtonLoadRepositories() {
   const [isLoading, setIsLoading] = useState<boolean>(false);

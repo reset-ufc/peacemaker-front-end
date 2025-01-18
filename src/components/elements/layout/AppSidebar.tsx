@@ -1,3 +1,7 @@
+import Link from "next/link";
+
+import { CircleAlertIcon, FolderGit2Icon, Home } from "lucide-react";
+
 import {
   Sidebar,
   SidebarContent,
@@ -11,13 +15,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import {
-  BarChart3Icon,
-  CircleAlertIcon,
-  FolderGit2Icon,
-  Home,
-} from "lucide-react";
-import Link from "next/link";
 import { NavUser } from "./NavUser";
 
 // Sample data for the sidebar
@@ -69,12 +66,12 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader> */}
       <SidebarContent>
-        {sidebarmenu.navMain.map((item) => (
+        {sidebarmenu.navMain.map(item => (
           <SidebarGroup key={item.title}>
             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {item.items.map((item) => (
+                {item.items.map(item => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild tooltip={item.title}>
                       <Link href={item.url}>

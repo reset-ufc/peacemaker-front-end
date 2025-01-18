@@ -22,15 +22,15 @@ export function generateMetadata(): Metadata {
 
 export default function Page() {
   return (
-    <main className="max-w-6xl mx-auto py-14 space-y-12">
+    <main className="mx-auto max-w-6xl space-y-12 py-14">
       <div className="mx-auto px-14">
         <h1 className="text-7xl font-extrabold">Privacy</h1>
       </div>
 
-      <section className="space-y-6 max-w-5xl mx-auto">
+      <section className="mx-auto max-w-5xl space-y-6">
         <div className="space-y-4">
           <h2 className="text-3xl font-semibold">Lorem ipsum</h2>
-          <p className="text-base text-balance leading-relaxed">
+          <p className="text-balance text-base leading-relaxed">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat
             tenetur tempore reprehenderit quos natus hic debitis, laboriosam
             neque fugiat, provident voluptates temporibus dicta, quisquam in
