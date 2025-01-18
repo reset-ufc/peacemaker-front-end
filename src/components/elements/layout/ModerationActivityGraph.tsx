@@ -1,5 +1,7 @@
 "use client";
 
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+
 import {
   Card,
   CardContent,
@@ -14,8 +16,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
-
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 const areaChartData = [
   { month: "Jan", moderations: 32, flags: 24 },
@@ -39,7 +39,7 @@ const areaChartConfig = {
 
 export function ModerationActivityGraph({ className }: { className?: string }) {
   return (
-    <Card className={cn("shadow-none rounded-lg", className)}>
+    <Card className={cn("rounded-lg shadow-none", className)}>
       <CardHeader>
         <CardTitle>Moderation Activity</CardTitle>
         <CardDescription>
@@ -62,7 +62,7 @@ export function ModerationActivityGraph({ className }: { className?: string }) {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={value => value.slice(0, 3)}
             />
             <ChartTooltip
               cursor={false}

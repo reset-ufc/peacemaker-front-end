@@ -17,9 +17,11 @@ export const dynamic = "force-static";
 
 export default function SettingLayout({
   children,
-}: { children: React.ReactNode }) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="p-4 flex flex-1 w-full min-h-[calc(100vh-4rem)]">
+    <div className="flex min-h-[calc(100vh-4rem)] w-full flex-1 p-4">
       <aside className="w-72 border-r border-border">
         <nav className="flex flex-col gap-4 px-8 pt-4">
           <Link href="/settings">Settings</Link>

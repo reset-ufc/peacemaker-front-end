@@ -91,65 +91,37 @@ export const mockData = {
   ],
   githubComments: [
     {
-      comment_id: "2518368089",
-      github_id: "174073720",
-      repo_id: "826011337",
-      login: "thepeacemakerbot[bot]",
-      repo_full_name: "ThePeacemakerBot/peacemaker-test-repo",
-      comment:
-        "@ThePeacemakerBot Hi there! We noticed some potentially concerning language in your recent comment. Would you mind reviewing our guidelines at https://github.com/apps/thepeacemakerbot? Let's work together to maintain a positive atmosphere.",
-      classification: "neutral",
-      toxicity_score: 0.017341165,
-      friendly_comment:
-        "Hello! I apologize if my previous comment came across as concerning. I'll make sure to review the guidelines at https://github.com/apps/thepeacemakerbot to ensure our conversation remains productive and respectful.",
-      solved: false,
-      solution: null,
+      comment_id: "2599730225",
+      user_id: "76269418",
+      repository_id: "918463959",
+      login: "meiazero",
+      repo_full_name: "meiazero/blob",
+      created_at: "2025-01-18T14:05:27Z",
+      content: "you should be fuck you!",
+      toxicity: "0.9563754",
+      suggestions: {
+        corrected_comment:
+          "I understand that you're upset, but let's focus on having a respectful conversation.",
+      },
+      classification: "vulgarity",
+      solutioned: false,
+      solution: "",
     },
     {
-      comment_id: "2518368963",
-      github_id: "174073720",
-      repo_id: "826011337",
-      login: "thepeacemakerbot[bot]",
-      repo_full_name: "ThePeacemakerBot/peacemaker-test-repo",
-      comment:
-        "@thepeacemakerbot[bot] Hi there! We noticed some potentially concerning language in your recent comment. Would you mind reviewing our guidelines at https://github.com/apps/thepeacemakerbot? Let's work together to maintain a positive atmosphere.",
-      classification: "neutral",
-      toxicity_score: 0.019477395,
-      friendly_comment:
-        "Hi! I'd be happy to review the guidelines at https://github.com/apps/thepeacemakerbot to ensure our conversation remains respectful and constructive. Let's focus on maintaining a positive atmosphere and fostering a collaborative environment.",
-      solved: false,
-      solution: null,
-    },
-  ],
-  githubCommentsDetail: [
-    {
-      comment_id: "2518374236",
-      github_id: "174073720",
-      repo_id: "826011337",
-      login: "thepeacemakerbot[bot]",
-      repo_full_name: "ThePeacemakerBot/peacemaker-test-repo",
-      comment:
-        "@thepeacemakerbot[bot] Hi there! We noticed some potentially concerning language in your recent comment. Would you mind reviewing our guidelines at https://github.com/apps/thepeacemakerbot? Let's work together to maintain a positive atmosphere.",
-      classification: "neutral",
-      toxicity_score: 0.019477395,
-      friendly_comment:
-        "Hi! We noticed some language in your recent comment that might concern others. Would you mind reviewing our guidelines at https://github.com/apps/thepeacemakerbot? Let's collaborate to maintain a respectful and inclusive environment.",
-      solved: false,
-      solution: null,
-    },
-  ],
-  githubSuggestions: [
-    {
-      id: "234234",
-      content: "A suggestion for this incivility comment",
-    },
-    {
-      id: "234234",
-      content: "Another suggestion for this incivility comment",
-    },
-    {
-      id: "234234",
-      content: "Yet another suggestion for this incivility comment",
+      comment_id: "25990225",
+      user_id: "76269418",
+      repository_id: "918463959",
+      login: "meiazero",
+      repo_full_name: "meiazero/meiazero.dev",
+      created_at: "2025-01-18T15:17:11.345Z",
+      content: "you should be fuck you!",
+      toxicity: "0.9563754",
+      suggestions: {
+        corrected_comment: "let's focus on having a respectful conversation.",
+      },
+      classification: "vulgarity",
+      solutioned: true,
+      solution: "",
     },
   ],
 };

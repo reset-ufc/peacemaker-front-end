@@ -1,36 +1,25 @@
 import { mockData } from "@/mock-data";
 
-export type Comment = {
+export interface Comment {
   comment_id: string;
-  github_id: string;
-  repo_id: string;
+  user_id: string;
+  repository_id: string;
   login: string;
   repo_full_name: string;
-  comment: string;
-  classification: string;
-  toxicity_score: number;
-  friendly_comment: string;
-  solved: boolean;
-  solution: string | null;
-};
-
-export interface Suggestion {
-  id: string;
+  created_at: string;
   content: string;
+  toxicity: string;
+  suggestions: {
+    corrected_comment: string;
+  };
+  classification: string;
+  solutioned: boolean;
+  solution: string;
 }
 
 export async function getComments(): Promise<Array<Comment>> {
   try {
     return mockData.githubComments;
-  } catch (error) {
-    console.error("Error fetching storages:", error);
-    throw error;
-  }
-}
-
-export async function getSuggestion(): Promise<Array<Suggestion>> {
-  try {
-    return mockData.githubSuggestions;
   } catch (error) {
     console.error("Error fetching storages:", error);
     throw error;

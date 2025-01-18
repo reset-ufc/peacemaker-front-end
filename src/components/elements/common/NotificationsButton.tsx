@@ -1,5 +1,10 @@
 "use client";
 
+import Link from "next/link";
+import { useState } from "react";
+
+import { BellIcon } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,9 +14,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { BellIcon } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
 
 type Notification = {
   id?: string;
@@ -23,7 +25,9 @@ type Notification = {
 };
 
 export function NotificationsButton() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [notifications, setNotifications] = useState<Array<Notification>>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
 
   return (
@@ -31,7 +35,7 @@ export function NotificationsButton() {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="flex size-10 items-center rounded-md justify-center border border-border"
+          className="flex size-10 items-center justify-center rounded-md border border-border"
         >
           <BellIcon className="size-4 text-foreground" />
         </button>
@@ -45,7 +49,7 @@ export function NotificationsButton() {
             notifications.length === 0 ? "justify-center" : "",
           )}
         >
-          {notifications.map((notification) => (
+          {notifications.map(notification => (
             <DropdownMenuItem
               className="w-full py-2"
               key={notification.id}

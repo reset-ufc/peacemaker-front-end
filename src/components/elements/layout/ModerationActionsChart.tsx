@@ -1,5 +1,8 @@
 "use client";
 
+import { TrendingUpIcon } from "lucide-react";
+import { Label, Pie, PieChart } from "recharts";
+
 import {
   Card,
   CardContent,
@@ -15,9 +18,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
-import { TrendingUpIcon } from "lucide-react";
-
-import { Label, Pie, PieChart } from "recharts";
 
 const pieChartData = [
   { action: "deleted", count: 1234, fill: "var(--color-deleted)" },
@@ -45,7 +45,7 @@ const pieChartConfig = {
 
 export function ModerationActionsChart({ className }: { className?: string }) {
   return (
-    <Card className={cn("shadow-none rounded-lg", className)}>
+    <Card className={cn("rounded-lg shadow-none", className)}>
       <CardHeader className="items-center pb-0">
         <CardTitle>Moderation Actions</CardTitle>
         <CardDescription>

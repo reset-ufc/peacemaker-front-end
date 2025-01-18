@@ -1,3 +1,5 @@
+import { ArrowUpRightIcon } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -15,7 +17,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { ArrowUpRightIcon } from "lucide-react";
 
 export function RecentFlaggedCommentsTable({
   users,
@@ -25,7 +26,7 @@ export function RecentFlaggedCommentsTable({
   className?: string;
 }) {
   return (
-    <Card className={cn("shadow-none rounded-lg", className)}>
+    <Card className={cn("rounded-lg shadow-none", className)}>
       <CardHeader>
         <CardTitle>Recent Flagged Comments</CardTitle>
         <CardDescription>
@@ -71,7 +72,7 @@ export function RecentFlaggedCommentsTable({
                       href={link}
                       target="_blank"
                       rel="noreferrer"
-                      className="border px-2 py-1 rounded-md flex items-center gap-1 w-fit"
+                      className="flex w-fit items-center gap-1 rounded-md border px-2 py-1"
                     >
                       Review
                       <ArrowUpRightIcon className="size-4" />

@@ -1,5 +1,9 @@
 "use client";
 
+import React from "react";
+
+import { useTheme } from "next-themes";
+
 import {
   HeaderNav,
   HeaderRoot,
@@ -8,8 +12,6 @@ import {
 // import { NavItem } from "@/components/elements/common/NavItem";
 import { ThemeToggle } from "@/components/elements/common/ThemeToggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useTheme } from "next-themes";
-import React from "react";
 
 export function AppHeader() {
   const { resolvedTheme, setTheme } = useTheme();

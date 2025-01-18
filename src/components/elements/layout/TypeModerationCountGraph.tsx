@@ -25,6 +25,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
+
 const chartData = [
   { moderation: "deleted", type: 5 },
   { moderation: "edited", type: 10 },
@@ -50,7 +51,7 @@ export function TypeModerationCountGraph({
   className?: string;
 }) {
   return (
-    <Card className={cn("shadow-none rounded-lg", className)}>
+    <Card className={cn("rounded-lg shadow-none", className)}>
       <CardHeader>
         <CardTitle>Bar Chart - Custom Label</CardTitle>
         <CardDescription>Count Type</CardDescription>
@@ -72,7 +73,7 @@ export function TypeModerationCountGraph({
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={value => value.slice(0, 3)}
               hide
             />
             <XAxis dataKey="type" type="number" hide />

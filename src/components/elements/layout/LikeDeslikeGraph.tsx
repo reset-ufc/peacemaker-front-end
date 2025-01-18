@@ -33,7 +33,7 @@ const chartConfig = {
 
 export function LikeDeslikeGraph({ className }: { className?: string }) {
   return (
-    <Card className={cn("shadow-none rounded-lg", className)}>
+    <Card className={cn("rounded-lg shadow-none", className)}>
       <CardHeader>
         <CardTitle>Bar Chart - Negative</CardTitle>
         <CardDescription>Like and Deslikes</CardDescription>
@@ -48,7 +48,7 @@ export function LikeDeslikeGraph({ className }: { className?: string }) {
             />
             <Bar dataKey="visitors">
               <LabelList position="top" dataKey="avaliantion" fillOpacity={1} />
-              {chartData.map((item) => (
+              {chartData.map(item => (
                 <Cell
                   key={item.avaliation}
                   fill={

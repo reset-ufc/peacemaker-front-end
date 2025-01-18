@@ -1,6 +1,7 @@
+import type { Metadata } from "next";
+
 import { ButtonLoadRepositories } from "@/components/elements/layout/ButtonLoadRepositories";
 import { RepositoriesTable } from "@/components/elements/layout/RepositoriesTable";
-import type { Metadata } from "next";
 
 /**
  * Force the page to be static and only change with a new build.

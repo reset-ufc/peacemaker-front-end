@@ -1,85 +1,82 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { cn } from "@/lib/utils";
-import { getSuggestion } from "@/services/comments/action";
 import { useState } from "react";
+
+import { SubmitButton } from "@/components/elements/common/SubmitButton";
+import { Separator } from "@/components/ui/separator";
+import { useNotification } from "@/hooks/use-notification";
+import { cn } from "@/lib/utils";
+
 import { SuggestionActions } from "./SuggestionActions";
 
-export function SuggestionTable() {
-  const [selectedSuggestion, setSelectedSuggestion] = useState<string>("");
-  const [suggestions, setSuggestions] = useState<Array<string>>([]);
-
-  const handleSuggestions = async () => {
-    const suggestions = await getSuggestion();
-    setSuggestions(suggestions.map((suggestion) => suggestion.content));
+interface SuggestionTableProps {
+  suggestions: {
+    corrected_comment: string;
   };
+}
+
+export function SuggestionTable({ suggestions }: SuggestionTableProps) {
+  const [selectedSuggestion, setSelectedSuggestion] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { notifySuccess, notifyError } = useNotification();
+
+  async function approveSuggestion(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    try {
+      setIsLoading(true);
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      notifySuccess("Suggestion approved");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      notifyError("Something went wrong", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
-    <div
-      className={cn(
-        "mt-4 flex flex-col gap-4",
-        suggestions.length === 0 && "flex flex-row justify-between",
-      )}
-    >
-      <h2 className="text-lg font-bold">Suggestions for fixing your comment</h2>
-      {suggestions.length > 0 ? (
-        <div className=" flex flex-col gap-6">
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Select</TableHead>
-                  <TableHead>Suggestion</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {suggestions.map((suggestion, index) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                  <TableRow key={index}>
-                    <TableCell>
-                      <form>
-                        <input
-                          type="radio"
-                          value={suggestion}
-                          checked={selectedSuggestion === suggestion}
-                          onChange={() => setSelectedSuggestion(suggestion)}
-                        />
-                      </form>
-                    </TableCell>
-                    <TableCell className="flex flex-row justify-between">
-                      {suggestion}
+    <div className="mt-4 flex flex-col gap-4 rounded-md border px-6 py-4">
+      <h2 className="text-md font-bold">Suggestions for fixing your comment</h2>
 
-                      {selectedSuggestion === suggestion && (
-                        <SuggestionActions
-                          selectedSuggestion={selectedSuggestion}
-                          suggestion={suggestion}
-                        />
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+      <Separator orientation="horizontal" />
+
+      <form className="space-y-8" onSubmit={approveSuggestion}>
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row gap-4">
+            <input
+              id="suggestion"
+              type="radio"
+              value={suggestions.corrected_comment}
+              checked={selectedSuggestion === suggestions.corrected_comment}
+              onChange={() =>
+                setSelectedSuggestion(suggestions.corrected_comment)
+              }
+              disabled={isLoading}
+              required
+            />
+
+            <label
+              htmlFor="suggestion"
+              className={cn(
+                "text-base",
+                isLoading && "cursor-not-allowed text-muted-foreground",
+              )}
+            >
+              {suggestions.corrected_comment}
+            </label>
           </div>
 
-          <div className="flex items-center">
-            <Button type="submit" size="sm" className="ml-auto">
-              Send
-            </Button>
-          </div>
+          <SuggestionActions
+            selectedSuggestion={selectedSuggestion}
+            suggestion={suggestions.corrected_comment}
+          />
         </div>
-      ) : (
-        <Button onClick={handleSuggestions}>Loading suggestions</Button>
-      )}
+
+        <SubmitButton type="submit" isSubmitting={isLoading}>
+          Approve
+        </SubmitButton>
+      </form>
     </div>
   );
 }

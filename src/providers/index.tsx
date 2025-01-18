@@ -1,12 +1,14 @@
 "use client";
 
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { PropsWithChildren } from "react";
 import React from "react";
 
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
+
+import { TooltipProvider } from "@/components/ui/tooltip";
+
 import { ThemeProvider } from "./ThemeProvider";
 
 export function Providers({ children }: PropsWithChildren) {

@@ -1,5 +1,7 @@
 "use client";
 
+import { AlertTriangle, Flag, Users } from "lucide-react";
+
 import {
   Card,
   CardContent,
@@ -8,11 +10,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { AlertTriangle, Flag, Users } from "lucide-react";
 
 export function QuickInsightsInfos({ className }: { className?: string }) {
   return (
-    <Card className={cn("shadow-none rounded-lg", className)}>
+    <Card className={cn("rounded-lg shadow-none", className)}>
       <CardHeader>
         <CardTitle>Quick Insights</CardTitle>
         <CardDescription>Key metrics and trends</CardDescription>

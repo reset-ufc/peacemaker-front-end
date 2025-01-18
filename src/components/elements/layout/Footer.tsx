@@ -15,11 +15,11 @@ export function Footer() {
     <footer className="border-t py-4">
       <div className="container flex flex-col gap-8 pt-5">
         <section className="grid w-fit grid-cols-1 gap-6 md:grid-cols-3">
-          {footerLinks.map((link) => (
+          {footerLinks.map(link => (
             <div key={link.title} className="flex flex-col gap-2">
               <p className="text-xl font-semibold">{link.title}</p>
               <div className="flex flex-col gap-1">
-                {link.items.map((item) => (
+                {link.items.map(item => (
                   <Link
                     key={item.title}
                     href={item.href}
