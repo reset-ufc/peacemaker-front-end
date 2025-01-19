@@ -57,7 +57,7 @@ export function NavUser() {
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-md"
             side="top"
-            align="start"
+            align="end"
             sideOffset={4}
           >
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
