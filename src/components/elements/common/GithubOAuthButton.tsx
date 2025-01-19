@@ -1,9 +1,10 @@
 "use client";
 
+import { LoaderCircle } from "lucide-react";
+
 import { GitHubIcon } from "@/components/elements/svg/Github";
 import { Button } from "@/components/ui/button";
 import { githubAuthService } from "@/services/auth";
-import { LoaderCircle } from "lucide-react";
 
 export function GithubOAuthButton() {
   const { url, isLoading } = githubAuthService();

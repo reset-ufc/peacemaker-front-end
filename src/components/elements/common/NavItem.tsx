@@ -1,7 +1,9 @@
+import type { HTMLAttributeAnchorTarget, PropsWithChildren } from "react";
+
+import { ArrowUpRightIcon } from "lucide-react";
+
 import { ActiveLink } from "@/components/elements/common/ActiveLink";
 import { cn } from "@/lib/utils";
-import { ArrowUpRightIcon } from "lucide-react";
-import type { HTMLAttributeAnchorTarget, PropsWithChildren } from "react";
 
 type NavItemProps = {
   href: string;
@@ -24,7 +26,7 @@ export function NavItem({
         "hover:bg-muted hover:text-foreground",
         className,
         type === "nav" &&
-          "px-4 py-2 rounded-md data-[current=true]:bg-muted flex items-center gap-2",
+          "flex items-center gap-2 rounded-md px-4 py-2 data-[current=true]:bg-muted",
       )}
       activeClassName="active"
       target={target}

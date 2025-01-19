@@ -1,5 +1,6 @@
 "use client";
 
+import { TrendingUpIcon } from "lucide-react";
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
 import {
@@ -17,7 +18,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
-import { TrendingUpIcon } from "lucide-react";
 
 export const description = "A radar chart";
 
@@ -42,7 +42,7 @@ const chartConfig = {
 
 export function ModerationsFlagsChart({ className }: { className?: string }) {
   return (
-    <Card className={cn("shadow-none rounded-lg", className)}>
+    <Card className={cn("rounded-lg shadow-none", className)}>
       <CardHeader className="items-center pb-4">
         <CardTitle>Moderations Flags</CardTitle>
         <CardDescription>

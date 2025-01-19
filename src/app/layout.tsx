@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Open_Sans as Font } from "next/font/google";
+import { Geist as Font } from "next/font/google";
 import type { PropsWithChildren } from "react";
 
 import { cn } from "@/lib/utils";
 import { Providers } from "@/providers";
-
 import "@/styles/globals.css";
 
 const font = Font({

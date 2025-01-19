@@ -54,7 +54,7 @@ export function TypeModerationAcceptedGraph({
   className?: string;
 }) {
   return (
-    <Card className={cn("shadow-none rounded-lg", className)}>
+    <Card className={cn("rounded-lg shadow-none", className)}>
       <CardHeader>
         <CardTitle>Bar Chart - Custom Label</CardTitle>
         <CardDescription>Classification</CardDescription>
@@ -76,7 +76,7 @@ export function TypeModerationAcceptedGraph({
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={value => value.slice(0, 3)}
               hide
             />
             <XAxis dataKey="type" type="number" hide />

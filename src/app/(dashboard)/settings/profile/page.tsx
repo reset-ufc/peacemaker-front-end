@@ -1,5 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,10 +23,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { userService } from "@/services/user";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 /**
  * Force the page to be static and only change with a new build.
@@ -63,7 +65,7 @@ export default function Page() {
 
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      await new Promise(resolve => setTimeout(resolve, 1200));
     } catch (error) {
       console.error(error);
     } finally {
@@ -72,14 +74,14 @@ export default function Page() {
   }
 
   return (
-    <Card className="rounded-md mx-auto border-none">
+    <Card className="mx-auto rounded-md border-none">
       <CardHeader>
         <CardTitle>User</CardTitle>
         <CardDescription>
           Used to identify your account and personalize your experience.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6 max-w-xl">
+      <CardContent className="max-w-xl space-y-6">
         <Form {...form}>
           <form
             className="space-y-6"

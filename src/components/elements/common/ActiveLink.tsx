@@ -1,9 +1,10 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ComponentProps } from "react";
+
+import { cn } from "@/lib/utils";
 
 type ActiveLocalizedLinkProps = ComponentProps<typeof Link> & {
   activeClassName?: "desactive" | "active" | ({} & string);
@@ -12,7 +13,6 @@ type ActiveLocalizedLinkProps = ComponentProps<typeof Link> & {
 
 export function ActiveLink({
   children,
-  activeClassName = "active",
   allowSubPath = false,
   className,
   href = "",

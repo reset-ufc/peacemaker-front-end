@@ -1,7 +1,7 @@
 // @ts-check
 
-import { fileURLToPath } from "node:url";
 import { createJiti } from "jiti";
+import { fileURLToPath } from "node:url";
 import { ENABLE_STATIC_EXPORT } from "./next.constants.mjs";
 
 const jiti = createJiti(fileURLToPath(import.meta.url));
@@ -9,6 +9,7 @@ const jiti = createJiti(fileURLToPath(import.meta.url));
 await jiti.import("./src/env.mjs");
 
 /** @type {import('next').NextConfig} */
+// @ts-ignore
 const nextConfig = {
   // Just to ensure that React is always on strict mode
   reactStrictMode: true,

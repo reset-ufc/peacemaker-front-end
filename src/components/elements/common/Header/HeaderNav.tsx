@@ -3,11 +3,14 @@ import { cn } from "@/lib/utils";
 export function HeaderNav({
   children,
   className,
-}: { children: React.ReactNode; className?: string }) {
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <nav
       className={cn(
-        "container h-full flex items-center justify-between",
+        "container flex h-full items-center justify-between",
         className,
       )}
     >

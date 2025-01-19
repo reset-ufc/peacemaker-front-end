@@ -1,5 +1,10 @@
 "use client";
 
+import Link from "next/link";
+import React from "react";
+
+import { useTheme } from "next-themes";
+
 import {
   HeaderNav,
   HeaderRoot,
@@ -9,9 +14,6 @@ import {
 import { ThemeToggle } from "@/components/elements/common/ThemeToggle";
 // import { PeaceMakeLogo } from "@/components/elements/svg/logo-v2";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "next-themes";
-import Link from "next/link";
-import React from "react";
 
 export function Header() {
   const { resolvedTheme, setTheme } = useTheme();

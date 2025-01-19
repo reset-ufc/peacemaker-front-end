@@ -1,12 +1,5 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
 import {
   CircleHelpIcon,
   FlagIcon,
@@ -15,6 +8,13 @@ import {
   Trash2Icon,
   TrendingUpIcon,
 } from "lucide-react";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const metrics: Array<{
   title: string;
@@ -62,15 +62,15 @@ export function MetricsCards() {
   return (
     <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {metrics.map(({ title, tooltip, value, description, icon: Icon }) => (
-        <Card key={title} className="shadow-none rounded-lg">
+        <Card key={title} className="rounded-lg shadow-none">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium align-baseline">
+            <CardTitle className="align-baseline text-sm font-medium">
               {title}{" "}
               <Tooltip>
                 <TooltipTrigger>
                   <CircleHelpIcon className="size-3" />
                 </TooltipTrigger>
-                <TooltipContent className="max-w-44 bg-background text-foreground border border-border text-balance">
+                <TooltipContent className="max-w-44 text-balance border border-border bg-background text-foreground">
                   {tooltip}
                 </TooltipContent>
               </Tooltip>

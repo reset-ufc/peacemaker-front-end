@@ -1,6 +1,7 @@
-import { GithubOAuthButton } from "@/components/elements/common/GithubOAuthButton";
 import type { Metadata } from "next";
 import { Suspense } from "react";
+
+import { GithubOAuthButton } from "@/components/elements/common/GithubOAuthButton";
 
 /**
  * Force the page to be static and only change with a new build.
@@ -24,13 +25,13 @@ export function generateMetadata(): Metadata {
 
 export default function Page() {
   return (
-    <div className="h-screen flex flex-col items-center justify-center">
+    <div className="flex h-screen flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-4">
         <h1 className="text-2xl font-semibold">Sign in with GitHub</h1>
         <Suspense fallback={<div>Loading...</div>}>
           <GithubOAuthButton />
         </Suspense>
-        <p className="text-sm text-muted-foreground max-w-xs text-center">
+        <p className="max-w-xs text-center text-sm text-muted-foreground">
           By clicking continue, you agree to our{" "}
           <a
             href="/terms"

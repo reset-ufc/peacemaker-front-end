@@ -1,11 +1,11 @@
+import type { Metadata } from "next";
+
+import { DateRangeFilter } from "@/components/elements/common/DateRangeFilter";
 import { MetricsCards } from "@/components/elements/layout/MetricsCards";
 import { ModerationActionsChart } from "@/components/elements/layout/ModerationActionsChart";
 import { ModerationActivityGraph } from "@/components/elements/layout/ModerationActivityGraph";
 import { ModerationsFlagsChart } from "@/components/elements/layout/ModerationsFlagsChart";
 import { RecentFlaggedCommentsTable } from "@/components/elements/layout/RecentFlaggedCommentsTable";
-
-import { DateRangeFilter } from "@/components/elements/common/DateRangeFilter";
-import type { Metadata } from "next";
 
 /**
  * Force the page to be static and only change with a new build.
@@ -38,21 +38,21 @@ export default function AppPage() {
         </div>
         {/* KPI Cards */}
         <MetricsCards />
-        <div className="mt-4 grid lg:gap-x-4 gap-y-4 md:grid-cols-2 lg:grid-cols-8">
+        <div className="mt-4 grid gap-y-4 md:grid-cols-2 lg:grid-cols-8 lg:gap-x-4">
           {/* Main Chart Section */}
           <ModerationActivityGraph className="col-span-5" />
 
           {/* Problematic Comments Table */}
           <RecentFlaggedCommentsTable
-            // @ts-ignore
+            // @ts-expect-error user comments is a any type
             users={usersComments}
-            className="lg:col-span-3 col-span-5"
+            className="col-span-5 lg:col-span-3"
           />
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-          <ModerationsFlagsChart className="md:col-span-3 col-span-2" />
+          <ModerationsFlagsChart className="col-span-2 md:col-span-3" />
           {/* Moderation Types Distribution */}
-          <ModerationActionsChart className="md:col-span-3 col-span-2" />
+          <ModerationActionsChart className="col-span-2 md:col-span-3" />
           {/* Quick Insights */}
           {/* <QuickInsightsInfos className="col-span-2" /> */}
         </div>

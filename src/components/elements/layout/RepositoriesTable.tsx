@@ -1,5 +1,15 @@
 "use client";
 
+import Link from "next/link";
+
+import {
+  type ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { ExternalLinkIcon } from "lucide-react";
+
 import {
   Table,
   TableBody,
@@ -10,19 +20,11 @@ import {
 } from "@/components/ui/table";
 import { repositoriesService } from "@/services/repositories";
 import type { Repository } from "@/services/repositories/action";
-import {
-  type ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { ExternalLinkIcon } from "lucide-react";
-import Link from "next/link";
 
 export const columns: Array<ColumnDef<Repository>> = [
   {
     accessorKey: "repository_id",
-    header: () => <div className="font-semibold text-sm">Repository Id</div>,
+    header: () => <div className="text-sm font-semibold">Repository Id</div>,
     cell: ({ row }) => (
       <Link
         href={`/app/dashboard/${row.getValue("repository_id")}`}
@@ -37,7 +39,7 @@ export const columns: Array<ColumnDef<Repository>> = [
     id: "repository_name",
     accessorKey: "repository_name",
 
-    header: () => <div className="font-semibold text-sm">Repository Name</div>,
+    header: () => <div className="text-sm font-semibold">Repository Name</div>,
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <div className="text-sm">{row.getValue("repository_name")}</div>
@@ -46,7 +48,7 @@ export const columns: Array<ColumnDef<Repository>> = [
   },
   {
     accessorKey: "github_html_url",
-    header: () => <div className="font-semibold text-sm">Repository Link</div>,
+    header: () => <div className="text-sm font-semibold">Repository Link</div>,
     cell: ({ row }) => (
       <a
         className="flex items-center gap-2 hover:underline"
@@ -74,16 +76,16 @@ export function RepositoriesTable() {
     <div className="rounded-md border">
       <Table>
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
+          {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
+              {headerGroup.headers.map(header => {
                 return (
                   <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 );
@@ -93,12 +95,12 @@ export function RepositoriesTable() {
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+            table.getRowModel().rows.map(row => (
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
-                {row.getVisibleCells().map((cell) => (
+                {row.getVisibleCells().map(cell => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
