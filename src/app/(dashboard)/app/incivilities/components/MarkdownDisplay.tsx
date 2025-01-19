@@ -7,8 +7,10 @@ import {
   oneDark,
   oneLight,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
+import remarkGfm from "remark-gfm";
 
 import { cn } from "@/lib/utils";
+import styles from "@/styles/markdown-styles.module.css";
 
 interface MarkdownDisplayProps {
   text: string;
@@ -24,7 +26,8 @@ export function MarkdownDisplay({ text, className }: MarkdownDisplayProps) {
     <Markdown
       // eslint-disable-next-line react/no-children-prop
       children={text}
-      className={cn(className)}
+      className={cn(className, styles.reactMarkDown)}
+      remarkPlugins={[remarkGfm]}
       components={{
         code(props) {
           const { children, className, node, ref, ...rest } = props;
