@@ -28,7 +28,6 @@ export function NavItem({
         type === "nav" &&
           "flex items-center gap-2 rounded-md px-4 py-2 data-[current=true]:bg-muted",
       )}
-      activeClassName="active"
       target={target}
     >
       <span className="text-sm">{children}</span>
