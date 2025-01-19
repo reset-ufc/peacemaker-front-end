@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import type { Comment } from "@/services/comments/action";
 
-import { SuggestionTable } from "./SuggestionTable";
+import { MarkdownDisplay } from "./MarkdownDisplay";
+import { Suggestions } from "./Suggestions";
 
 interface IncivilityDetailsProps {
   incivility: Comment | null;
@@ -53,12 +54,15 @@ export function IncivilityDetails({ incivility }: IncivilityDetailsProps) {
 
           <Separator />
 
-          <div className="text-md flex-1 px-4 py-8">{incivility.content}</div>
+          <MarkdownDisplay
+            text={incivility.content}
+            className="flex-1 px-4 py-8"
+          />
           <Separator className="mt-auto" />
 
           <div className="p-4">
             <div className="grid gap-4">
-              <SuggestionTable suggestions={incivility.suggestions} />
+              <Suggestions suggestions={incivility.suggestions} />
             </div>
           </div>
         </div>
