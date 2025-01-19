@@ -123,5 +123,23 @@ export const mockData = {
       solutioned: true,
       solution: "",
     },
+    {
+      comment_id: "2600438122",
+      user_id: "76269418",
+      repository_id: "918463959",
+      login: "meiazero",
+      repo_full_name: "meiazero/blob",
+      created_at: "2025-01-19T01:58:22Z",
+      content:
+        'you should be able to change this shit code, using the `Bun` globals instance. use your damn brain mtf\n\n```ts\nconst client = new Bun.S3Client({\n  accessKeyId: "your-access-key",\n  secretAccessKey: "your-secret-key",\n  bucket: "my-bucket",\n});\n```',
+      toxicity: "0.7856813",
+      suggestions: {
+        corrected_comment:
+          "I think it's possible to refactor this code using the `Bun` globals instance. Let's utilize its capabilities to create a more efficient solution. For instance, we could initialize the S3 client with the access key, secret key, and bucket name as follows: `const client = new Bun.S3Client({...}).` Would you like to explore this approach further?",
+      },
+      classification: "insulting",
+      solutioned: false,
+      solution: null,
+    },
   ],
 };
