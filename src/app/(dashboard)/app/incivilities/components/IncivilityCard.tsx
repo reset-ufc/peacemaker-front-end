@@ -30,7 +30,7 @@ export function IncivilityCart({
             <Badge variant="secondary">Unsolved</Badge>
           )}
         </div>
-        <p className="">{incivility.content}</p>
+        <p className="max-w-xs truncate">{incivility.content}</p>
         <div className="flex w-full items-center justify-between">
           <Badge className="w-fit">{incivility.classification}</Badge>
           <p className="text-xs">
