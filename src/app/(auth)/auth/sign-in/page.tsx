@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
-import { GitHubIcon } from "@/components/elements/svg/Github";
-import { Button } from "@/components/ui/button";
-import { api } from "@/lib/api";
-import { GITHUB_AUTH_ROUTE } from "@/lib/routes";
+import { GithubOAuthButton } from "@/components/elements/common/GithubOAuthButton";
 
 /**
  * Force the page to be static and only change with a new build.
@@ -25,28 +23,14 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default async function Page() {
-  const response = await api.get<{ authorization_url: string }>(
-    GITHUB_AUTH_ROUTE(),
-  );
-
-  console.info(response.data);
-
-  const url = new URL(response.data.authorization_url);
-
+export default function Page() {
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-4">
         <h1 className="text-2xl font-semibold">Sign in with GitHub</h1>
-        {/* <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div>Loading...</div>}>
           <GithubOAuthButton />
-        </Suspense> */}
-        <Button asChild>
-          <a href={url.toString()} target="_blank" rel="noreferrer">
-            <GitHubIcon />
-            Login with Github
-          </a>
-        </Button>
+        </Suspense>
         <p className="max-w-xs text-center text-sm text-muted-foreground">
           By clicking continue, you agree to our{" "}
           <a
