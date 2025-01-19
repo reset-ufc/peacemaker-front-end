@@ -32,7 +32,7 @@ export default async function Page() {
 
   console.info(response.data);
 
-  const url = response.data.authorization_url;
+  const url = new URL(response.data.authorization_url);
 
   return (
     <div className="flex h-screen flex-col items-center justify-center">
@@ -42,7 +42,7 @@ export default async function Page() {
           <GithubOAuthButton />
         </Suspense> */}
         <Button asChild>
-          <a href={url} target="_blank" rel="noreferrer">
+          <a href={url.toString()} target="_blank" rel="noreferrer">
             <GitHubIcon />
             Login with Github
           </a>
