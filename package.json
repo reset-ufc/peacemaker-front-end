@@ -41,6 +41,8 @@
     "react-day-picker": "8.10.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "7.54.2",
+    "react-markdown": "9.0.3",
+    "react-syntax-highlighter": "15.6.1",
     "recharts": "2.13.3",
     "sonner": "^1.7.1",
     "zod": "^3.24.1"
@@ -52,6 +54,7 @@
     "@types/node": "^22.10.4",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/react-syntax-highlighter": "15.5.13",
     "autoprefixer": "^10.4.19",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
