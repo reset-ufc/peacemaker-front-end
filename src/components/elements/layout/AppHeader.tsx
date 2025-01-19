@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 import { useTheme } from "next-themes";
 
 import {
@@ -9,9 +7,10 @@ import {
   HeaderRoot,
   HeaderSide,
 } from "@/components/elements/common/Header";
-// import { NavItem } from "@/components/elements/common/NavItem";
+import { NavItem } from "@/components/elements/common/NavItem";
 import { ThemeToggle } from "@/components/elements/common/ThemeToggle";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+
+import { NavUser } from "./NavUser";
 
 export function AppHeader() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -23,26 +22,30 @@ export function AppHeader() {
     <HeaderRoot>
       <HeaderNav className="min-w-full">
         <HeaderSide className="gap-8">
-          <SidebarTrigger />
-
-          {/* <ul className="md:flex flex-row gap-4 hidden">
+          <ul className="hidden flex-row gap-4 md:flex">
             {[
               {
-                text: "Home",
-                href: "/home",
+                text: "Incivilities",
+                href: "/app/incivilities",
                 target: undefined,
               },
-            ].map((link) => (
+              {
+                text: "Repositories",
+                href: "/app/repositories",
+                target: undefined,
+              },
+            ].map(link => (
               <li key={link.href}>
                 <NavItem key={link.href} href={link.href} target={link.target}>
                   {link.text}
                 </NavItem>
               </li>
             ))}
-          </ul> */}
+          </ul>
         </HeaderSide>
         <HeaderSide>
           <ThemeToggle onClick={toggleCurrentTheme} />
+          <NavUser />
         </HeaderSide>
       </HeaderNav>
     </HeaderRoot>
