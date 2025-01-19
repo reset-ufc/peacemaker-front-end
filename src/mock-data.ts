@@ -196,5 +196,23 @@ export const mockData = {
       solutioned: false,
       solution: "",
     },
+    {
+      comment_id: "260044388822",
+      user_id: "76269418",
+      repository_id: "918463959",
+      login: "meiazero",
+      repo_full_name: "meiazero/blob",
+      created_at: "2025-01-19T01:58:22Z",
+      content:
+        "A paragraph with *emphasis* and **strong importance**. \n> A block quote with ~strikethrough~ and a URL: https://reactjs.org.\n *Lists\n * [ ] todo\n * [x] done\n A table:\n\n | a | b |\n | - | - |\n",
+      toxicity: "0.7856813",
+      suggestions: {
+        corrected_comment:
+          "I think it's possible to refactor this code using the `Bun` globals instance. Let's utilize its capabilities to create a more efficient solution. For instance, we could initialize the S3 client with the access key, secret key, and bucket name as follows: `const client = new Bun.S3Client({...}).` Would you like to explore this approach further?",
+      },
+      classification: "insulting",
+      solutioned: false,
+      solution: "",
+    },
   ],
 };
