@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 
-import { GithubOAuthButton } from "@/components/elements/common/GithubOAuthButton";
+import { GitHubIcon } from "@/components/elements/svg/Github";
+import { Button } from "@/components/ui/button";
+import { env } from "@/env.mjs";
 
 /**
  * Force the page to be static and only change with a new build.
@@ -28,9 +29,17 @@ export default function Page() {
     <div className="flex h-screen flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-4">
         <h1 className="text-2xl font-semibold">Sign in with GitHub</h1>
-        <Suspense fallback={<div>Loading...</div>}>
-          <GithubOAuthButton />
-        </Suspense>
+        <Button asChild>
+          <a
+            href={`https://github.com/login/oauth/authorize?client_id=${env.NEXT_PUBLIC_GITHUB_ID}&response_type=code&state=${encodeURIComponent("repo,user:email")}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <GitHubIcon />
+            Login with GitHub
+          </a>
+        </Button>
+
         <p className="max-w-xs text-center text-sm text-muted-foreground">
           By clicking continue, you agree to our{" "}
           <a
