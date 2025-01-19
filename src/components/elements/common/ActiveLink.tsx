@@ -7,7 +7,7 @@ import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 type ActiveLocalizedLinkProps = ComponentProps<typeof Link> & {
-  activeClassName?: "desactive" | "active" | ({} & string);
+  activeClassname?: "desactive" | "active" | ({} & string);
   allowSubPath?: boolean;
 };
 
