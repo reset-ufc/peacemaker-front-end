@@ -7,15 +7,15 @@ import { Separator } from "@/components/ui/separator";
 import { useNotification } from "@/hooks/use-notification";
 import { cn } from "@/lib/utils";
 
-import { SuggestionActions } from "./SuggestionActions";
+import { MarkdownDisplay } from "./MarkdownDisplay";
 
-interface SuggestionTableProps {
+interface SuggestionsProps {
   suggestions: {
     corrected_comment: string;
   };
 }
 
-export function SuggestionTable({ suggestions }: SuggestionTableProps) {
+export function Suggestions({ suggestions }: SuggestionsProps) {
   const [selectedSuggestion, setSelectedSuggestion] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { notifySuccess, notifyError } = useNotification();
@@ -63,14 +63,14 @@ export function SuggestionTable({ suggestions }: SuggestionTableProps) {
                 isLoading && "cursor-not-allowed text-muted-foreground",
               )}
             >
-              {suggestions.corrected_comment}
+              <MarkdownDisplay text={suggestions.corrected_comment} />
             </label>
           </div>
 
-          <SuggestionActions
+          {/* <SuggestionActions
             selectedSuggestion={selectedSuggestion}
             suggestion={suggestions.corrected_comment}
-          />
+          /> */}
         </div>
 
         <SubmitButton type="submit" isSubmitting={isLoading}>
