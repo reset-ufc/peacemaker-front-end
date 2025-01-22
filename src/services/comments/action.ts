@@ -1,4 +1,5 @@
-import { mockData } from "@/mock-data";
+import { api } from "@/lib/api";
+import { COMMENTS_ROUTE } from "@/lib/routes";
 
 export interface Comment {
   comment_id: string;
@@ -19,7 +20,8 @@ export interface Comment {
 
 export async function getComments(): Promise<Array<Comment>> {
   try {
-    return mockData.githubComments;
+    const response = await api.get<Array<Comment>>(COMMENTS_ROUTE());
+    return response.data;
   } catch (error) {
     console.error("Error fetching storages:", error);
     throw error;
