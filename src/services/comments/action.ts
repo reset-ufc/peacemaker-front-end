@@ -18,9 +18,9 @@ export interface Comment {
   solution: string;
 }
 
-export async function getComments(): Promise<Array<Comment>> {
+export async function getComments(username: string): Promise<Array<Comment>> {
   try {
-    const response = await api.get<Array<Comment>>(COMMENTS_ROUTE());
+    const response = await api.get<Array<Comment>>(COMMENTS_ROUTE(username));
     return response.data;
   } catch (error) {
     console.error("Error fetching storages:", error);

@@ -6,7 +6,8 @@ export const PROFILE_ROUTE = (): string => "api/v1/user/profile";
 export const REPOSITORIES_ROUTE = (): string => "api/v1/repository";
 export const REPOSITORIES_LOADER_ROUTE = (): string =>
   "api/v1/repository/remote";
-export const COMMENTS_ROUTE = (): string => "api/v1/comments";
+export const COMMENTS_ROUTE = (username: string): string =>
+  `api/v1/comments/${username}`;
 export const REPOSITORY_COMMENTS_ROUTE = (repository_id: string): string =>
   `comments/${repository_id}/`;
 export const INCIVILITIES_COMMENT_SUGGESTION_ROUTE = (): string =>

@@ -2,15 +2,17 @@
 
 import { ComponentProps, useState } from "react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { format, formatDistanceToNow } from "date-fns";
+import { parseAsString, useQueryState } from "nuqs";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { commentsService } from "@/services/comments";
 import { Comment } from "@/services/comments/action";
+import { userService } from "@/services/user";
 
 import { MarkdownDisplay } from "./components/MarkdownDisplay";
 import { Suggestions } from "./components/Suggestions";
@@ -26,18 +28,24 @@ export interface Incivility {
 }
 
 export default function IncivilitiesPage() {
-  const { comments: incivilities } = commentsService();
-  const [incivility, setIncivility] = useState<{
-    selected: string | null;
-    incivility: Comment | null;
-  }>({
-    selected: null,
-    incivility: null,
-  });
+  const { user } = userService();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+  const { comments: incivilities } = commentsService(user?.profile.username!);
+
+  const [incivilitySelected, setIncivilitySelected] = useQueryState(
+    "incivility",
+    parseAsString.withDefault("").withOptions({
+      shallow: true,
+    }),
+  );
+
+  const [incivility, setIncivility] = useState<Comment | null>(
+    incivilities?.find(item => item.comment_id === incivilitySelected) || null,
+  );
 
   return (
     <main className="flex h-[calc(100vh-4rem)] flex-row">
-      <ScrollArea className="h-full border-r sm:w-2/4">
+      <ScrollArea className="h-full border-r py-8 sm:w-2/4">
         <div className="flex flex-col gap-2 p-4 pt-0">
           {incivilities ? (
             incivilities.map(item => (
@@ -45,16 +53,17 @@ export default function IncivilitiesPage() {
                 key={item.comment_id}
                 className={cn(
                   "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
-                  incivility.selected === item.comment_id && "bg-muted",
+                  incivilitySelected === item.comment_id && "bg-muted",
                 )}
-                onClick={() =>
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  setIncivility((prevState: any) => ({
-                    ...prevState,
-                    selected: item.comment_id,
-                    incivility: item,
-                  }))
-                }
+                onClick={async () => {
+                  // setIncivility((prevState: any) => ({
+                  //   ...prevState,
+                  //   selected: item.comment_id,
+                  //   incivility: item,
+                  // }));
+                  await setIncivilitySelected(item.comment_id);
+                  setIncivility(item);
+                }}
               >
                 <div className="flex w-full flex-col gap-1">
                   <div className="flex items-center">
@@ -72,7 +81,7 @@ export default function IncivilitiesPage() {
                     <div
                       className={cn(
                         "ml-auto text-xs",
-                        incivility.selected === item.comment_id
+                        incivilitySelected === item.comment_id
                           ? "text-foreground"
                           : "text-muted-foreground",
                       )}
@@ -106,36 +115,31 @@ export default function IncivilitiesPage() {
       </ScrollArea>
 
       <div className="flex h-full w-3/4 flex-col">
-        {incivility ? (
+        {incivilitySelected ? (
           <div className="flex flex-1 flex-col">
             <div className="flex items-start p-4">
               <div className="flex items-start gap-4 text-sm">
                 <Avatar>
                   <AvatarImage
-                    alt={`https://github.com/${incivility?.incivility?.login}.png`}
+                    alt={`https://github.com/${incivility?.login}.png`}
                   />
                   <AvatarFallback>
-                    {incivility?.incivility?.login
+                    {incivility?.login
                       .split(" ")
                       .map(chunk => chunk[0])
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid gap-1">
-                  <div className="font-semibold">
-                    {incivility?.incivility?.login}
-                  </div>
+                  <div className="font-semibold">{incivility?.login}</div>
                   <div className="line-clamp-1 text-xs">
-                    {incivility?.incivility?.repo_full_name}
+                    {incivility?.repo_full_name}
                   </div>
                 </div>
               </div>
-              {incivility?.incivility?.created_at && (
+              {incivility?.created_at && (
                 <div className="ml-auto text-xs text-muted-foreground">
-                  {format(
-                    new Date(incivility?.incivility?.created_at),
-                    "PPPpp",
-                  )}
+                  {format(new Date(incivility?.created_at), "PPPpp")}
                 </div>
               )}
             </div>
@@ -144,13 +148,13 @@ export default function IncivilitiesPage() {
             <ScrollArea className="h-full w-full">
               <MarkdownDisplay
                 className="flex-1 whitespace-pre-wrap p-4 text-sm"
-                text={incivility?.incivility?.content as string}
+                text={incivility?.content as string}
               />
             </ScrollArea>
             <Separator className="mt-auto" />
             <Suggestions
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              suggestions={incivility?.incivility?.suggestions as any}
+              suggestions={incivility?.suggestions as any}
             />
           </div>
         ) : (
