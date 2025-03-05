@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
 
 import { useTheme } from "next-themes";
 
@@ -49,7 +48,7 @@ export function Header() {
         <HeaderSide>
           <ThemeToggle onClick={toggleCurrentTheme} />
           <Button asChild>
-            <Link href="/auth/sign-in">Sign in</Link>
+            <Link href="/auth/sign-in/github">Sign in</Link>
           </Button>
         </HeaderSide>
       </HeaderNav>

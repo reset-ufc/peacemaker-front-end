@@ -1,14 +1,16 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
+
+import axios, { AxiosResponse } from "axios";
 
 import { GitHubIcon } from "@/components/elements/svg/Github";
 import { Button } from "@/components/ui/button";
-import { env } from "@/env.mjs";
 
 /**
  * Force the page to be static and only change with a new build.
  *
  * read more about the Route Segment Config here:
  * https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
+ * 'auto' | 'error' | 'force-static' | 'force-dynamic'
  */
 export const dynamic = "force-static";
 
@@ -20,21 +22,40 @@ export const dynamic = "force-static";
  */
 export function generateMetadata(): Metadata {
   return {
-    title: "Sign In",
+    title: "Sign in with Github",
   };
 }
 
-export default function Page() {
+export default async function AuthPage() {
+  const request: AxiosResponse<{ url: string }> = await axios.get(
+    "http://localhost:3000/api/oauth/github",
+    {
+      params: {
+        // This should be changed up front, using search parameters to make it more dynamic
+        redirect_uri: "http://localhost:3001/app/repositories",
+        client_type: "web",
+      },
+    },
+  );
+
+  const url = request.data.url;
+
+  return (
+    <main className="flex h-screen flex-col items-center justify-center gap-y-8">
+      <div className="container">
+        <AuthComponent url={url} />
+      </div>
+    </main>
+  );
+}
+
+function AuthComponent({ url }: { url: string }) {
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-4">
         <h1 className="text-2xl font-semibold">Sign in with GitHub</h1>
         <Button asChild>
-          <a
-            href={`https://github.com/login/oauth/authorize?client_id=${env.NEXT_PUBLIC_GITHUB_ID}&response_type=code&state=${encodeURIComponent("repo,user:email")}`}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href={url}>
             <GitHubIcon />
             Login with GitHub
           </a>

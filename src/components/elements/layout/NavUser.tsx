@@ -32,22 +32,18 @@ export function NavUser() {
               className="border border-primary data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <img
-                src={user?.profile?.avatar_url}
-                alt={user?.profile?.name}
+                src={user?.avatar_url}
+                alt={user?.name}
                 className="size-8 rounded-md"
               />
               <div className="grid flex-1 text-left text-sm leading-tight">
-                {user?.profile?.name ? (
-                  <span className="truncate font-semibold">
-                    {user?.profile?.name}
-                  </span>
+                {user?.name ? (
+                  <span className="truncate font-semibold">{user?.name}</span>
                 ) : (
                   <span className="animate-pulse bg-muted py-2" />
                 )}
-                {user?.profile?.email ? (
-                  <span className="truncate text-xs">
-                    {user?.profile?.email}
-                  </span>
+                {user?.email ? (
+                  <span className="truncate text-xs">{user?.email}</span>
                 ) : (
                   <span className="truncate text-xs">No e-mail provided</span>
                 )}
