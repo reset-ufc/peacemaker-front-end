@@ -1,4 +1,4 @@
-import { Header } from "@/components/elements/layout/Header";
+import { Header } from "@/components/layout/Header";
 
 export default function PublicLayout({
   children,

@@ -1,0 +1,35 @@
+"use client";
+
+import Link from "next/link";
+
+import { useTheme } from "next-themes";
+
+import { HeaderNav, HeaderRoot, HeaderSide } from "@/components/base/Header";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { Button } from "@/components/ui/button";
+
+export function Header() {
+  const { resolvedTheme, setTheme } = useTheme();
+
+  const toggleCurrentTheme = () =>
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+
+  return (
+    <HeaderRoot>
+      <HeaderNav>
+        <HeaderSide className="gap-8">
+          <Link href="/">
+            <h1 className="text-xl font-bold">PeaceMakerBot</h1>
+          </Link>
+        </HeaderSide>
+
+        <HeaderSide>
+          <ThemeToggle onClick={toggleCurrentTheme} />
+          <Button asChild>
+            <Link href="/sign-in/github">Sign in</Link>
+          </Button>
+        </HeaderSide>
+      </HeaderNav>
+    </HeaderRoot>
+  );
+}
