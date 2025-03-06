@@ -1,5 +1,5 @@
 services:
-  nextjs-boilerplate:
+  peacemaker-web:
     build:
       context: .
       dockerfile: Dockerfile
