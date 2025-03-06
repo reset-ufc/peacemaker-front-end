@@ -30,7 +30,7 @@ export default function Page() {
       <section className="mx-auto max-w-5xl space-y-6">
         <div className="space-y-4">
           <h2 className="text-3xl font-semibold">Lorem ipsum</h2>
-          <p className="text-balance text-base leading-relaxed">
+          <p className="text-base leading-relaxed text-balance">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat
             tenetur tempore reprehenderit quos natus hic debitis, laboriosam
             neque fugiat, provident voluptates temporibus dicta, quisquam in
