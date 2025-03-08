@@ -6,15 +6,17 @@ import { formatDistanceToNow } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { mockData } from "@/mock";
+import { Comment } from "@/types";
 
-export default function IncivilitiesLayout({
+export default async function IncivilitiesLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const data = mockData.githubComments;
+  const request = await api.get<{ comments: Array<Comment> }>("/api/comments");
+  const data = request.data.comments;
 
   const unsolveds = data.filter(item => !item.solutioned);
 
@@ -31,9 +33,9 @@ export default function IncivilitiesLayout({
             <TabsContent value="all">
               <ul className="space-y-4">
                 {data.map(item => (
-                  <li key={item.comment_id} className="text-sm">
+                  <li key={item.gh_comment_id} className="text-sm">
                     <Link
-                      href={`/incivilities/${item.comment_id}`}
+                      href={`/incivilities/${item.gh_comment_id}`}
                       className={cn(
                         "hover:bg-accent flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all"
                       )}
@@ -42,7 +44,7 @@ export default function IncivilitiesLayout({
                         <div className="flex items-center">
                           <div className="flex items-center gap-2">
                             <div className="font-semibold">
-                              {item.repo_full_name}
+                              {item.repository_fullname}
                             </div>
                             {!item.solutioned && (
                               <Badge
@@ -54,9 +56,12 @@ export default function IncivilitiesLayout({
                             )}
                           </div>
                           <div className={cn("ml-auto text-xs")}>
-                            {formatDistanceToNow(new Date(item.created_at), {
-                              addSuffix: true,
-                            })}
+                            {formatDistanceToNow(
+                              new Date(item.comment_created_at),
+                              {
+                                addSuffix: true,
+                              }
+                            )}
                           </div>
                         </div>
                       </div>
@@ -83,9 +88,9 @@ export default function IncivilitiesLayout({
             <TabsContent value="unsolveds">
               <ul className="space-y-4">
                 {unsolveds.map(item => (
-                  <li key={item.comment_id} className="text-sm">
+                  <li key={item.gh_comment_id} className="text-sm">
                     <Link
-                      href={`/incivilities/${item.comment_id}`}
+                      href={`/incivilities/${item.gh_comment_id}`}
                       className={cn(
                         "hover:bg-accent flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all"
                       )}
@@ -94,7 +99,7 @@ export default function IncivilitiesLayout({
                         <div className="flex items-center">
                           <div className="flex items-center gap-2">
                             <div className="font-semibold">
-                              {item.repo_full_name}
+                              {item.repository_fullname}
                             </div>
                             {!item.solutioned && (
                               <Badge
@@ -106,9 +111,12 @@ export default function IncivilitiesLayout({
                             )}
                           </div>
                           <div className={cn("ml-auto text-xs")}>
-                            {formatDistanceToNow(new Date(item.created_at), {
-                              addSuffix: true,
-                            })}
+                            {formatDistanceToNow(
+                              new Date(item.comment_created_at),
+                              {
+                                addSuffix: true,
+                              }
+                            )}
                           </div>
                         </div>
                       </div>
