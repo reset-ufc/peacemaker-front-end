@@ -3,8 +3,8 @@ import Image from "next/image";
 
 import { format } from "date-fns";
 
-import { Suggestions } from "@/components/layout/Suggestions";
-import { mockData } from "@/mock";
+import { api } from "@/lib/api";
+import { Comment } from "@/types";
 
 interface IncivilityPageProps {
   params: Promise<{
@@ -47,43 +47,56 @@ export async function generateMetadata({
 export default async function IncivilityPage({ params }: IncivilityPageProps) {
   const p = await params;
 
-  const findIncivility = mockData.githubComments.find(
-    item => item.comment_id === p.id
-  );
+  const request = await api.get<{ comment: Comment }>(`/api/comments/${p.id}`);
+
+  const findIncivility = request.data.comment;
 
   return (
-    <div className="flex h-full flex-1 flex-col justify-between">
-      <div className="flex flex-col">
-        <div className="flex items-start p-4">
-          <div className="flex items-start gap-4 text-sm">
-            <Image
-              alt={`${findIncivility?.login}'s avatar`}
-              className="h-10 w-10 rounded-full"
-              height={40}
-              src={`https://github.com/${findIncivility?.login}.png`}
-              width={40}
-              unoptimized
-            />
-            <div className="grid gap-1">
-              <div className="font-semibold">{findIncivility?.login}</div>
-              <div className="line-clamp-1 text-xs">
-                {findIncivility?.repo_full_name}
+    <>
+      {findIncivility.gh_comment_id ? (
+        <div className="flex h-full flex-1 flex-col justify-between">
+          <div className="flex flex-col">
+            <div className="flex items-start p-4">
+              <div className="flex items-start gap-4 text-sm">
+                <Image
+                  alt={`${findIncivility?.repository_fullname}'s avatar`}
+                  className="h-10 w-10 rounded-full"
+                  height={40}
+                  src={`https://github.com/${findIncivility?.repository_owner}.png`}
+                  width={40}
+                  unoptimized
+                />
+                <div className="grid gap-1">
+                  <div className="font-semibold">
+                    {findIncivility?.repository_owner}
+                  </div>
+                  <div className="line-clamp-1 text-xs">
+                    {findIncivility?.repository_fullname}
+                  </div>
+                </div>
               </div>
+              {findIncivility?.comment_created_at && (
+                <div className="text-muted-foreground ml-auto text-xs">
+                  {format(
+                    new Date(findIncivility?.comment_created_at),
+                    "PPPpp"
+                  )}
+                </div>
+              )}
             </div>
+
+            <code className="flex-1 text-xs whitespace-pre-wrap">
+              {findIncivility?.content}
+            </code>
           </div>
-          {findIncivility?.created_at && (
-            <div className="text-muted-foreground ml-auto text-xs">
-              {format(new Date(findIncivility?.created_at), "PPPpp")}
-            </div>
-          )}
+
+          {/* <Suggestions suggestions={findIncivility?.suggestions} /> */}
         </div>
-
-        <code className="flex-1 text-xs whitespace-pre-wrap">
-          {findIncivility?.content}
-        </code>
-      </div>
-
-      <Suggestions suggestions={findIncivility?.suggestions} />
-    </div>
+      ) : (
+        <div className="container">
+          <h1>Incivility {p.id} not found</h1>
+        </div>
+      )}
+    </>
   );
 }
