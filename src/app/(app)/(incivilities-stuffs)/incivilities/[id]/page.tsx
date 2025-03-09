@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { format } from "date-fns";
 
+import { SuggestionList } from "@/components/layout/Suggestions";
 import { api } from "@/lib/api";
 import { Comment } from "@/types";
 
@@ -43,6 +44,26 @@ export async function generateMetadata({
     title: `Incivility ${p.id}`,
   };
 }
+
+const exampleSuggestions = {
+  gh_comment_id: "123456789",
+  suggestions: [
+    {
+      content:
+        "Sugiro alterar o termo 'idiota' para 'inadequado'. Isso mantém a crítica sem usar linguagem ofensiva.",
+    },
+    {
+      content:
+        "Recomendo remover completamente a frase ofensiva e focar apenas nos aspectos técnicos da discussão.",
+    },
+    {
+      content:
+        "Você poderia reformular seu comentário para: 'Discordo dessa abordagem pois ela não considera os casos de uso X e Y'.",
+    },
+  ],
+  is_edited: false,
+  selected_suggestion_index: null,
+};
 
 export default async function IncivilityPage({ params }: IncivilityPageProps) {
   const p = await params;
@@ -90,7 +111,7 @@ export default async function IncivilityPage({ params }: IncivilityPageProps) {
             </code>
           </div>
 
-          {/* <Suggestions suggestions={findIncivility?.suggestions} /> */}
+          <SuggestionList suggestions={exampleSuggestions} />
         </div>
       ) : (
         <div className="container">
