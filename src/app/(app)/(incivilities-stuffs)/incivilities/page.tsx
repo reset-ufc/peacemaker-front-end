@@ -7,7 +7,7 @@ import type { Metadata } from "next";
  * https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
  * 'auto' | 'error' | 'force-static' | 'force-dynamic'
  */
-export const dynamic = "force-static";
+export const dynamic = "auto";
 
 /**
  * Generate the metadata with dynamic information.
@@ -21,10 +21,10 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default async function IncivilitesPage() {
+export default function IncivilitesPage() {
   return (
-    <>
-      <h1>incivilites</h1>
-    </>
+    <main className="flex h-full flex-1 items-center justify-center">
+      <h1 className="text-xl">No comment selected</h1>
+    </main>
   );
 }
