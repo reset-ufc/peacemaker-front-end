@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Check, Edit, X } from "lucide-react";
 import { toast } from "sonner";
@@ -10,13 +10,19 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { Suggestion } from "@/types";
 
-export function SuggestionList({
-  suggestions,
-}: {
-  suggestions: Array<Suggestion>;
-}) {
+// Interface da API
+interface Suggestions {
+  gh_comment_id: string; // id do comentário no GitHub
+  // sugestões do comentário
+  suggestions: Array<{
+    content: string; // solução sugerida
+  }>;
+  is_edited: boolean; // se o comentário foi editado
+  selected_suggestion_index: number | null; // índice da sugestão selecionada
+}
+
+export function SuggestionList({ suggestions }: { suggestions: Suggestions }) {
   const [selectedSuggestion, setSelectedSuggestion] = useState<number | null>(
     null
   );
@@ -25,24 +31,24 @@ export function SuggestionList({
   const [isAccepted, setIsAccepted] = useState(false);
 
   // Initialize with previously selected suggestion if any
-  // useEffect(() => {
-  //   if (suggestions.selected_suggestion_index !== null) {
-  //     setSelectedSuggestion(suggestions.selected_suggestion_index);
-  //     setIsAccepted(true);
-  //     if (
-  //       suggestions.selected_suggestion_index >= 0 &&
-  //       suggestions.selected_suggestion_index < suggestions.suggestions.length
-  //     ) {
-  //       setEditedContent(
-  //         suggestions.suggestions[suggestions.selected_suggestion_index].content
-  //       );
-  //     }
-  //   }
-  // }, [suggestions.selected_suggestion_index, suggestions.suggestions]);
+  useEffect(() => {
+    if (suggestions.selected_suggestion_index !== null) {
+      setSelectedSuggestion(suggestions.selected_suggestion_index);
+      setIsAccepted(true);
+      if (
+        suggestions.selected_suggestion_index >= 0 &&
+        suggestions.selected_suggestion_index < suggestions.suggestions.length
+      ) {
+        setEditedContent(
+          suggestions.suggestions[suggestions.selected_suggestion_index].content
+        );
+      }
+    }
+  }, [suggestions.selected_suggestion_index, suggestions.suggestions]);
 
   // Select a suggestion
   const handleSelectSuggestion = (index: number) => {
-    if (isAccepted) return;
+    if (isAccepted || suggestions.selected_suggestion_index !== null) return;
 
     if (selectedSuggestion === index) {
       setSelectedSuggestion(null);
@@ -91,7 +97,11 @@ export function SuggestionList({
       <div className="space-y-3 px-2 pb-10">
         {suggestions.suggestions.map((suggestion, index) => {
           const isSelected = selectedSuggestion === index;
-          const isDisabled = isAccepted && !isPreviouslySelected;
+          const isPreviouslySelected =
+            suggestions.selected_suggestion_index === index;
+          const isDisabled =
+            (isAccepted || suggestions.selected_suggestion_index !== null) &&
+            !isPreviouslySelected;
 
           return (
             <Card
@@ -99,10 +109,11 @@ export function SuggestionList({
               className={cn(
                 "p-2 transition-colors",
                 isDisabled && "cursor-not-allowed opacity-50",
-                (isSelected || ) &&
+                (isSelected || isPreviouslySelected) &&
                   "border-primary border-2",
                 !isDisabled &&
                   !isSelected &&
+                  !isPreviouslySelected &&
                   "hover:border-muted-foreground/50 cursor-pointer"
               )}
               onClick={() => !isDisabled && handleSelectSuggestion(index)}
@@ -117,7 +128,7 @@ export function SuggestionList({
                   />
                 ) : (
                   <p className="whitespace-pre-wrap">
-                    {(isSelected ) && !isEditing
+                    {(isSelected || isPreviouslySelected) && !isEditing
                       ? editedContent
                       : suggestion.content}
                   </p>
