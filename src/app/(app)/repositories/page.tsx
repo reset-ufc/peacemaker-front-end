@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import { Suspense } from "react";
 
 import { AxiosResponse } from "axios";
 
@@ -55,8 +56,10 @@ export default async function RepositoriesPage() {
   const repos = request.data;
 
   return (
-    <main className="p-8">
-      <RepositoriesTable initialData={repos} />
+    <main className="h-[calc(100vh-4rem)] w-full p-8">
+      <Suspense>
+        <RepositoriesTable repositories={repos} />
+      </Suspense>
       {/* <pre>{JSON.stringify(repos, null, 2)}</pre> */}
     </main>
   );
