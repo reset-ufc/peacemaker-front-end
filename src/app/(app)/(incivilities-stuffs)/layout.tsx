@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { ComponentProps } from "react";
 
@@ -8,16 +9,24 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { Comment } from "@/types";
 
 export default async function IncivilitiesLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const request = await api.get<{ comments: Array<Comment> }>("/api/comments");
+  const c = await cookies();
+  const t = c.get("access_token")?.value;
+
+  const request = await api.get("/api/comments", {
+    headers: {
+      Authorization: `Bearer ${t}`,
+    },
+  });
+
   const data = request.data.comments;
 
+  // @ts-ignore
   const unsolveds = data.filter(item => !item.solutioned);
 
   return (
@@ -32,6 +41,7 @@ export default async function IncivilitiesLayout({
           <section className="h-full w-full max-w-md min-w-md border-e pe-2 pt-12">
             <TabsContent value="all">
               <ul className="space-y-4">
+                {/* @ts-ignore */}
                 {data.map(item => (
                   <li key={item.gh_comment_id} className="text-sm">
                     <Link
@@ -87,6 +97,7 @@ export default async function IncivilitiesLayout({
 
             <TabsContent value="unsolveds">
               <ul className="space-y-4">
+                {/* @ts-ignore */}
                 {unsolveds.map(item => (
                   <li key={item.gh_comment_id} className="text-sm">
                     <Link
