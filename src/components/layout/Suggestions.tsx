@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Check, Edit, X } from "lucide-react";
 import { toast } from "sonner";
@@ -10,19 +10,13 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { Suggestion } from "@/types";
 
-// Interface da API
-interface Suggestions {
-  gh_comment_id: string; // id do comentário no GitHub
-  // sugestões do comentário
-  suggestions: Array<{
-    content: string; // solução sugerida
-  }>;
-  is_edited: boolean; // se o comentário foi editado
-  selected_suggestion_index: number | null; // índice da sugestão selecionada
-}
-
-export function SuggestionList({ suggestions }: { suggestions: Suggestions }) {
+export function SuggestionList({
+  suggestions,
+}: {
+  suggestions: Array<Suggestion>;
+}) {
   const [selectedSuggestion, setSelectedSuggestion] = useState<number | null>(
     null
   );
@@ -31,24 +25,24 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestions }) {
   const [isAccepted, setIsAccepted] = useState(false);
 
   // Initialize with previously selected suggestion if any
-  useEffect(() => {
-    if (suggestions.selected_suggestion_index !== null) {
-      setSelectedSuggestion(suggestions.selected_suggestion_index);
-      setIsAccepted(true);
-      if (
-        suggestions.selected_suggestion_index >= 0 &&
-        suggestions.selected_suggestion_index < suggestions.suggestions.length
-      ) {
-        setEditedContent(
-          suggestions.suggestions[suggestions.selected_suggestion_index].content
-        );
-      }
-    }
-  }, [suggestions.selected_suggestion_index, suggestions.suggestions]);
+  // useEffect(() => {
+  //   if (suggestions.selected_suggestion_index !== null) {
+  //     setSelectedSuggestion(suggestions.selected_suggestion_index);
+  //     setIsAccepted(true);
+  //     if (
+  //       suggestions.selected_suggestion_index >= 0 &&
+  //       suggestions.selected_suggestion_index < suggestions.suggestions.length
+  //     ) {
+  //       setEditedContent(
+  //         suggestions.suggestions[suggestions.selected_suggestion_index].content
+  //       );
+  //     }
+  //   }
+  // }, [suggestions.selected_suggestion_index, suggestions.suggestions]);
 
   // Select a suggestion
   const handleSelectSuggestion = (index: number) => {
-    if (isAccepted || suggestions.selected_suggestion_index !== null) return;
+    if (isAccepted) return;
 
     if (selectedSuggestion === index) {
       setSelectedSuggestion(null);
@@ -97,11 +91,7 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestions }) {
       <div className="space-y-3 px-2 pb-10">
         {suggestions.suggestions.map((suggestion, index) => {
           const isSelected = selectedSuggestion === index;
-          const isPreviouslySelected =
-            suggestions.selected_suggestion_index === index;
-          const isDisabled =
-            (isAccepted || suggestions.selected_suggestion_index !== null) &&
-            !isPreviouslySelected;
+          const isDisabled = isAccepted && !isPreviouslySelected;
 
           return (
             <Card
@@ -109,11 +99,10 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestions }) {
               className={cn(
                 "p-2 transition-colors",
                 isDisabled && "cursor-not-allowed opacity-50",
-                (isSelected || isPreviouslySelected) &&
+                (isSelected || ) &&
                   "border-primary border-2",
                 !isDisabled &&
                   !isSelected &&
-                  !isPreviouslySelected &&
                   "hover:border-muted-foreground/50 cursor-pointer"
               )}
               onClick={() => !isDisabled && handleSelectSuggestion(index)}
@@ -128,7 +117,7 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestions }) {
                   />
                 ) : (
                   <p className="whitespace-pre-wrap">
-                    {(isSelected || isPreviouslySelected) && !isEditing
+                    {(isSelected ) && !isEditing
                       ? editedContent
                       : suggestion.content}
                   </p>
