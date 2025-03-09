@@ -29,3 +29,13 @@ export interface CommentParent {
   title: string;
   url: string;
 }
+
+export interface Suggestion {
+  is_selected: boolean;
+  gh_comment_id: string;
+  suggestions: Array<{
+    content: string;
+  }>;
+  is_edited: boolean;
+  created_at: string;
+}
