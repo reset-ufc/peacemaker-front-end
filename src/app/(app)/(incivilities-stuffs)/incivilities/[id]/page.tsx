@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Image from "next/image";
 
 import { format } from "date-fns";
 
-import { SuggestionList } from "@/components/layout/Suggestions";
+import { SuggestionList } from "@/components/layout/SuggestionList";
 import { api } from "@/lib/api";
 import { Comment } from "@/types";
 
@@ -20,7 +21,7 @@ interface IncivilityPageProps {
  * https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
  * 'auto' | 'error' | 'force-static' | 'force-dynamic'
  */
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 /**
  * Configure the dynamicParams option.
@@ -67,10 +68,20 @@ const exampleSuggestions = {
 
 export default async function IncivilityPage({ params }: IncivilityPageProps) {
   const p = await params;
+  const c = await cookies();
 
-  const request = await api.get<{ comment: Comment }>(`/api/comments/${p.id}`);
+  const t = c.get("access_token")?.value;
 
-  const findIncivility = request.data.comment;
+  const requestComment = await api.get<{ comment: Comment }>(
+    `/api/comments/${p.id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${t}`,
+      },
+    }
+  );
+
+  const findIncivility = requestComment.data.comment;
 
   return (
     <>
@@ -106,7 +117,7 @@ export default async function IncivilityPage({ params }: IncivilityPageProps) {
               )}
             </div>
 
-            <code className="flex-1 text-xs whitespace-pre-wrap">
+            <code className="flex-1 px-2 pt-4 text-sm whitespace-pre-wrap">
               {findIncivility?.content}
             </code>
           </div>
