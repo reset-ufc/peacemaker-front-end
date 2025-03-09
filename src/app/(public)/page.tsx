@@ -26,7 +26,7 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default async function HomePage() {
+export default function HomePage() {
   return (
     <>
       <Features />

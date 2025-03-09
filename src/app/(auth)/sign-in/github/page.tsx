@@ -32,7 +32,7 @@ export default async function AuthPage() {
     "/api/oauth/github",
     {
       params: {
-        redirect_uri: "http://localhost:3001",
+        redirect_uri: "http://localhost:3001/incivilities",
         client_type: "web",
       },
     }
