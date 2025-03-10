@@ -11,50 +11,72 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
-// Interface da API
-interface Suggestions {
-  gh_comment_id: string; // id do comentário no GitHub
-  // sugestões do comentário
-  suggestions: Array<{
-    content: string; // solução sugerida
-  }>;
-  is_edited: boolean; // se o comentário foi editado
-  selected_suggestion_index: number | null; // índice da sugestão selecionada
+import { FeedbackSuggestion } from "./FeedbackSuggestion";
+
+interface SuggestionItem {
+  content: string;
 }
 
-export function SuggestionList({ suggestions }: { suggestions: Suggestions }) {
+interface SuggestionGroup {
+  suggestion_selected_index: number | null;
+  gh_comment_id: string;
+  suggestions: SuggestionItem[];
+  is_edited: boolean;
+  created_at: string;
+}
+
+export interface SuggestionResponse {
+  suggestions: SuggestionGroup[];
+}
+
+export function SuggestionList({ suggestions }: SuggestionResponse) {
+  const [selectedGroup, setSelectedGroup] = useState<number | null>(null);
   const [selectedSuggestion, setSelectedSuggestion] = useState<number | null>(
     null
   );
   const [editedContent, setEditedContent] = useState<string>("");
   const [isEditing, setIsEditing] = useState(false);
   const [isAccepted, setIsAccepted] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   // Initialize with previously selected suggestion if any
   useEffect(() => {
-    if (suggestions.selected_suggestion_index !== null) {
-      setSelectedSuggestion(suggestions.selected_suggestion_index);
-      setIsAccepted(true);
-      if (
-        suggestions.selected_suggestion_index >= 0 &&
-        suggestions.selected_suggestion_index < suggestions.suggestions.length
-      ) {
+    if (suggestions.length > 0) {
+      const group = suggestions[0];
+
+      // If there's a previously selected suggestion
+      if (group.suggestion_selected_index !== null) {
+        setSelectedGroup(0); // We're assuming there's only one group for now
+        setSelectedSuggestion(group.suggestion_selected_index);
         setEditedContent(
-          suggestions.suggestions[suggestions.selected_suggestion_index].content
+          group.suggestions[group.suggestion_selected_index].content
         );
+        setIsAccepted(true);
+        setShowFeedback(true);
       }
     }
-  }, [suggestions.selected_suggestion_index, suggestions.suggestions]);
+  }, [suggestions]);
 
   // Select a suggestion
-  const handleSelectSuggestion = (index: number) => {
-    if (isAccepted || suggestions.selected_suggestion_index !== null) return;
+  const handleSelectSuggestion = (
+    groupIndex: number,
+    suggestionIndex: number
+  ) => {
+    const group = suggestions[groupIndex];
 
-    if (selectedSuggestion === index) {
+    // If there's already a selected suggestion in this group, don't allow new selection
+    if (isAccepted || group.suggestion_selected_index !== null) return;
+
+    if (
+      selectedGroup === groupIndex &&
+      selectedSuggestion === suggestionIndex
+    ) {
+      setSelectedGroup(null);
       setSelectedSuggestion(null);
     } else {
-      setSelectedSuggestion(index);
-      setEditedContent(suggestions.suggestions[index].content);
+      setSelectedGroup(groupIndex);
+      setSelectedSuggestion(suggestionIndex);
+      setEditedContent(group.suggestions[suggestionIndex].content);
       setIsEditing(false);
     }
   };
@@ -75,7 +97,11 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestions }) {
   // Cancel edit
   const handleCancelEdit = () => {
     setIsEditing(false);
-    setEditedContent(suggestions.suggestions[selectedSuggestion!].content);
+    if (selectedGroup !== null && selectedSuggestion !== null) {
+      setEditedContent(
+        suggestions[selectedGroup].suggestions[selectedSuggestion].content
+      );
+    }
   };
 
   // Accept suggestion
@@ -84,118 +110,138 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestions }) {
     console.log("Suggestion accepted:", editedContent);
 
     setIsAccepted(true);
+    setShowFeedback(true);
     toast.success("Suggestion accepted", {
       description: "The suggestion has been successfully applied.",
     });
   };
 
   return (
-    <div className="w-full">
+    <div className="mb-10 w-full">
       <h2 className="mb-2 text-xl font-semibold">Correction Suggestions</h2>
       <Separator className="mb-4" />
 
-      <div className="space-y-3 px-2 pb-10">
-        {suggestions.suggestions.map((suggestion, index) => {
-          const isSelected = selectedSuggestion === index;
-          const isPreviouslySelected =
-            suggestions.selected_suggestion_index === index;
-          const isDisabled =
-            (isAccepted || suggestions.selected_suggestion_index !== null) &&
-            !isPreviouslySelected;
+      <div className="space-y-6">
+        {/* Feedback Component */}
+        {showFeedback && <FeedbackSuggestion />}
 
-          return (
-            <Card
-              key={index}
-              className={cn(
-                "p-2 transition-colors",
-                isDisabled && "cursor-not-allowed opacity-50",
-                (isSelected || isPreviouslySelected) &&
-                  "border-primary border-2",
-                !isDisabled &&
-                  !isSelected &&
-                  !isPreviouslySelected &&
-                  "hover:border-muted-foreground/50 cursor-pointer"
+        <div className="space-y-3 px-2">
+          {suggestions.map((suggestionGroup, groupIndex) => (
+            <div key={groupIndex} className="space-y-3">
+              {suggestionGroup.suggestions.map(
+                (suggestion, suggestionIndex) => {
+                  const isSelected =
+                    selectedGroup === groupIndex &&
+                    selectedSuggestion === suggestionIndex;
+                  const isPreviouslySelected =
+                    suggestionGroup.suggestion_selected_index ===
+                    suggestionIndex;
+                  const isDisabled =
+                    (isAccepted ||
+                      suggestionGroup.suggestion_selected_index !== null) &&
+                    !isPreviouslySelected;
+                  const isActive = isSelected || isPreviouslySelected;
+
+                  return (
+                    <Card
+                      key={suggestionIndex}
+                      className={cn(
+                        "p-2 transition-colors",
+                        isDisabled && "cursor-not-allowed opacity-50",
+                        isActive && "border-primary border-2",
+                        !isDisabled &&
+                          !isActive &&
+                          "hover:border-muted-foreground/50 cursor-pointer",
+                        isPreviouslySelected && "bg-primary/5"
+                      )}
+                      onClick={() =>
+                        !isDisabled &&
+                        handleSelectSuggestion(groupIndex, suggestionIndex)
+                      }
+                    >
+                      <CardContent className="p-2">
+                        {isEditing && isSelected ? (
+                          <Textarea
+                            value={editedContent}
+                            onChange={e => setEditedContent(e.target.value)}
+                            onClick={e => e.stopPropagation()}
+                            className="min-h-[100px] w-full outline-none"
+                          />
+                        ) : (
+                          <p className="whitespace-pre-wrap">
+                            {isActive && !isEditing
+                              ? editedContent
+                              : suggestion.content}
+                          </p>
+                        )}
+                      </CardContent>
+
+                      {isSelected &&
+                        !isAccepted &&
+                        suggestionGroup.suggestion_selected_index === null && (
+                          <CardFooter className="flex justify-end gap-2 p-3 pt-0">
+                            {isEditing ? (
+                              <>
+                                <Button
+                                  variant="destructive"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    handleCancelEdit();
+                                  }}
+                                >
+                                  <X className="size-4" />
+                                  Cancel edit
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    handleConfirmEdit();
+                                  }}
+                                >
+                                  <Check className="size-4" />
+                                  Confirm edit
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button
+                                  variant="outline"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    handleEdit();
+                                  }}
+                                >
+                                  <Edit className="size-4" />
+                                  Edit suggestion
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    handleAccept();
+                                  }}
+                                >
+                                  <Check className="size-4" />
+                                  Accept suggestion
+                                </Button>
+                              </>
+                            )}
+                          </CardFooter>
+                        )}
+                    </Card>
+                  );
+                }
               )}
-              onClick={() => !isDisabled && handleSelectSuggestion(index)}
-            >
-              <CardContent className="p-2">
-                {isEditing && isSelected ? (
-                  <Textarea
-                    value={editedContent}
-                    onChange={e => setEditedContent(e.target.value)}
-                    onClick={e => e.stopPropagation()}
-                    className="min-h-[100px] w-full outline-none"
-                  />
-                ) : (
-                  <p className="whitespace-pre-wrap">
-                    {(isSelected || isPreviouslySelected) && !isEditing
-                      ? editedContent
-                      : suggestion.content}
-                  </p>
-                )}
-              </CardContent>
+            </div>
+          ))}
 
-              {isSelected &&
-                !isAccepted &&
-                suggestions.selected_suggestion_index === null && (
-                  <CardFooter className="flex justify-end gap-2 p-3 pt-0">
-                    {isEditing ? (
-                      <>
-                        <Button
-                          variant="destructive"
-                          onClick={e => {
-                            e.stopPropagation();
-                            handleCancelEdit();
-                          }}
-                        >
-                          <X className="size-4" />
-                          Cancel edit
-                        </Button>
-                        <Button
-                          variant="outline"
-                          onClick={e => {
-                            e.stopPropagation();
-                            handleConfirmEdit();
-                          }}
-                        >
-                          <Check className="size-4" />
-                          Confirm edit
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button
-                          variant="outline"
-                          onClick={e => {
-                            e.stopPropagation();
-                            handleEdit();
-                          }}
-                        >
-                          <Edit className="size-4" />
-                          Edit suggestion
-                        </Button>
-                        <Button
-                          variant="outline"
-                          onClick={e => {
-                            e.stopPropagation();
-                            handleAccept();
-                          }}
-                        >
-                          <Check className="size-4" />
-                          Accept suggestion
-                        </Button>
-                      </>
-                    )}
-                  </CardFooter>
-                )}
-            </Card>
-          );
-        })}
-        {suggestions.suggestions.length === 0 && (
-          <p className="text-muted-foreground py-4 text-center">
-            No suggestions available for this comment.
-          </p>
-        )}
+          {suggestions.length === 0 && (
+            <p className="text-muted-foreground py-4 text-center">
+              No suggestions available for this comment.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
