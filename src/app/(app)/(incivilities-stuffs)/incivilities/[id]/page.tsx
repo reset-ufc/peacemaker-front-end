@@ -47,23 +47,29 @@ export async function generateMetadata({
 }
 
 const exampleSuggestions = {
-  gh_comment_id: "123456789",
   suggestions: [
     {
-      content:
-        "Sugiro alterar o termo 'idiota' para 'inadequado'. Isso mantém a crítica sem usar linguagem ofensiva.",
-    },
-    {
-      content:
-        "Recomendo remover completamente a frase ofensiva e focar apenas nos aspectos técnicos da discussão.",
-    },
-    {
-      content:
-        "Você poderia reformular seu comentário para: 'Discordo dessa abordagem pois ela não considera os casos de uso X e Y'.",
+      suggestion_selected_index: 0,
+      gh_comment_id: "2706675513",
+      suggestions: [
+        {
+          content:
+            "@meiazero I'm having trouble getting this bot to run. Could you please help me figure out what's going on?",
+        },
+        {
+          content:
+            "I'm experiencing issues with this code. It doesn't seem to be working in any environment. Can someone offer some guidance?",
+        },
+        {
+          content:
+            "The bot isn't running as expected. I'd appreciate any assistance in resolving this issue and getting it up and running smoothly.",
+        },
+      ],
+      is_selected: false,
+      is_edited: false,
+      created_at: "2025-03-09T23:39:42.935Z",
     },
   ],
-  is_edited: false,
-  selected_suggestion_index: null,
 };
 
 export default async function IncivilityPage({ params }: IncivilityPageProps) {
@@ -122,7 +128,7 @@ export default async function IncivilityPage({ params }: IncivilityPageProps) {
             </code>
           </div>
 
-          <SuggestionList suggestions={exampleSuggestions} />
+          <SuggestionList suggestions={exampleSuggestions.suggestions} />
         </div>
       ) : (
         <div className="container">
