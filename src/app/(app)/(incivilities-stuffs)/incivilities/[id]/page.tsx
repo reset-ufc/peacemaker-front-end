@@ -89,6 +89,16 @@ export default async function IncivilityPage({ params }: IncivilityPageProps) {
 
   const findIncivility = requestComment.data.comment;
 
+  const requestSuggestions = await api.get(
+    `/api/comments/${findIncivility.gh_comment_id}/suggestions`,
+    {
+      headers: {
+        Authorization: `Bearer ${t}`,
+      },
+    }
+  );
+  const suggestions = requestSuggestions.data.suggestions;
+
   return (
     <>
       {findIncivility.gh_comment_id ? (
@@ -128,7 +138,7 @@ export default async function IncivilityPage({ params }: IncivilityPageProps) {
             </code>
           </div>
 
-          <SuggestionList suggestions={exampleSuggestions.suggestions} />
+          <SuggestionList suggestions={suggestions} />
         </div>
       ) : (
         <div className="container">
