@@ -1,3 +1,4 @@
+import CookieBanner from "@/components/layout/CookiesBanner";
 import { Header } from "@/components/layout/Header";
 
 export default function PublicLayout({
@@ -9,6 +10,7 @@ export default function PublicLayout({
     <>
       <Header />
       {children}
+      <CookieBanner />
     </>
   );
 }
