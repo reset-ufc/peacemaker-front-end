@@ -30,7 +30,6 @@ export function generateMetadata(): Metadata {
 
 export default async function RepositoriesPage() {
   const c = await cookies();
-  console.log(c);
 
   const t = c.get("access_token")?.value;
 
