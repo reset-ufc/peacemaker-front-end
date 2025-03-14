@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 
+import createMDX from "@next/mdx";
 import { createJiti } from "jiti";
 import { fileURLToPath } from "node:url";
 
@@ -10,6 +11,9 @@ const jiti = createJiti(fileURLToPath(import.meta.url));
 jiti.import("./src/env.mjs");
 
 const nextConfig: NextConfig = {
+  // Configure `pageExtensions` to include markdown and MDX files
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+
   // Just to ensure that React is always on strict mode
   reactStrictMode: true,
 
@@ -47,4 +51,11 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  options: {
+    format: "mdx",
+  },
+});
+
+// Merge MDX config with Next.js config
+export default withMDX(nextConfig);
