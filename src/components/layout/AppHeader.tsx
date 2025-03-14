@@ -2,14 +2,13 @@
 
 import { HTMLAttributeAnchorTarget } from "react";
 
-import { LucideIcon, PanelLeftIcon } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { NavItem } from "@/components/base/NavItem";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
 import { HeaderNav, HeaderRoot, HeaderSide } from "../base/Header";
-import { Button } from "../ui/button";
 
 export function AppHeader() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -55,9 +54,9 @@ export function AppHeader() {
             )}
           </ul>
 
-          <Button variant="ghost" size="icon" className="block sm:hidden">
+          {/* <Button variant="ghost" size="icon" className="block sm:hidden">
             <PanelLeftIcon className="size-6" />
-          </Button>
+          </Button> */}
         </HeaderSide>
         <HeaderSide>
           <ThemeToggle onClick={toggleCurrentTheme} />
