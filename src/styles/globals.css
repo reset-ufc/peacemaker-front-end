@@ -122,3 +122,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+.mdx {
+  @apply text-foreground;
+}
+
+.mdx h1,
+.mdx h2,
+.mdx h3,
+.mdx h4,
+.mdx h5,
+.mdx h6 {
+  @apply scroll-m-20 font-bold tracking-tight;
+}
+
+.mdx pre {
+  @apply mt-6 mb-4 overflow-x-auto rounded-lg border bg-black py-4;
+}
+
+.mdx code {
+  @apply bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm;
+}

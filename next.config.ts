@@ -8,39 +8,53 @@ import { ENABLE_STATIC_EXPORT } from "./next.constants.mjs";
 
 const jiti = createJiti(fileURLToPath(import.meta.url));
 
+// Carrega variáveis de ambiente do arquivo `env.mjs`
 jiti.import("./src/env.mjs");
 
+// Tenta importar um arquivo de configuração do usuário, se existir
+let userConfig;
+try {
+  userConfig = jiti("./v0-user-next.config");
+} catch (e) {
+  console.warn("Nenhuma configuração de usuário encontrada.");
+}
+
 const nextConfig: NextConfig = {
-  // Configure `pageExtensions` to include markdown and MDX files
+  // Configure `pageExtensions` para incluir arquivos markdown e MDX
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 
-  // Just to ensure that React is always on strict mode
+  // Apenas para garantir que o React esteja sempre no modo estrito
   reactStrictMode: true,
 
-  // We don't use trailing slashes on URLs from the Node.js Website
+  // Não usamos barras finais nas URLs do site
   trailingSlash: false,
 
-  // We don't want to redirect with trailing slashes
+  // Evita redirecionamentos desnecessários com barras finais
   skipTrailingSlashRedirect: true,
 
-  // We don't want to run Type Checking on Production Builds
-  // as we already check it on the CI within each Pull Request
+  // Não queremos executar a verificação de tipos no build de produção
+  // pois já verificamos no CI dentro de cada Pull Request
   typescript: { ignoreBuildErrors: true },
 
-  // We don't want to run ESLint Checking on Production Builds
-  // as we already check it on the CI within each Pull Request
-  // we also configure ESLint to run its lint checking on all files (next lint)
+  // Não queremos executar a verificação do ESLint no build de produção
+  // pois já verificamos no CI dentro de cada Pull Request
+  // Também configuramos o ESLint para rodar a verificação em todos os arquivos (next lint)
   eslint: { dirs: ["."], ignoreDuringBuilds: true },
 
   experimental: {
-    // A list of packages that Next.js should automatically evaluate and optimise the imports for.
+    // Lista de pacotes que o Next.js deve otimizar automaticamente
     // @see https://vercel.com/blog/how-we-optimized-package-imports-in-next-js
     optimizePackageImports: ["tailwindcss"],
+
+    // Melhorias de build paralelo no Webpack para otimização de desempenho
+    webpackBuildWorker: true,
+    parallelServerBuildTraces: true,
+    parallelServerCompiles: true,
   },
 
   transpilePackages: ["@t3-oss/env-nextjs"],
 
-  // On static export builds we want to enable the export feature
+  // Em builds de exportação estática, ativamos esse recurso
   output: ENABLE_STATIC_EXPORT ? "export" : "standalone",
 
   logging: {
@@ -49,7 +63,35 @@ const nextConfig: NextConfig = {
       fullUrl: true,
     },
   },
+
+  // Em exportações estáticas, desativamos a otimização de imagens
+  images: {
+    unoptimized: ENABLE_STATIC_EXPORT,
+  },
 };
+
+// Função para mesclar configurações adicionais do usuário
+function mergeConfig(baseConfig: NextConfig, extraConfig: any) {
+  if (!extraConfig) return baseConfig;
+
+  for (const key in extraConfig) {
+    if (
+      typeof baseConfig[key] === "object" &&
+      !Array.isArray(baseConfig[key])
+    ) {
+      baseConfig[key] = {
+        ...baseConfig[key],
+        ...extraConfig[key],
+      };
+    } else {
+      baseConfig[key] = extraConfig[key];
+    }
+  }
+  return baseConfig;
+}
+
+// Aplica configurações extras do usuário, se existirem
+const finalConfig = mergeConfig(nextConfig, userConfig);
 
 const withMDX = createMDX({
   options: {
@@ -57,5 +99,5 @@ const withMDX = createMDX({
   },
 });
 
-// Merge MDX config with Next.js config
-export default withMDX(nextConfig);
+// Mescla a configuração do MDX com a configuração final do Next.js
+export default withMDX(finalConfig);

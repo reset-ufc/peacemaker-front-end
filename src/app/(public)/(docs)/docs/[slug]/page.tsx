@@ -1,146 +1,85 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { baseUrl } from "@/app/sitemap";
-import { CustomMDX } from "@/components/layout/Mdx";
-import { formatDate, getDocPosts } from "@/lib/mdx";
+import { MDXRemote } from "next-mdx-remote/rsc";
 
-interface PageProps {
-  params: Promise<{
-    slug: string;
-  }>;
+import { DocsPageHeader } from "@/components/layout/mdx/docs-page-header";
+import { DocsPager } from "@/components/layout/mdx/docs-pager";
+import { components } from "@/components/layout/mdx/mdx-components";
+import { getDocPosts } from "@/lib/mdx";
+
+interface DocPageProps {
+  params: {
+    slug: string[];
+  };
 }
 
 /**
- * Force the page to be static and only change with a new build.
- *
- * read more about the Route Segment Config here:
- * https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
- * 'auto' | 'error' | 'force-static' | 'force-dynamic'
+ * Função para buscar um documento baseado no `slug`
  */
-export const dynamic = "force-static";
+async function getDocFromParams(params: DocPageProps["params"]) {
+  const slug = params.slug?.join("/") || "getting-started";
+  const doc = getDocPosts().find(doc => doc.slug === slug);
+
+  if (!doc) {
+    return null;
+  }
+
+  return doc;
+}
 
 /**
- * Configure the dynamicParams option.
- *
- * read more about the dynamicParams option here:
- * https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamicparams
+ * Gera os metadados dinâmicos para a página
  */
-export const dynamicParams = true;
+export async function generateMetadata({
+  params,
+}: DocPageProps): Promise<Metadata> {
+  const doc = await getDocFromParams(params);
 
-export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
-  let docs = getDocPosts();
+  if (!doc) {
+    return {};
+  }
 
-  return docs.map(doc => ({
-    slug: doc.slug,
+  return {
+    title: doc.metadata.title,
+    description: doc.metadata.summary,
+  };
+}
+
+/**
+ * Gera os caminhos estáticos para pré-renderização
+ */
+export async function generateStaticParams(): Promise<
+  DocPageProps["params"][]
+> {
+  return getDocPosts().map(doc => ({
+    slug: doc.slug.split("/"),
   }));
 }
 
 /**
- * Generate the metadata with dynamic information.
- *
- * Read more about the Dynamic Metadata here:
- * https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
+ * Página de documentação
  */
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata | undefined> {
-  const promiseProps = await params;
-
-  const { slug } = promiseProps;
-
-  let doc = getDocPosts().find(doc => doc.slug === slug);
-
-  if (!doc) {
-    return;
-  }
-
-  let {
-    title,
-    publishedAt: publishedTime,
-    summary: description,
-    image,
-  } = doc.metadata;
-  let ogImage = image
-    ? image
-    : `${baseUrl}/og?title=${encodeURIComponent(title)}`;
-
-  return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-      type: "article",
-      publishedTime,
-      url: `${baseUrl}/blog/${doc.slug}`,
-      images: [
-        {
-          url: ogImage,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [ogImage],
-    },
-  };
-}
-
-export default async function Page({ params }: PageProps) {
-  const paramsPromise = await params;
-
-  const { slug } = paramsPromise;
-  let doc = getDocPosts().find(doc => doc.slug === slug);
+export default async function DocPage({ params }: DocPageProps) {
+  const doc = await getDocFromParams(params);
 
   if (!doc) {
     notFound();
   }
 
-  // return (
-  //   <>
-  //     <pre>{JSON.stringify(doc, null, 2)}</pre>
-  //   </>
-  // );
   return (
-    <section className="container mx-auto pt-12">
-      <script
-        type="application/ld+json"
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            headline: doc.metadata.title,
-            datePublished: doc.metadata.publishedAt,
-            dateModified: doc.metadata.publishedAt,
-            description: doc.metadata.summary,
-            image: doc.metadata.image
-              ? `${baseUrl}${doc.metadata.image}`
-              : `/og?title=${encodeURIComponent(doc.metadata.title)}`,
-            url: `${baseUrl}/blog/${doc.slug}`,
-            author: {
-              "@type": "Person",
-              name: "My Portfolio",
-            },
-          }),
-        }}
-      />
-
-      <h1 className="title text-2xl font-semibold tracking-tighter">
-        {doc.metadata.title}
-      </h1>
-      <div className="mt-2 mb-8 flex items-center justify-between text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {formatDate(doc.metadata.publishedAt)}
-        </p>
+    <main className="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+      <div className="mx-auto w-full min-w-0">
+        <DocsPageHeader
+          heading={doc.metadata.title}
+          text={doc.metadata.summary}
+        />
+        <div className="mdx px-4 md:px-8">
+          <MDXRemote source={doc.content} components={components} />
+        </div>
+        <hr className="my-4 md:my-6" />
+        <DocsPager doc={doc} />
       </div>
-      <article className="font-thin">
-        <CustomMDX source={doc.content} />
-        {/* <pre>{JSON.stringify(doc.content, null, 2)}</pre> */}
-      </article>
-    </section>
+    </main>
   );
 }
