@@ -43,7 +43,7 @@ export default async function IncivilitiesLayout({
               <ul className="space-y-4">
                 {/* @ts-ignore */}
                 {data.map(item => (
-                  <li key={item.gh_comment_id} className="text-sm">
+                  <li key={item.gh_id} className="text-sm">
                     <Link
                       href={`/incivilities/${item.gh_comment_id}`}
                       className={cn(
@@ -66,12 +66,7 @@ export default async function IncivilitiesLayout({
                             )}
                           </div>
                           <div className={cn("ml-auto text-xs")}>
-                            {formatDistanceToNow(
-                              new Date(item.comment_created_at),
-                              {
-                                addSuffix: true,
-                              }
-                            )}
+                            {formatDistanceToNow(new Date(item.created_at))}
                           </div>
                         </div>
                       </div>
@@ -99,7 +94,7 @@ export default async function IncivilitiesLayout({
               <ul className="space-y-4">
                 {/* @ts-ignore */}
                 {unsolveds.map(item => (
-                  <li key={item.gh_comment_id} className="text-sm">
+                  <li key={item.gh_id} className="text-sm">
                     <Link
                       href={`/incivilities/${item.gh_comment_id}`}
                       className={cn(
@@ -122,12 +117,9 @@ export default async function IncivilitiesLayout({
                             )}
                           </div>
                           <div className={cn("ml-auto text-xs")}>
-                            {formatDistanceToNow(
-                              new Date(item.comment_created_at),
-                              {
-                                addSuffix: true,
-                              }
-                            )}
+                            {formatDistanceToNow(new Date(item.created_at), {
+                              addSuffix: true,
+                            })}
                           </div>
                         </div>
                       </div>

@@ -90,7 +90,7 @@ export default async function IncivilityPage({ params }: IncivilityPageProps) {
   const findIncivility = requestComment.data.comment;
 
   const requestSuggestions = await api.get(
-    `/api/comments/${findIncivility.gh_comment_id}/suggestions`,
+    `/api/comments/${findIncivility._id}/suggestions`,
     {
       headers: {
         Authorization: `Bearer ${t}`,
