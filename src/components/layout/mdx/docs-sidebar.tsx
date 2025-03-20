@@ -23,11 +23,10 @@ export function DocsSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar>
+    <Sidebar className="mt-[80px]">
+      {" "}
+      {/* Adicionando margin-top para a sidebar */}
       <SidebarHeader className="flex items-center">
-        <Link href="/" className="flex items-center space-x-2">
-          <span className="font-bold">Documentation</span>
-        </Link>
         <div className="ml-auto flex items-center gap-2">
           <SearchDialog />
         </div>
