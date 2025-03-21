@@ -1,3 +1,4 @@
+// index.ts
 export interface Comment {
   gh_comment_id: string;
   gh_repository_id: string;
@@ -30,4 +31,25 @@ export interface Suggestion {
   content: string;
   is_edited: boolean;
   created_at: string;
+}
+
+// comments-response.api.ts
+import { Comment } from "@/lib/types";
+
+export interface CommentsResponse {
+  comments: Array<Comment>;
+}
+
+// comment-response.api.ts
+import { Comment } from "@/lib/types";
+
+export interface CommentResponse {
+  comment: Comment;
+}
+
+// suggestions-response.api.ts
+import { Suggestion } from "@/lib/types";
+
+export interface SuggestionsResponse {
+  suggestions: Array<Suggestion>;
 }
