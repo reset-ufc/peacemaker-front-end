@@ -13,13 +13,9 @@ import { TabsCategories } from "./TabsCategories";
 
 interface CommentModerationProps {
   commentsData: Array<Comment>;
-  suggestionsData: Record<string, Array<Suggestion>>;
 }
 
-export function CommentModeration({
-  commentsData,
-  suggestionsData,
-}: CommentModerationProps) {
+export function CommentModeration({ commentsData }: CommentModerationProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -86,7 +82,14 @@ export function CommentModeration({
         // setSuggestions(data.suggestions)
 
         //
-        const commentSuggestions = suggestionsData.suggestions;
+        const commentSuggestions = comments
+          .map(c =>
+            c.suggestions.map(s =>
+              s.gh_comment_id === selectedComment.gh_comment_id ? s : null
+            )
+          )
+          .flat()
+          .filter(s => s !== null);
 
         setSuggestions(commentSuggestions);
       } catch (error) {
@@ -146,9 +149,9 @@ export function CommentModeration({
   }, [comments, selectedId, selectedComment]);
 
   // Handle search input
-  const handleSearch = (searchTerm: string) => {
-    updateUrlParams({ q: searchTerm });
-  };
+  // const handleSearch = (searchTerm: string) => {
+  //   updateUrlParams({ q: searchTerm });
+  // };
 
   // Handle filter change
   const handleFilterChange = (value: string) => {

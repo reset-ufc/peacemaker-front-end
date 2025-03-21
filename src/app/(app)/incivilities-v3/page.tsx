@@ -21,12 +21,12 @@ export default async function IncivilitiesPage() {
     }
   );
 
-  const data = request.data.comments;
+  const data = request.data;
 
   return (
     <main className="bg-background h-[calc(100vh-4rem)]">
       <Suspense fallback={<div>Loading...</div>}>
-        <CommentModeration commentsData={data} suggestionsData={{}} />
+        <CommentModeration commentsData={data.comments} />
       </Suspense>
     </main>
   );

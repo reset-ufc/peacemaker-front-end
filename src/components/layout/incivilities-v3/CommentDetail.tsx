@@ -23,6 +23,7 @@ interface CommentDetailProps {
   onSuggestionSelect: (suggestion: Suggestion) => void;
   onSuggestionConfirm: (editedContent: string) => void;
 }
+
 const getToxicityLevel = (score: number) => {
   if (score >= 0.75) return "High";
   if (score >= 0.5) return "Medium";

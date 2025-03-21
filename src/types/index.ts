@@ -1,6 +1,8 @@
 export interface Comment {
   gh_comment_id: string;
   gh_repository_id: string;
+  gh_repository_name: string;
+  gh_repository_owner: string;
   gh_comment_sender_id: string;
   gh_comment_sender_login: string;
   content: string;
@@ -12,12 +14,14 @@ export interface Comment {
   comment_html_url: string;
   issue_id: string;
   created_at: string;
-  parent: Parent;
+  parent?: Parent;
+  suggestions: Suggestion[];
 }
 
 export interface Parent {
   comment_id: string;
   gh_parent_id: string;
+  gh_parent_number: number;
   title: string;
   html_url: string;
   is_open: string;
@@ -26,24 +30,9 @@ export interface Parent {
 }
 
 export interface Suggestion {
-  _id?: string;
+  _id: string;
   gh_comment_id: string;
   content: string;
   is_edited: boolean;
   created_at: string;
 }
-
-export interface Repository {
-  _id: string;
-  gh_repository_id: string;
-  name: string;
-  gh_repo_fullname: string;
-  gh_url: string;
-  private: boolean;
-  owner_gh_id: string;
-  created_at: string;
-}
-
-export * from "./comment-response.api";
-export * from "./comments-response.api";
-export * from "./suggestions-response.api";
