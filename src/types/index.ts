@@ -33,6 +33,17 @@ export interface Suggestion {
   created_at: string;
 }
 
+export interface Repository {
+  _id: string;
+  gh_repository_id: string;
+  name: string;
+  gh_repo_fullname: string;
+  gh_url: string;
+  private: boolean;
+  owner_gh_id: string;
+  created_at: string;
+}
+
 export * from "./comment-response.api";
 export * from "./comments-response.api";
 export * from "./suggestions-response.api";

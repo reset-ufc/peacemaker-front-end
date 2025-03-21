@@ -1,10 +1,11 @@
 "use client";
 
 import { formatDistanceToNow, parseISO } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import type { Comment } from "@/types";
 
 interface CommentListProps {
@@ -24,7 +25,7 @@ const getToxicityLevel = (score: number) => {
 const getTimeAgo = (dateString: string) => {
   try {
     const date = parseISO(dateString);
-    return `há ${formatDistanceToNow(date, { locale: ptBR })}`;
+    return `${formatDistanceToNow(date, { locale: enUS })}`;
   } catch (error) {
     return dateString;
   }
@@ -77,7 +78,12 @@ export function CommentList({
         return (
           <div
             key={comment.gh_comment_id}
-            className={`hover:bg-muted/50 cursor-pointer rounded-xl border p-4 ${selectedId === comment.gh_comment_id ? "bg-muted/50 border-primary/50" : ""}`}
+            className={cn(
+              "hover:bg-muted/50 cursor-pointer rounded-xl border px-4 py-2",
+              selectedId === comment.gh_comment_id
+                ? "bg-muted/50 border-primary/50"
+                : ""
+            )}
             onClick={() => onSelect(comment)}
           >
             <div className="mb-3 flex justify-between">

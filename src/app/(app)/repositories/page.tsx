@@ -6,6 +6,7 @@ import { AxiosResponse } from "axios";
 
 import { RepositoriesTable } from "@/components/layout/RepositoriesTable";
 import { api } from "@/lib/api";
+import { Repository } from "@/types";
 
 /**
  * Force the page to be static and only change with a new build.
@@ -33,33 +34,20 @@ export default async function RepositoriesPage() {
 
   const t = c.get("access_token")?.value;
 
-  const request: AxiosResponse<
-    Array<{
-      _id: string;
-      user_id: string;
-      gh_user_id: string;
-      gh_repository_id: string;
-      name: string;
-      repo_fullname: string;
-      url: string;
-      is_private: boolean;
-      created_at: string;
-      updated_at: string;
-    }>
-  > = await api.get("/api/repositories", {
-    headers: {
-      Authorization: `Bearer ${t}`,
-    },
-  });
+  const request: AxiosResponse<{ repositories: Array<Repository> }> =
+    await api.get("/api/repositories", {
+      headers: {
+        Authorization: `Bearer ${t}`,
+      },
+    });
 
-  const repos = request.data;
+  const repos = request.data.repositories;
 
   return (
     <main className="h-[calc(100vh-4rem)] w-full p-8">
       <Suspense>
         <RepositoriesTable repositories={repos} />
       </Suspense>
-      {/* <pre>{JSON.stringify(repos, null, 2)}</pre> */}
     </main>
   );
 }

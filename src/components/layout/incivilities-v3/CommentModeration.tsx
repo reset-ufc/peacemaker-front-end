@@ -236,9 +236,7 @@ export function CommentModeration({
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Comment List */}
-        <div
-          className={`${showDetails ? "w-1/3" : "w-2/5"} overflow-y-auto border-r transition-all duration-300`}
-        >
+        <div className={"w-1/3 overflow-y-auto border-r"}>
           <CommentList
             comments={filteredComments}
             selectedId={selectedComment?.gh_comment_id || ""}
@@ -248,9 +246,7 @@ export function CommentModeration({
         </div>
 
         {/* Comment Detail */}
-        <div
-          className={`${showDetails ? "w-2/3" : "flex-1"} overflow-y-auto transition-all duration-300`}
-        >
+        <div className={"w-full overflow-y-auto"}>
           {selectedComment && (
             <CommentDetail
               comment={selectedComment}

@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 
+import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import { ChevronRight, ExternalLink, Reply } from "lucide-react";
 
 import { Avatar } from "@/components/ui/avatar";
@@ -32,7 +33,7 @@ const getToxicityLevel = (score: number) => {
 const getTimeAgo = (dateString: string) => {
   try {
     const date = parseISO(dateString);
-    return formatDistanceToNow(date, { locale: ptBR });
+    return formatDistanceToNow(date, { locale: enUS });
   } catch (error) {
     return dateString;
   }
@@ -41,7 +42,7 @@ const getTimeAgo = (dateString: string) => {
 const getFormattedDate = (dateString: string) => {
   try {
     const date = parseISO(dateString);
-    return format(date, "MMM d, yyyy", { locale: ptBR });
+    return format(date, "MMM d, yyyy", { locale: enUS });
   } catch (error) {
     return dateString;
   }
@@ -50,7 +51,7 @@ const getFormattedDate = (dateString: string) => {
 const getFormattedTime = (dateString: string) => {
   try {
     const date = parseISO(dateString);
-    return format(date, "HH:mm", { locale: ptBR });
+    return format(date, "HH:mm", { locale: enUS });
   } catch (error) {
     return "";
   }
@@ -71,9 +72,7 @@ export function CommentDetail({
   const [editedContent, setEditedContent] = useState<string>("");
 
   const toxicityLevel = getToxicityLevel(comment.toxicity_score);
-  const username =
-    comment.gh_comment_sender_login || comment.gh_comment_sender_id;
-  const repository = comment.gh_repository_id;
+  const username = comment.gh_comment_sender_login;
 
   return (
     <div className="flex h-full flex-col">
@@ -130,23 +129,26 @@ export function CommentDetail({
       <div className="flex flex-1 p-4">
         <div className="flex-1">
           <div className="mb-4 flex items-center gap-3">
-            <Avatar className="h-10 w-10">
-              <div className="bg-primary text-primary-foreground flex h-full w-full items-center justify-center rounded-full">
+            <Avatar>
+              <AvatarFallback>
                 {username.charAt(0).toUpperCase()}
-              </div>
+              </AvatarFallback>
+              <AvatarImage src={`https://github.com/${username}.png`} />
             </Avatar>
             <div>
               <div className="font-medium">{username}</div>
-              <div className="text-muted-foreground text-sm">{repository}</div>
             </div>
-            <div className="text-muted-foreground ml-auto text-sm">
-              há {getTimeAgo(comment.created_at)}
+            <div
+              className="text-muted-foreground ml-auto text-sm"
+              title={new Date(comment.created_at).toDateString()}
+            >
+              {getTimeAgo(comment.created_at)}
             </div>
           </div>
 
           {/* Original Comment */}
           <div className="mb-4 overflow-x-auto">
-            <pre className="font-sans text-base whitespace-pre-wrap">
+            <pre className="text-base whitespace-pre-wrap">
               {comment.content}
             </pre>
 
@@ -207,13 +209,6 @@ export function CommentDetail({
                   </Avatar>
                   <span className="text-sm">{username}</span>
                 </div>
-              </div>
-
-              <div>
-                <h4 className="text-muted-foreground mb-1 text-xs">
-                  Repository
-                </h4>
-                <div className="text-sm">{repository}</div>
               </div>
 
               <div>

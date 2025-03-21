@@ -35,21 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-
-export interface Repository {
-  user_id: string;
-  gh_user_id: string;
-  gh_repository_id: string;
-  name: string;
-  repo_fullname: string;
-  url: string;
-  is_private: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-// Mock data based on the provided API response
-const mockRepositories: Repository[] = [];
+import { Repository } from "@/types";
 
 const columns: ColumnDef<Repository>[] = [
   {
@@ -71,7 +57,7 @@ const columns: ColumnDef<Repository>[] = [
       );
     },
     cell: ({ row }) => {
-      const isPrivate = row.original.is_private;
+      const isPrivate = row.original.private;
       return (
         <div className="flex items-center gap-2">
           <div className="bg-primary/10 flex h-8 w-8 items-center justify-center rounded-md">
@@ -87,7 +73,7 @@ const columns: ColumnDef<Repository>[] = [
               )}
             </div>
             <span className="text-muted-foreground text-xs">
-              {row.original.repo_fullname}
+              {row.original.gh_repo_fullname}
             </span>
           </div>
         </div>
@@ -98,7 +84,7 @@ const columns: ColumnDef<Repository>[] = [
     accessorKey: "visibility",
     header: "Visibility",
     cell: ({ row }) => {
-      const isPrivate = row.original.is_private;
+      const isPrivate = row.original.private;
       return (
         <Badge
           variant={isPrivate ? "outline" : "secondary"}
@@ -140,38 +126,13 @@ const columns: ColumnDef<Repository>[] = [
       );
     },
   },
-  {
-    accessorKey: "updated_at",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="flex items-center gap-1 p-0 hover:bg-transparent"
-        >
-          <span className="font-semibold">Updated</span>
-          {column.getIsSorted() === "asc" ? (
-            <ChevronUpIcon className="h-4 w-4" />
-          ) : column.getIsSorted() === "desc" ? (
-            <ChevronDownIcon className="h-4 w-4" />
-          ) : null}
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <span className="text-muted-foreground text-sm">
-          {format(new Date(row.original.updated_at), "MMM dd, yyyy")}
-        </span>
-      );
-    },
-  },
+
   {
     id: "actions",
     cell: ({ row }) => {
       return (
         <a
-          href={row.original.url}
+          href={row.original.gh_url}
           target="_blank"
           rel="noreferrer"
           className="text-primary flex items-center gap-1 text-sm hover:underline"

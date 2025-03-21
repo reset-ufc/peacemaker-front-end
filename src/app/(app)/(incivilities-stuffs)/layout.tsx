@@ -42,8 +42,8 @@ export default async function IncivilitiesLayout({
             <TabsContent value="all">
               <ul className="space-y-4">
                 {/* @ts-ignore */}
-                {data.map(item => (
-                  <li key={item.gh_id} className="text-sm">
+                {data.map((item, index) => (
+                  <li key={index} className="text-sm">
                     <Link
                       href={`/incivilities/${item.gh_comment_id}`}
                       className={cn(
