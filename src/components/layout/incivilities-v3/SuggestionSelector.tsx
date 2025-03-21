@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useCallback, useState } from "react";
 
 import { Check, Edit, X } from "lucide-react";
 
@@ -10,14 +10,14 @@ import type { Suggestion } from "@/types";
 
 interface SuggestionSelectorProps {
   suggestions: Suggestion[];
-  selectedSuggestion: Suggestion | undefined;
-  onSelect: (suggestion: Suggestion) => void;
+  selectedSuggestion: Suggestion | null;
+  onSelect: (suggestion: Suggestion | null) => void;
   onConfirm: (editedContent: string) => void;
   editedContent: string;
   setEditedContent: (content: string) => void;
 }
 
-export function SuggestionSelector({
+export const SuggestionSelector = memo(function SuggestionSelector({
   suggestions,
   selectedSuggestion,
   onSelect,
@@ -27,26 +27,33 @@ export function SuggestionSelector({
 }: SuggestionSelectorProps) {
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleSelectSuggestion = (suggestion: Suggestion) => {
-    onSelect(suggestion);
-    setEditedContent(suggestion.content);
-  };
+  const handleSelectSuggestion = useCallback(
+    (suggestion: Suggestion) => {
+      onSelect(suggestion);
+      setEditedContent(suggestion.content);
+    },
+    [onSelect, setEditedContent]
+  );
 
-  const handleStartEditing = () => {
+  const handleStartEditing = useCallback(() => {
     setIsEditing(true);
-  };
+  }, []);
 
-  const handleCancelEditing = () => {
+  const handleCancelEditing = useCallback(() => {
     setIsEditing(false);
     if (selectedSuggestion) {
       setEditedContent(selectedSuggestion.content);
     }
-  };
+  }, [selectedSuggestion, setEditedContent]);
 
-  const handleConfirm = () => {
+  const handleConfirm = useCallback(() => {
     onConfirm(editedContent);
     setIsEditing(false);
-  };
+  }, [editedContent, onConfirm]);
+
+  const handleCancelSelection = useCallback(() => {
+    onSelect(null);
+  }, [onSelect]);
 
   return (
     <div className="mb-6">
@@ -54,9 +61,9 @@ export function SuggestionSelector({
 
       {!selectedSuggestion ? (
         <div className="space-y-3">
-          {suggestions.map((suggestion, index) => (
+          {suggestions.map(suggestion => (
             <div
-              key={suggestion._id || index}
+              key={suggestion._id}
               className="bg-muted/50 border-border hover:bg-muted cursor-pointer rounded-lg border p-3"
               onClick={() => handleSelectSuggestion(suggestion)}
             >
@@ -109,7 +116,7 @@ export function SuggestionSelector({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => onSelect(undefined as any)}
+                  onClick={handleCancelSelection}
                 >
                   <X className="mr-1 h-4 w-4" />
                   Cancel
@@ -121,4 +128,4 @@ export function SuggestionSelector({
       )}
     </div>
   );
-}
+});

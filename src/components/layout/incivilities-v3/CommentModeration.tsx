@@ -1,13 +1,15 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+import { ArrowUpDown, Filter, Search } from "lucide-react";
 
 import { CommentDetail } from "@/components/layout/incivilities-v3/CommentDetail";
 import { CommentList } from "@/components/layout/incivilities-v3/CommentList";
-// import { mockComments } from "@/data/comments";
-// import { mockSuggestions } from "@/data/suggestions";
-import type { Comment, Suggestion } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import type { Comment, CommentState, Suggestion } from "@/types";
 
 import { TabsCategories } from "./TabsCategories";
 
@@ -20,89 +22,18 @@ export function CommentModeration({ commentsData }: CommentModerationProps) {
   const searchParams = useSearchParams();
 
   const [comments, setComments] = useState<Comment[]>([]);
-  const [filteredComments, setFilteredComments] = useState<Comment[]>([]);
-  const [selectedComment, setSelectedComment] = useState<Comment | null>(null);
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showDetails, setShowDetails] = useState(false);
+  const [commentStates, setCommentStates] = useState<CommentState[]>([]);
 
   // Get query parameters
   const query = searchParams.get("q") || "";
   const activeFilter = searchParams.get("filter") || "all";
   const selectedId = searchParams.get("id") || "";
 
-  // Update URL with new parameters
-  const updateUrlParams = (params: Record<string, string>) => {
-    const url = new URL(window.location.href);
-
-    // Update existing parameters
-    Object.entries(params).forEach(([key, value]) => {
-      if (value) {
-        url.searchParams.set(key, value);
-      } else {
-        url.searchParams.delete(key);
-      }
-    });
-
-    // Replace the current URL without reloading the page
-    router.replace(url.pathname + url.search, { scroll: false });
-  };
-
-  // Fetch comments
-  useEffect(() => {
-    const fetchComments = async () => {
-      setIsLoading(true);
-      try {
-        // In a real app, this would be an API call
-        // const response = await fetch('/api/comments?with_parent=true')
-        // const data = await response.json()
-        // setComments(data.comments)
-
-        // Using mock data for now
-        setComments(commentsData);
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchComments();
-  }, []);
-
-  // Fetch suggestions when a comment is selected
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      if (!selectedComment) return;
-
-      try {
-        // In a real app, this would be an API call
-        // const response = await fetch(`/api/comments/${selectedComment.gh_comment_id}/suggestions`)
-        // const data = await response.json()
-        // setSuggestions(data.suggestions)
-
-        //
-        const commentSuggestions = comments
-          .map(c =>
-            c.suggestions.map(s =>
-              s.gh_comment_id === selectedComment.gh_comment_id ? s : null
-            )
-          )
-          .flat()
-          .filter(s => s !== null);
-
-        setSuggestions(commentSuggestions);
-      } catch (error) {
-        console.error("Error fetching suggestions:", error);
-      }
-    };
-
-    fetchSuggestions();
-  }, [selectedComment]);
-
-  // Filter and search comments
-  useEffect(() => {
-    if (!comments.length) return;
+  // Memoize filtered comments to avoid unnecessary recalculations
+  const filteredComments = useMemo(() => {
+    if (!comments.length) return [];
 
     let result = [...comments];
 
@@ -112,9 +43,8 @@ export function CommentModeration({ commentsData }: CommentModerationProps) {
       result = result.filter(
         comment =>
           comment.content.toLowerCase().includes(searchTerm) ||
-          (comment.gh_comment_sender_login || "")
-            .toLowerCase()
-            .includes(searchTerm) ||
+          comment.gh_comment_sender_login.toLowerCase().includes(searchTerm) ||
+          comment.gh_repository_name.toLowerCase().includes(searchTerm) ||
           comment.gh_repository_id.toLowerCase().includes(searchTerm)
       );
     }
@@ -131,84 +61,178 @@ export function CommentModeration({ commentsData }: CommentModerationProps) {
       }
     }
 
-    setFilteredComments(result);
+    return result;
   }, [comments, query, activeFilter]);
+
+  // Memoize selected comment
+  const selectedComment = useMemo(() => {
+    if (!selectedId || !comments.length) return null;
+    return comments.find(c => c.gh_comment_id === selectedId) || null;
+  }, [comments, selectedId]);
+
+  // Get comment state for the selected comment
+  const selectedCommentState = useMemo(() => {
+    if (!selectedId) return null;
+    return commentStates.find(state => state.commentId === selectedId) || null;
+  }, [commentStates, selectedId]);
+
+  // Update URL with new parameters
+  const updateUrlParams = useCallback(
+    (params: Record<string, string>) => {
+      const url = new URL(window.location.href);
+
+      // Update existing parameters
+      Object.entries(params).forEach(([key, value]) => {
+        if (value) {
+          url.searchParams.set(key, value);
+        } else {
+          url.searchParams.delete(key);
+        }
+      });
+
+      // Replace the current URL without reloading the page
+      router.replace(url.pathname + url.search, { scroll: false });
+    },
+    [router]
+  );
+
+  // Fetch comments
+  useEffect(() => {
+    const fetchComments = async () => {
+      setIsLoading(true);
+      try {
+        // In a real app, this would be an API call
+        // const response = await fetch('/api/comments?with_parent=true')
+        // const data = await response.json()
+        // setComments(data.comments)
+
+        // Using mock data for now
+        setComments(commentsData);
+
+        // Initialize comment states
+        const initialStates = commentsData.map(comment => ({
+          commentId: comment.gh_comment_id,
+        }));
+        setCommentStates(initialStates);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchComments();
+  }, []);
 
   // Set selected comment from URL
   useEffect(() => {
     if (selectedId && comments.length) {
       const comment = comments.find(c => c.gh_comment_id === selectedId);
-      if (comment) {
-        setSelectedComment(comment);
+      if (!comment && comments.length > 0) {
+        // If the selected ID doesn't exist, select the first comment
+        updateUrlParams({ id: comments[0].gh_comment_id });
       }
-    } else if (comments.length && !selectedComment) {
+    } else if (comments.length && !selectedId) {
       // Select first comment by default
-      setSelectedComment(comments[0]);
       updateUrlParams({ id: comments[0].gh_comment_id });
     }
-  }, [comments, selectedId, selectedComment]);
+  }, [comments, selectedId, updateUrlParams]);
 
   // Handle search input
-  // const handleSearch = (searchTerm: string) => {
-  //   updateUrlParams({ q: searchTerm });
-  // };
+  const handleSearch = useCallback(
+    (searchTerm: string) => {
+      updateUrlParams({ q: searchTerm });
+    },
+    [updateUrlParams]
+  );
 
   // Handle filter change
-  const handleFilterChange = (value: string) => {
-    updateUrlParams({ filter: value });
-  };
+  const handleFilterChange = useCallback(
+    (value: string) => {
+      updateUrlParams({ filter: value });
+    },
+    [updateUrlParams]
+  );
 
   // Handle comment selection
-  const handleSelectComment = (comment: Comment) => {
-    setSelectedComment(comment);
-    setShowDetails(false);
-    updateUrlParams({ id: comment.gh_comment_id });
-  };
+  const handleSelectComment = useCallback(
+    (comment: Comment) => {
+      setShowDetails(false);
+      updateUrlParams({ id: comment.gh_comment_id });
+    },
+    [updateUrlParams]
+  );
 
-  // Handle suggestion selection and editing
-  const handleSuggestionSelect = (suggestion: Suggestion) => {
-    if (!selectedComment) return;
+  // Handle suggestion selection
+  const handleSuggestionSelect = useCallback(
+    (suggestion: Suggestion | null) => {
+      if (!selectedId) return;
 
-    // Update the selected comment with the selected suggestion
-    const updatedComment = {
-      ...selectedComment,
-      selected_suggestion: suggestion,
-    };
+      setCommentStates(prevStates => {
+        const updatedStates = [...prevStates];
+        const stateIndex = updatedStates.findIndex(
+          state => state.commentId === selectedId
+        );
 
-    setSelectedComment(updatedComment);
+        if (stateIndex >= 0) {
+          // @ts-ignore
+          updatedStates[stateIndex] = {
+            ...updatedStates[stateIndex],
+            selectedSuggestionId: suggestion?._id,
+            editedContent: suggestion?.content,
+          };
+        } else if (suggestion) {
+          updatedStates.push({
+            commentId: selectedId,
+            selectedSuggestionId: suggestion._id,
+            editedContent: suggestion.content,
+          });
+        }
 
-    // Update the comment in the comments list
-    const updatedComments = comments.map(c =>
-      c.gh_comment_id === updatedComment.gh_comment_id ? updatedComment : c
-    );
-
-    setComments(updatedComments);
-  };
+        return updatedStates;
+      });
+    },
+    [selectedId]
+  );
 
   // Handle suggestion confirmation
-  const handleSuggestionConfirm = (editedContent: string) => {
-    if (!selectedComment) return;
+  const handleSuggestionConfirm = useCallback(
+    (editedContent: string) => {
+      if (!selectedId) return;
 
-    // Update the selected comment with the edited content
-    const updatedComment = {
-      ...selectedComment,
-      edited_content: editedContent,
-    };
+      setCommentStates(prevStates => {
+        const updatedStates = [...prevStates];
+        const stateIndex = updatedStates.findIndex(
+          state => state.commentId === selectedId
+        );
 
-    setSelectedComment(updatedComment);
+        if (stateIndex >= 0) {
+          updatedStates[stateIndex] = {
+            ...updatedStates[stateIndex],
+            editedContent,
+          };
+        } else {
+          updatedStates.push({
+            commentId: selectedId,
+            editedContent,
+          });
+        }
 
-    // Update the comment in the comments list
-    const updatedComments = comments.map(c =>
-      c.gh_comment_id === updatedComment.gh_comment_id ? updatedComment : c
-    );
+        return updatedStates;
+      });
+    },
+    [selectedId]
+  );
 
-    setComments(updatedComments);
-  };
+  // Handle toggle details
+  const handleToggleDetails = useCallback(() => {
+    setShowDetails(prev => !prev);
+  }, []);
 
   return (
-    <div className="flex h-full flex-col overflow-hidden">
+    <div className="bg-background text-foreground flex h-screen flex-col overflow-hidden">
       {/* Header/Search Bar */}
-      {/* <header className="flex h-14 items-center justify-between border-b px-4">
+      <header className="flex h-14 items-center justify-between border-b px-4">
         <div className="flex w-full max-w-md items-center gap-2">
           <Search className="text-muted-foreground h-4 w-4" />
           <Input
@@ -228,7 +252,7 @@ export function CommentModeration({ commentsData }: CommentModerationProps) {
             <span>Sort</span>
           </Button>
         </div>
-      </header> */}
+      </header>
 
       {/* Category Tabs */}
       <TabsCategories
@@ -239,25 +263,30 @@ export function CommentModeration({ commentsData }: CommentModerationProps) {
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Comment List */}
-        <div className={"w-1/3 overflow-y-auto border-r"}>
+        <div
+          className={`${showDetails ? "w-1/3" : "w-2/5"} overflow-y-auto border-r transition-all duration-300`}
+        >
           <CommentList
             comments={filteredComments}
-            selectedId={selectedComment?.gh_comment_id || ""}
+            selectedId={selectedId}
             onSelect={handleSelectComment}
             isLoading={isLoading}
+            commentStates={commentStates}
           />
         </div>
 
         {/* Comment Detail */}
-        <div className={"w-full overflow-y-auto"}>
+        <div
+          className={`${showDetails ? "w-2/3" : "flex-1"} overflow-y-auto transition-all duration-300`}
+        >
           {selectedComment && (
             <CommentDetail
               comment={selectedComment}
-              suggestions={suggestions}
               showDetails={showDetails}
-              onToggleDetails={() => setShowDetails(!showDetails)}
+              onToggleDetails={handleToggleDetails}
               onSuggestionSelect={handleSuggestionSelect}
               onSuggestionConfirm={handleSuggestionConfirm}
+              commentState={selectedCommentState}
             />
           )}
         </div>

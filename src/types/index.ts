@@ -36,3 +36,18 @@ export interface Suggestion {
   is_edited: boolean;
   created_at: string;
 }
+
+export interface CommentsResponse {
+  comments: Array<Comment>;
+}
+
+export interface CommentResponse {
+  comment: Comment;
+}
+
+// Interfaces para gerenciamento de estado interno
+export interface CommentState {
+  commentId: string;
+  selectedSuggestionId?: string;
+  editedContent?: string;
+}

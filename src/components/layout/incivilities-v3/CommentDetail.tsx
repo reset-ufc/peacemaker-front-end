@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 
-import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { ChevronRight, ExternalLink, Reply } from "lucide-react";
@@ -11,69 +10,88 @@ import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import type { Comment, Suggestion } from "@/types";
+import type { Comment, CommentState, Suggestion } from "@/types";
 
 import { SuggestionSelector } from "./SuggestionSelector";
 
 interface CommentDetailProps {
   comment: Comment;
-  suggestions?: Suggestion[];
   showDetails: boolean;
   onToggleDetails: () => void;
-  onSuggestionSelect: (suggestion: Suggestion) => void;
+  onSuggestionSelect: (suggestion: Suggestion | null) => void;
   onSuggestionConfirm: (editedContent: string) => void;
+  commentState: CommentState | null;
 }
 
-const getToxicityLevel = (score: number) => {
-  if (score >= 0.75) return "High";
-  if (score >= 0.5) return "Medium";
-  if (score >= 0.25) return "Low";
-  return "Neutral";
-};
-
-const getTimeAgo = (dateString: string) => {
-  try {
-    const date = parseISO(dateString);
-    return formatDistanceToNow(date, { locale: enUS });
-  } catch (error) {
-    return dateString;
-  }
-};
-
-const getFormattedDate = (dateString: string) => {
-  try {
-    const date = parseISO(dateString);
-    return format(date, "MMM d, yyyy", { locale: enUS });
-  } catch (error) {
-    return dateString;
-  }
-};
-
-const getFormattedTime = (dateString: string) => {
-  try {
-    const date = parseISO(dateString);
-    return format(date, "HH:mm", { locale: enUS });
-  } catch (error) {
-    return "";
-  }
-};
-
-const handleReply = (comment: Comment) => {
-  window.open(comment.comment_html_url, "_blank");
-};
-
-export function CommentDetail({
+export const CommentDetail = memo(function CommentDetail({
   comment,
-  suggestions = [],
   showDetails,
   onToggleDetails,
   onSuggestionSelect,
   onSuggestionConfirm,
+  commentState,
 }: CommentDetailProps) {
   const [editedContent, setEditedContent] = useState<string>("");
 
+  // Update edited content when comment state changes
+  useState(() => {
+    if (commentState?.editedContent) {
+      setEditedContent(commentState.editedContent);
+    }
+  });
+
+  const getToxicityLevel = useCallback((score: number) => {
+    if (score >= 0.75) return "High";
+    if (score >= 0.5) return "Medium";
+    if (score >= 0.25) return "Low";
+    return "Neutral";
+  }, []);
+
+  const getTimeAgo = useCallback((dateString: string) => {
+    try {
+      const date = parseISO(dateString);
+      return formatDistanceToNow(date, { locale: enUS });
+    } catch (error) {
+      return dateString;
+    }
+  }, []);
+
+  const getFormattedDate = useCallback((dateString: string) => {
+    try {
+      const date = parseISO(dateString);
+      return format(date, "MMM d, yyyy", { locale: enUS });
+    } catch (error) {
+      return dateString;
+    }
+  }, []);
+
+  const getFormattedTime = useCallback((dateString: string) => {
+    try {
+      const date = parseISO(dateString);
+      return format(date, "HH:mm", { locale: enUS });
+    } catch (error) {
+      return "";
+    }
+  }, []);
+
+  const handleReply = useCallback(() => {
+    window.open(comment.comment_html_url, "_blank");
+  }, [comment.comment_html_url]);
+
+  const handleUpdateEditedContent = useCallback((content: string) => {
+    setEditedContent(content);
+  }, []);
+
+  const selectedSuggestion = useMemo(() => {
+    if (!commentState?.selectedSuggestionId) return null;
+    return (
+      comment.suggestions.find(
+        s => s._id === commentState.selectedSuggestionId
+      ) || null
+    );
+  }, [comment.suggestions, commentState?.selectedSuggestionId]);
+
   const toxicityLevel = getToxicityLevel(comment.toxicity_score);
-  const username = comment.gh_comment_sender_login;
 
   return (
     <div className="flex h-full flex-col">
@@ -86,7 +104,7 @@ export function CommentDetail({
               variant="outline"
               size="sm"
               className="hidden items-center gap-1 md:flex"
-              onClick={() => handleReply(comment)}
+              onClick={handleReply}
             >
               <Reply className="h-4 w-4" />
               <span>Reply on GitHub</span>
@@ -98,7 +116,7 @@ export function CommentDetail({
               size="icon"
               className="md:hidden"
               title="Reply on GitHub"
-              onClick={() => handleReply(comment)}
+              onClick={handleReply}
             >
               <Reply className="h-4 w-4" />
             </Button>
@@ -130,26 +148,27 @@ export function CommentDetail({
       <div className="flex flex-1 p-4">
         <div className="flex-1">
           <div className="mb-4 flex items-center gap-3">
-            <Avatar>
-              <AvatarFallback>
-                {username.charAt(0).toUpperCase()}
-              </AvatarFallback>
-              <AvatarImage src={`https://github.com/${username}.png`} />
+            <Avatar className="h-10 w-10">
+              <div className="bg-primary text-primary-foreground flex h-full w-full items-center justify-center rounded-full">
+                {comment.gh_comment_sender_login.charAt(0).toUpperCase()}
+              </div>
             </Avatar>
             <div>
-              <div className="font-medium">{username}</div>
+              <div className="font-medium">
+                {comment.gh_comment_sender_login}
+              </div>
+              <div className="text-muted-foreground text-sm">
+                {comment.gh_repository_name}
+              </div>
             </div>
-            <div
-              className="text-muted-foreground ml-auto text-sm"
-              title={new Date(comment.created_at).toDateString()}
-            >
+            <div className="text-muted-foreground ml-auto text-sm">
               {getTimeAgo(comment.created_at)}
             </div>
           </div>
 
           {/* Original Comment */}
           <div className="mb-4 overflow-x-auto">
-            <pre className="text-base whitespace-pre-wrap">
+            <pre className="font-sans text-base whitespace-pre-wrap">
               {comment.content}
             </pre>
 
@@ -168,26 +187,26 @@ export function CommentDetail({
           </div>
 
           {/* Edited Content (if available) */}
-          {comment.solutioned && (
+          {commentState?.editedContent && (
             <div className="bg-primary/5 border-primary/10 mb-6 rounded-lg border p-3">
               <div className="text-muted-foreground mb-1 text-xs">
                 Edited Comment
               </div>
               <pre className="font-sans text-base whitespace-pre-wrap">
-                {comment.solutioned}
+                {commentState.editedContent}
               </pre>
             </div>
           )}
 
           {/* Suggestion Selector */}
-          {suggestions && suggestions.length > 0 && !comment.solutioned && (
+          {comment.suggestions.length > 0 && !commentState?.editedContent && (
             <SuggestionSelector
-              suggestions={suggestions}
-              selectedSuggestion={comment.suggestion_id}
+              suggestions={comment.suggestions}
+              selectedSuggestion={selectedSuggestion}
               onSelect={onSuggestionSelect}
               onConfirm={onSuggestionConfirm}
               editedContent={editedContent}
-              setEditedContent={setEditedContent}
+              setEditedContent={handleUpdateEditedContent}
             />
           )}
         </div>
@@ -205,10 +224,22 @@ export function CommentDetail({
                 <div className="flex items-center gap-2">
                   <Avatar className="h-6 w-6">
                     <div className="bg-primary text-primary-foreground flex h-full w-full items-center justify-center rounded-full text-xs">
-                      {username.charAt(0).toUpperCase()}
+                      {comment.gh_comment_sender_login.charAt(0).toUpperCase()}
                     </div>
                   </Avatar>
-                  <span className="text-sm">{username}</span>
+                  <span className="text-sm">
+                    {comment.gh_comment_sender_login}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-muted-foreground mb-1 text-xs">
+                  Repository
+                </h4>
+                <div className="text-sm">{comment.gh_repository_name}</div>
+                <div className="text-muted-foreground text-xs">
+                  {comment.gh_repository_owner}
                 </div>
               </div>
 
@@ -239,24 +270,24 @@ export function CommentDetail({
                 <>
                   <div>
                     <h4 className="text-muted-foreground mb-1 text-xs">
-                      Related Issue
+                      Related {comment.parent.type}
                     </h4>
                     <div className="flex items-center gap-1 text-sm">
-                      <span>#{comment.parent.gh_parent_id}</span>
+                      <span>#{comment.parent.gh_parent_number}</span>
                       <ExternalLink className="h-3 w-3" />
                     </div>
                   </div>
 
                   <div>
                     <h4 className="text-muted-foreground mb-1 text-xs">
-                      Issue Title
+                      {comment.parent.type} Title
                     </h4>
                     <div className="text-sm">{comment.parent.title}</div>
                   </div>
 
                   <div>
                     <h4 className="text-muted-foreground mb-1 text-xs">
-                      Issue Status
+                      {comment.parent.type} Status
                     </h4>
                     <div className="text-sm">{comment.parent.is_open}</div>
                   </div>
@@ -285,4 +316,4 @@ export function CommentDetail({
       </div>
     </div>
   );
-}
+});
