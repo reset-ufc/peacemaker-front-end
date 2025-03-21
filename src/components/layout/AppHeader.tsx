@@ -34,6 +34,11 @@ export function AppHeader() {
                 target: undefined,
               },
               {
+                text: "Incivilities V3",
+                href: "/incivilities-v3",
+                target: undefined,
+              },
+              {
                 text: "Repositories",
                 href: "/repositories",
                 target: undefined,
