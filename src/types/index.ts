@@ -1,3 +1,13 @@
+export interface Repository {
+  gh_repository_id: string;
+  name: string;
+  gh_repo_fullname: string;
+  gh_url: string;
+  private: boolean;
+  owner_gh_id: string;
+  created_at: string;
+}
+
 export interface Comment {
   gh_comment_id: string;
   gh_repository_id: string;
@@ -10,7 +20,7 @@ export interface Comment {
   toxicity_score: number;
   classification: string;
   solutioned: boolean;
-  suggestion_id: any;
+  suggestion_id: string;
   comment_html_url: string;
   issue_id: string;
   created_at: string;
@@ -50,4 +60,12 @@ export interface CommentState {
   commentId: string;
   selectedSuggestionId?: string;
   editedContent?: string;
+}
+
+export interface Profile {
+  github_id: string;
+  username: string;
+  name: string;
+  email: string;
+  avatar_url: string;
 }

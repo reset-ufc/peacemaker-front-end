@@ -1,5 +1,3 @@
-"use client";
-
 import { HTMLAttributeAnchorTarget } from "react";
 
 import { LucideIcon, PanelLeftIcon } from "lucide-react";
@@ -8,6 +6,7 @@ import { useTheme } from "next-themes";
 import { HeaderNav, HeaderRoot, HeaderSide } from "@/components/base/Header";
 import { NavItem } from "@/components/base/NavItem";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { UserProfile } from "@/components/layout/UserProfile";
 import { Button } from "@/components/ui/button";
 
 export function AppHeader() {
@@ -30,16 +29,6 @@ export function AppHeader() {
               {
                 text: "Incivilities",
                 href: "/incivilities",
-                target: undefined,
-              },
-              {
-                text: "Incivilities V2",
-                href: "/incivilities-v2",
-                target: undefined,
-              },
-              {
-                text: "Incivilities V3",
-                href: "/incivilities-v3",
                 target: undefined,
               },
               {
@@ -75,6 +64,7 @@ export function AppHeader() {
         </HeaderSide>
         <HeaderSide>
           <ThemeToggle onClick={toggleCurrentTheme} />
+          <UserProfile />
         </HeaderSide>
       </HeaderNav>
     </HeaderRoot>

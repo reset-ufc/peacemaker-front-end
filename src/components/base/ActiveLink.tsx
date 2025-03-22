@@ -1,8 +1,6 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import type { ComponentProps } from "react";
+
+import { Link, useLocation } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
 
@@ -15,24 +13,21 @@ export function ActiveLink({
   children,
   allowSubPath = false,
   className,
-  href = "",
+  to = "",
   ...props
 }: ActiveLocalizedLinkProps) {
-  const pathname = usePathname();
+  const location = useLocation();
+  const pathname = location.pathname;
 
   return (
     <Link
-      href={href}
+      to={to}
       {...props}
       className={cn(className)}
-      prefetch={false}
       data-current={
         allowSubPath
-          ? // When using allowSubPath we want only to check if
-            // the current pathname starts with the utmost upper level
-            // of an href (e.g. /docs/...)
-            pathname.startsWith(`/${href.toString().split("/")[1]}`)
-          : href.toString() === pathname
+          ? pathname.startsWith(`/${to.toString().split("/")[1]}`)
+          : to.toString() === pathname
       }
     >
       {children}

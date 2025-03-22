@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 
 import type * as LabelPrimitive from "@radix-ui/react-label";
@@ -169,12 +167,12 @@ const FormMessage = React.forwardRef<
 FormMessage.displayName = "FormMessage";
 
 export {
-  useFormField,
   Form,
-  FormItem,
-  FormLabel,
   FormControl,
   FormDescription,
-  FormMessage,
   FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useFormField,
 };

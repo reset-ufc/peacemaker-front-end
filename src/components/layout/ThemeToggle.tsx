@@ -1,9 +1,11 @@
-import type { MouseEvent } from "react";
+import type { MouseEvent, TouchEvent } from "react";
 
 import { MoonIcon, SunIcon } from "lucide-react";
 
 type ThemeToggleProps = {
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (
+    event: MouseEvent<HTMLButtonElement> | TouchEvent<HTMLButtonElement>
+  ) => void;
 };
 
 export function ThemeToggle({ onClick = () => {} }: ThemeToggleProps) {

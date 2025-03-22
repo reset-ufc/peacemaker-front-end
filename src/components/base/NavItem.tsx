@@ -23,7 +23,7 @@ export function NavItem({
 }: PropsWithChildren<NavItemProps>) {
   return (
     <ActiveLink
-      href={href}
+      to={href}
       className={cn(
         "hover:bg-muted hover:text-foreground",
         className,

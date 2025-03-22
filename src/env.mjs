@@ -1,11 +1,16 @@
 // @ts-check
-import { createEnv } from "@t3-oss/env-nextjs";
-import * as dotenv from "dotenv";
+import { createEnv } from "@t3-oss/env-core";
+import { fly } from "@t3-oss/env-core/presets-zod";
 import { z } from "zod";
 
-dotenv.config();
-
 export const env = createEnv({
+  extends: [fly()],
+  /**
+   * The prefix that client-side variables must have. This is enforced both at
+   * a type-level and at runtime.
+   */
+  clientPrefix: "VITE_PUBLIC_",
+
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars.
@@ -36,9 +41,9 @@ export const env = createEnv({
    * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_BASE_URL: z.string().url().default("http://localhost:3001"),
-    NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: z.string().optional(),
-    NEXT_PUBLIC_STATIC_EXPORT: z.string().transform(v => v === "true"),
+    VITE_PUBLIC_BASE_URL: z.string().url().default("http://localhost:4173"),
+    VITE_PUBLIC_GOOGLE_ANALYTICS_ID: z.string().optional(),
+    VITE_PUBLIC_STATIC_EXPORT: z.string().transform(v => v === "true"),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.
@@ -48,10 +53,10 @@ export const env = createEnv({
     VERCEL_ENV: process.env.VERCEL_ENV,
     VERCEL_REVALIDATE_TIME: process.env.VERCEL_REVALIDATE_TIME,
     BASE_API_URL: process.env.BASE_API_URL,
-    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
-    NEXT_PUBLIC_STATIC_EXPORT: process.env.NEXT_PUBLIC_STATIC_EXPORT,
-    NEXT_PUBLIC_GOOGLE_ANALYTICS_ID:
-      process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID,
+    VITE_PUBLIC_BASE_URL: process.env.VITE_PUBLIC_BASE_URL,
+    VITE_PUBLIC_STATIC_EXPORT: process.env.VITE_PUBLIC_STATIC_EXPORT,
+    VITE_PUBLIC_GOOGLE_ANALYTICS_ID:
+      process.env.VITE_PUBLIC_GOOGLE_ANALYTICS_ID,
   },
 
   /**

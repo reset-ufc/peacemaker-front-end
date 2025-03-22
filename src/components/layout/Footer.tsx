@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 const footerLinks = [
   {
@@ -22,7 +22,7 @@ export function Footer() {
                 {link.items.map(item => (
                   <Link
                     key={item.title}
-                    href={item.href}
+                    to={item.href}
                     title={item.title}
                     className="hover:underline"
                   >

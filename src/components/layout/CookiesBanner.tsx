@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -33,7 +31,7 @@ export default function CookieBanner() {
 
   return (
     <div className="bg-background fixed right-0 bottom-0 left-0 z-50 border-t p-4 shadow-md">
-      <div className="bg-muted/40 container mx-auto h-full">
+      <div className="container mx-auto h-full">
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div className="flex-1">
             <p className="text-sm">
