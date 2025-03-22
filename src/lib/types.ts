@@ -30,10 +30,11 @@ export interface User {
 }
 
 export interface Repository {
-  _id: string;
-  gh_id: string;
+  gh_repository_id: string;
+  name: string;
+  gh_repo_fullname: string;
   gh_url: string;
-  private: string;
+  private: boolean;
   owner_gh_id: string;
   created_at: string;
 }
