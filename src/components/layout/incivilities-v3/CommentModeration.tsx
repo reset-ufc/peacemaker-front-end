@@ -3,12 +3,8 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { ArrowUpDown, Filter, Search } from "lucide-react";
-
 import { CommentDetail } from "@/components/layout/incivilities-v3/CommentDetail";
 import { CommentList } from "@/components/layout/incivilities-v3/CommentList";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import type { Comment, CommentState, Suggestion } from "@/types";
 
 import { TabsCategories } from "./TabsCategories";
@@ -230,30 +226,7 @@ export function CommentModeration({ commentsData }: CommentModerationProps) {
   }, []);
 
   return (
-    <div className="bg-background text-foreground flex h-screen flex-col overflow-hidden">
-      {/* Header/Search Bar */}
-      <header className="flex h-14 items-center justify-between border-b px-4">
-        <div className="flex w-full max-w-md items-center gap-2">
-          <Search className="text-muted-foreground h-4 w-4" />
-          <Input
-            placeholder="Search comments, users or repositories..."
-            className="bg-background h-9 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
-            value={query}
-            onChange={e => handleSearch(e.target.value)}
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-1">
-            <Filter className="h-4 w-4" />
-            <span>Filter</span>
-          </Button>
-          <Button variant="outline" size="sm" className="gap-1">
-            <ArrowUpDown className="h-4 w-4" />
-            <span>Sort</span>
-          </Button>
-        </div>
-      </header>
-
+    <div className="bg-background text-foreground flex h-full flex-col overflow-hidden">
       {/* Category Tabs */}
       <TabsCategories
         activeFilter={activeFilter}
