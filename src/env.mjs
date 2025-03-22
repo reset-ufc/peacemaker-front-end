@@ -1,6 +1,9 @@
 // @ts-check
 import { createEnv } from "@t3-oss/env-nextjs";
+import * as dotenv from "dotenv";
 import { z } from "zod";
+
+dotenv.config();
 
 export const env = createEnv({
   /**
@@ -21,13 +24,12 @@ export const env = createEnv({
      * FIX: the next don't recognize
      */
     VERCEL_REVALIDATE_TIME: z.coerce.number().default(604800),
-    DATABASE_URL: z.string().optional(),
   },
   shared: {
     VERCEL_ENV: z
       .enum(["production", "preview", "development"])
       .default("development"),
-    BASE_API_URL: z.string().url().default("http://localhost:3000"),
+    BASE_API_URL: z.string().url().default("http://localhost:3333"),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -50,7 +52,6 @@ export const env = createEnv({
     NEXT_PUBLIC_STATIC_EXPORT: process.env.NEXT_PUBLIC_STATIC_EXPORT,
     NEXT_PUBLIC_GOOGLE_ANALYTICS_ID:
       process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID,
-    DATABASE_URL: process.env.DATABASE_URL,
   },
 
   /**
