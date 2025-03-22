@@ -5,11 +5,10 @@ import { HTMLAttributeAnchorTarget } from "react";
 import { LucideIcon, PanelLeftIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 
+import { HeaderNav, HeaderRoot, HeaderSide } from "@/components/base/Header";
 import { NavItem } from "@/components/base/NavItem";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
-
-import { HeaderNav, HeaderRoot, HeaderSide } from "../base/Header";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 export function AppHeader() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -23,6 +22,11 @@ export function AppHeader() {
         <HeaderSide className="gap-8">
           <ul className="hidden flex-row gap-4 sm:flex">
             {[
+              {
+                text: "Home",
+                href: "/",
+                target: undefined,
+              },
               {
                 text: "Incivilities",
                 href: "/incivilities",

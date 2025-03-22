@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 
-export const runtime = "nodejs";
+// export const runtime = "nodejs";
 // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#runtime
 
 export async function middleware(request: NextRequest) {
@@ -10,19 +10,18 @@ export async function middleware(request: NextRequest) {
   const token = cookie.get("access_token")?.value;
 
   const protectedRoutes = [
-    "/app",
-    "/app/dashboard",
-    "/app/repositories",
-    "/app/incivilities",
-    "/settings",
-    "/settings/profile",
+    "/incivilities",
+    "/incivilities-v2",
+    "/incivilities-v3",
+    "/repositories",
   ];
 
   const isProtectedRoute = protectedRoutes.includes(request.nextUrl.pathname);
 
   if (isProtectedRoute && !token) {
-    return NextResponse.redirect(new URL("/", request.nextUrl));
+    return NextResponse.redirect(new URL("/sign-in/github", request.nextUrl));
   }
+
   return NextResponse.next();
 }
 
