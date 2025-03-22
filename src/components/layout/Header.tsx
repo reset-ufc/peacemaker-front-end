@@ -11,8 +11,10 @@ import { Button } from "@/components/ui/button";
 
 export function Header() {
   const { resolvedTheme, setTheme } = useTheme();
-
-  const hasAuthCookie = document.cookie.includes("access_token");
+  const isClient = typeof window !== "undefined";
+  const hasAuthCookie = isClient
+    ? window.document.cookie.includes("access_token")
+    : false;
 
   const toggleCurrentTheme = () =>
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
@@ -27,14 +29,14 @@ export function Header() {
         </HeaderSide>
 
         <HeaderSide>
-          <Button asChild variant="outline">
-            {hasAuthCookie && (
+          {hasAuthCookie && (
+            <Button asChild variant="outline">
               <Link href="/incivilities-v3">
                 Go to incivilities page
                 <ArrowUpRightIcon className="ml-2 size-4" />
               </Link>
-            )}
-          </Button>
+            </Button>
+          )}
           <ThemeToggle onClick={toggleCurrentTheme} />
           <Button asChild>
             <Link href="/sign-in/github">Sign in</Link>
