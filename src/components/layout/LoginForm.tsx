@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { AxiosResponse } from "axios";
+
 import { GitHubIcon } from "@/components/svg/Github";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -7,13 +13,33 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 export function LoginForm({
   className,
-  autorizationUrl,
   ...props
-}: { autorizationUrl: string } & React.ComponentPropsWithoutRef<"div">) {
+}: React.ComponentPropsWithoutRef<"div">) {
+  const [url, setUrl] = useState<string>("");
+
+  useEffect(() => {
+    const fetchUrl = async () => {
+      const request: AxiosResponse<{ url: string }> = await api.get(
+        "/api/oauth/github",
+        {
+          params: {
+            redirect_uri: "http://localhost:3001/incivilities-v3",
+            client_type: "web",
+          },
+        }
+      );
+
+      setUrl(request.data.url);
+    };
+
+    fetchUrl();
+  }, []);
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -23,7 +49,7 @@ export function LoginForm({
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <a
-            href={autorizationUrl}
+            href={url}
             target="_parent"
             rel="noreferrer"
             className={cn(

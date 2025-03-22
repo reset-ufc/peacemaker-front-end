@@ -1,10 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 
-import { AxiosResponse } from "axios";
-
 import { LoginForm } from "@/components/layout/LoginForm";
-import { api } from "@/lib/api";
 
 /**
  * Force the page to be static and only change with a new build.
@@ -13,7 +10,7 @@ import { api } from "@/lib/api";
  * https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
  * 'auto' | 'error' | 'force-static' | 'force-dynamic'
  */
-export const dynamic = "force-static";
+export const dynamic = "auto";
 
 /**
  * Generate the metadata with dynamic information.
@@ -28,18 +25,6 @@ export function generateMetadata(): Metadata {
 }
 
 export default async function AuthPage() {
-  const request: AxiosResponse<{ url: string }> = await api.get(
-    "/api/oauth/github",
-    {
-      params: {
-        redirect_uri: "http://localhost:3001/incivilities-v3",
-        client_type: "web",
-      },
-    }
-  );
-
-  const url = request.data.url;
-
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
@@ -49,7 +34,7 @@ export default async function AuthPage() {
         >
           PeacemakerBot
         </Link>
-        <LoginForm autorizationUrl={url} />
+        <LoginForm />
       </div>
     </div>
   );
