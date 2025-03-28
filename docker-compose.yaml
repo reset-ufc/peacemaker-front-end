@@ -1,16 +1,17 @@
 services:
-  peacemaker-front-end:
+  peacemaker-web:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
-        NEXT_PUBLIC_VERCEL_REVALIDATE_TIME: ${NEXT_PUBLIC_VERCEL_REVALIDATE_TIME}
-        NEXT_PUBLIC_STATIC_EXPORT: ${NEXT_PUBLIC_STATIC_EXPORT}
-        NEXT_PUBLIC_GOOGLE_ANALYTICS: ${NEXT_PUBLIC_GOOGLE_ANALYTICS}
-        NEXT_PUBLIC_GITHUB_ID: ${NEXT_PUBLIC_GITHUB_ID}
+        - VITE_PUBLIC_BASE_URL=${VITE_PUBLIC_BASE_URL}
+        - BASE_API_URL=${BASE_API_URL}
+        - VERCEL_REVALIDATE_TIME=${VERCEL_REVALIDATE_TIME}
+        - VITE_PUBLIC_STATIC_EXPORT=${VITE_PUBLIC_STATIC_EXPORT}
+        - VITE_PUBLIC_GOOGLE_ANALYTICS_ID=${VITE_PUBLIC_GOOGLE_ANALYTICS_ID}
+
     env_file:
       - ".env"
     ports:
-      - "3001:3000"
+      # host:container
+      - 80:80
