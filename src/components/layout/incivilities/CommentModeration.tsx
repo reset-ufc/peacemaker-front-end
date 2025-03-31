@@ -225,7 +225,7 @@ export function CommentModeration({ commentsData }: CommentModerationProps) {
   }, []);
 
   return (
-    <div className="bg-background text-foreground flex h-full flex-col overflow-hidden">
+    <div className="flex h-full flex-col overflow-hidden">
       {/* Category Tabs */}
       <TabsCategories
         activeFilter={activeFilter}
@@ -235,9 +235,7 @@ export function CommentModeration({ commentsData }: CommentModerationProps) {
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Comment List */}
-        <div
-          className={`${showDetails ? "w-1/3" : "w-2/5"} overflow-y-auto border-r transition-all duration-300`}
-        >
+        <div className="overflow-y-auto border-r transition-all duration-300 sm:w-2/4 md:w-1/4">
           <CommentList
             comments={filteredComments}
             selectedId={selectedId}
@@ -249,7 +247,7 @@ export function CommentModeration({ commentsData }: CommentModerationProps) {
 
         {/* Comment Detail */}
         <div
-          className={`${showDetails ? "w-2/3" : "flex-1"} overflow-y-auto transition-all duration-300`}
+          className={`${showDetails ? "w-full" : "flex-1"} overflow-y-auto transition-all duration-300`}
         >
           {selectedComment && (
             <CommentDetail
