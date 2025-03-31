@@ -35,7 +35,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Repository } from "@/types";
 
-const columns: ColumnDef<Repository>[] = [
+const columns: Array<ColumnDef<Repository>> = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -146,7 +146,7 @@ const columns: ColumnDef<Repository>[] = [
 export function RepositoriesTable({
   repositories,
 }: {
-  repositories: Repository[];
+  repositories: Array<Repository>;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
 
