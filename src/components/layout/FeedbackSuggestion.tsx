@@ -1,8 +1,9 @@
-import { useState } from "react";
-
+import { useMutation } from "@tanstack/react-query";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 
+import { api } from "@/lib/api";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
@@ -10,23 +11,47 @@ import { Textarea } from "../ui/textarea";
 
 export function FeedbackSuggestion() {
   // Feedback states
-  const [feedbackType, setFeedbackType] = useState<
-    "useful" | "not-useful" | null
-  >(null);
+  const [feedbackType, setFeedbackType] = useState<"useful" | "not-useful" | null>(null);
   const [feedbackReason, setFeedbackReason] = useState<string>("");
   const [feedbackComment, setFeedbackComment] = useState<string>("");
+
+  // Cria a mutation para enviar o feedback
+  const feedbackMutation = useMutation({
+    mutationFn: async (feedbackData: { type: string | null; reason: string; comment: string }) => {
+      const token = localStorage.getItem("access_token");
+      const response = await api.post("/suggestions/feedback", feedbackData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Feedback submitted", {
+        description: "Thank you for your feedback!",
+      });
+      // Aqui você pode também resetar os estados, se necessário:
+      setFeedbackType(null);
+      setFeedbackReason("");
+      setFeedbackComment("");
+    },
+    onError: () => {
+      toast.error("Error submitting feedback", {
+        description: "Please try again later.",
+      });
+    }
+  });
+
   // Handle feedback submission
   const handleFeedbackSubmit = () => {
-    console.log("Feedback submitted:", {
+    // Validação mínima pode ser feita aqui se necessário
+    feedbackMutation.mutate({
       type: feedbackType,
       reason: feedbackReason,
       comment: feedbackComment,
     });
-
-    toast.success("Feedback submitted", {
-      description: "Thank you for your feedback!",
-    });
   };
+
   return (
     <div className="bg-muted/20 rounded-lg border px-4 py-2">
       <h3 className="mb-3 text-lg font-medium">
@@ -99,12 +124,14 @@ export function FeedbackSuggestion() {
               id="feedback-comment"
               placeholder="Please provide more details..."
               value={feedbackComment}
-              onChange={e => setFeedbackComment(e.target.value)}
+              onChange={(e) => setFeedbackComment(e.target.value)}
               className="min-h-[100px]"
             />
           </div>
 
-          <Button onClick={handleFeedbackSubmit}>Submit Feedback</Button>
+          <Button onClick={handleFeedbackSubmit} disabled={feedbackMutation.status === "pending"}>
+            {feedbackMutation.status === "pending" ? "Submitting..." : "Submit Feedback"}
+          </Button>
         </div>
       )}
     </div>
