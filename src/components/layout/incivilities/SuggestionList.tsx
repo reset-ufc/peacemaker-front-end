@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
+import { api } from "@/lib/api"
 import type { Suggestion } from "@/types"
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group"
+import { useMutation } from "@tanstack/react-query"
 import { ThumbsDown, ThumbsUp } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { toast } from "sonner"
@@ -32,6 +34,44 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestion[] | an
   const [feedbackType, setFeedbackType] = useState<"useful" | "not-useful" | null>(null)
   const [feedbackReason, setFeedbackReason] = useState<string>("")
   const [feedbackComment, setFeedbackComment] = useState<string>("")
+
+  const acceptSuggestionMutation = useMutation({
+    mutationFn: async ({
+      commentId,
+      suggestionId,
+      content,
+      isEdited = false,
+    }: {
+      commentId: string;
+      suggestionId: string;
+      content: string;
+      isEdited?: boolean;
+    }) => {
+      const token = localStorage.getItem("access_token");
+      const response = await api.post(
+        `comments/${commentId}/suggestions/${suggestionId}/accept`,
+        { suggestion_content: content, is_edited: isEdited,  },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Suggestion accepted", {
+        description: "The suggestion has been successfully applied.",
+      });
+      setIsAccepted(true);
+      setShowFeedback(true);
+    },
+    onError: () => {
+      toast.error("Failed to accept suggestion", {
+        description: "Please try again later.",
+      });
+    },
+  });
 
   useEffect(() => {
     console.log(groups)
@@ -96,24 +136,48 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestion[] | an
   }
 
   const handleAccept = () => {
-    console.log("Suggestion accepted:", editedContent)
-    setIsAccepted(true)
-    setShowFeedback(true)
-    toast.success("Suggestion accepted", {
-      description: "The suggestion has been successfully applied.",
-    })
-  }
+    console.log("Suggestion accepted:", editedContent);
+    if (selectedGroup !== null && selectedSuggestion !== null) {
+      acceptSuggestionMutation.mutate({
+        commentId: groups[selectedGroup].gh_comment_id,
+        suggestionId: groups[selectedGroup].suggestions[selectedSuggestion]._id,
+        content: editedContent,
+      });
+    }
+  };
+
+  const feedbackMutation = useMutation({
+    mutationFn: async (feedbackData: { type: string | null; reason: string; comment: string }) => {
+      const token = localStorage.getItem("access_token");
+      const response = await api.post("/suggestions/feedback", feedbackData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Feedback submitted", {
+        description: "Thank you for your feedback!",
+      });
+      setFeedbackType(null);
+      setFeedbackReason("");
+      setFeedbackComment("");
+    },
+    onError: () => {
+      toast.error("Error submitting feedback", {
+        description: "Please try again later.",
+      });
+    }
+  });
 
   const handleFeedbackSubmit = () => {
-    console.log("Feedback submitted:", {
+    feedbackMutation.mutate({
       type: feedbackType,
       reason: feedbackReason,
       comment: feedbackComment,
-    })
-    toast.success("Feedback submitted", {
-      description: "Thank you for your feedback!",
-    })
-  }
+    });
+  };
 
   return (
     <div className="w-full">

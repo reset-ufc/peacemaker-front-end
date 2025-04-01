@@ -13,7 +13,7 @@ export function IncivilitiesPage() {
       const t = localStorage.getItem("access_token");
       await new Promise(resolve => setTimeout(resolve, 1500));
       const request: AxiosResponse<{ comments: Array<Comment> }> =
-        await api.get("/api/comments?with_parent=true", {
+        await api.get("/comments?with_parent=true", {
           headers: {
             Authorization: `Bearer ${t}`,
           },

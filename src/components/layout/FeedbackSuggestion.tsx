@@ -10,12 +10,10 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Textarea } from "../ui/textarea";
 
 export function FeedbackSuggestion() {
-  // Feedback states
   const [feedbackType, setFeedbackType] = useState<"useful" | "not-useful" | null>(null);
   const [feedbackReason, setFeedbackReason] = useState<string>("");
   const [feedbackComment, setFeedbackComment] = useState<string>("");
 
-  // Cria a mutation para enviar o feedback
   const feedbackMutation = useMutation({
     mutationFn: async (feedbackData: { type: string | null; reason: string; comment: string }) => {
       const token = localStorage.getItem("access_token");
@@ -30,7 +28,6 @@ export function FeedbackSuggestion() {
       toast.success("Feedback submitted", {
         description: "Thank you for your feedback!",
       });
-      // Aqui você pode também resetar os estados, se necessário:
       setFeedbackType(null);
       setFeedbackReason("");
       setFeedbackComment("");
@@ -42,9 +39,7 @@ export function FeedbackSuggestion() {
     }
   });
 
-  // Handle feedback submission
   const handleFeedbackSubmit = () => {
-    // Validação mínima pode ser feita aqui se necessário
     feedbackMutation.mutate({
       type: feedbackType,
       reason: feedbackReason,
