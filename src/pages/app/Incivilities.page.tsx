@@ -1,3 +1,4 @@
+import { Loader } from "@/components/ui/loadingSpinner";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
@@ -24,9 +25,8 @@ export function IncivilitiesPage() {
     refetchOnMount: false,
   });
 
-  // Create a Loading component
   if (query.isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   // Handle errors with a fallback component
