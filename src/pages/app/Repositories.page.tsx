@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
 import { RepositoriesTable } from "@/components/layout/RepositoriesTable";
+import { Loader } from "@/components/ui/loadingSpinner";
 import { api } from "@/lib/api";
 import { Repository } from "@/types";
 
@@ -23,9 +24,8 @@ export function RepositoriesPage() {
     refetchOnMount: false,
   });
 
-  // Create a Loading component
   if (query.isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   // Handle errors with a fallback component
