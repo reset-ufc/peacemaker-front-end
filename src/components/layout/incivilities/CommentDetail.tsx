@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useState } from "react";
 
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { enUS } from "date-fns/locale";
@@ -11,8 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import type { Comment, CommentState, Suggestion } from "@/types";
 
-import { SuggestionSelector } from "./SuggestionSelector";
-
+import { SuggestionList } from "./SuggestionList";
 interface CommentDetailProps {
   comment: Comment;
   showDetails: boolean;
@@ -26,8 +25,8 @@ export const CommentDetail = memo(function CommentDetail({
   comment,
   showDetails,
   onToggleDetails,
-  onSuggestionSelect,
-  onSuggestionConfirm,
+  // onSuggestionSelect,
+  // onSuggestionConfirm,
   commentState,
 }: CommentDetailProps) {
   const [editedContent, setEditedContent] = useState<string>("");
@@ -73,18 +72,18 @@ export const CommentDetail = memo(function CommentDetail({
     }
   }, []);
 
-  const handleUpdateEditedContent = useCallback((content: string) => {
-    setEditedContent(content);
-  }, []);
+  // const handleUpdateEditedContent = useCallback((content: string) => {
+  //   setEditedContent(content);
+  // }, []);
 
-  const selectedSuggestion = useMemo(() => {
-    if (!commentState?.selectedSuggestionId) return null;
-    return (
-      comment.suggestions.find(
-        s => s._id === commentState.selectedSuggestionId
-      ) || null
-    );
-  }, [comment.suggestions, commentState?.selectedSuggestionId]);
+  // const selectedSuggestion = useMemo(() => {
+  //   if (!commentState?.selectedSuggestionId) return null
+  //   return (
+  //     comment.suggestions.find(
+  //       s => s._id === commentState.selectedSuggestionId
+  //     ) || null
+  //   )
+  // }, [comment.suggestions, commentState?.selectedSuggestionId])
 
   const toxicityLevel = getToxicityLevel(comment.toxicity_score);
 
@@ -309,14 +308,7 @@ export const CommentDetail = memo(function CommentDetail({
 
           {/* Suggestion Selector */}
           {comment.suggestions.length > 0 && !commentState?.editedContent && (
-            <SuggestionSelector
-              suggestions={comment.suggestions}
-              selectedSuggestion={selectedSuggestion}
-              onSelect={onSuggestionSelect}
-              onConfirm={onSuggestionConfirm}
-              editedContent={editedContent}
-              setEditedContent={handleUpdateEditedContent}
-            />
+            <SuggestionList suggestions={comment.suggestions} />
           )}
         </div>
       </div>

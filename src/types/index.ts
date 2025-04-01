@@ -8,6 +8,53 @@ export interface Repository {
   created_at: string;
 }
 
+export interface SuggestionItem {
+  content: string
+}
+
+export interface SuggestionGroup {
+  suggestion_selected_index: number | null
+  gh_comment_id: string
+  suggestions: SuggestionItem[]
+  is_edited: boolean
+  created_at: string
+}
+
+export interface SuggestionResponse {
+  suggestions: SuggestionGroup[]
+}
+
+export interface SuggestionItemCardProps {
+  suggestion: SuggestionItem
+  isSelected: boolean
+  isPreviouslySelected: boolean
+  isDisabled: boolean
+  isEditing: boolean
+  editedContent: string
+  onClick: () => void
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+}
+
+export interface SuggestionGroupComponentProps {
+  group: SuggestionGroup
+  groupIndex: number
+  selectedGroup: number | null
+  selectedSuggestion: number | null
+  editedContent: string
+  isEditing: boolean
+  isAccepted: boolean
+  handleSelectSuggestion: (groupIndex: number, suggestionIndex: number) => void
+  setEditedContent: (content: string) => void
+  handleEdit: () => void
+  handleConfirmEdit: () => void
+  handleCancelEdit: () => void
+  handleAccept: () => void
+}
+
+export interface SuggestionResponse {
+  suggestions: SuggestionGroup[];
+}
+
 export interface Comment {
   gh_comment_id: string;
   gh_repository_id: string;
