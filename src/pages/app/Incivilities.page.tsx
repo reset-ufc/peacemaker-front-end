@@ -1,3 +1,4 @@
+import { Loader } from "@/components/ui/loadingSpinner";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
@@ -12,7 +13,7 @@ export function IncivilitiesPage() {
       const t = localStorage.getItem("access_token");
       await new Promise(resolve => setTimeout(resolve, 1500));
       const request: AxiosResponse<{ comments: Array<Comment> }> =
-        await api.get("/api/comments?with_parent=true", {
+        await api.get("/comments?with_parent=true", {
           headers: {
             Authorization: `Bearer ${t}`,
           },
@@ -24,9 +25,8 @@ export function IncivilitiesPage() {
     refetchOnMount: false,
   });
 
-  // Create a Loading component
   if (query.isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   // Handle errors with a fallback component
