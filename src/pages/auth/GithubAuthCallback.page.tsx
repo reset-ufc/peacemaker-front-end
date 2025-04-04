@@ -22,7 +22,7 @@ export function GithubAuthCallback() {
     }
 
     api
-      .get("/api/users/me", {
+      .get("/users/me", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

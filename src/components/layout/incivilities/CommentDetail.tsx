@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback } from "react";
 
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { enUS } from "date-fns/locale";
@@ -29,14 +29,14 @@ export const CommentDetail = memo(function CommentDetail({
   // onSuggestionConfirm,
   commentState,
 }: CommentDetailProps) {
-  const [editedContent, setEditedContent] = useState<string>("");
+  // const [editedContent, setEditedContent] = useState<string>("");
 
-  // Update edited content when comment state changes
-  useState(() => {
-    if (commentState?.editedContent) {
-      setEditedContent(commentState.editedContent);
-    }
-  });
+  // // Update edited content when comment state changes
+  // useState(() => {
+  //   if (commentState?.editedContent) {
+  //     setEditedContent(commentState.editedContent);
+  //   }
+  // });
 
   const getToxicityLevel = useCallback((score: number) => {
     if (score >= 0.75) return "High";

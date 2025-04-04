@@ -98,7 +98,7 @@ export function CommentModeration({ commentsData }: CommentModerationProps) {
       setIsLoading(true);
       try {
         // In a real app, this would be an API call
-        // const response = await fetch('/api/comments?with_parent=true')
+        // const response = await fetch('/comments?with_parent=true')
         // const data = await response.json()
         // setComments(data.comments)
 

@@ -13,7 +13,7 @@ export function RepositoriesPage() {
       const t = localStorage.getItem("access_token");
       await new Promise(resolve => setTimeout(resolve, 1500));
       const request: AxiosResponse<{ repositories: Array<Repository> }> =
-        await api.get("/api/repositories", {
+        await api.get("/repositories", {
           headers: {
             Authorization: `Bearer ${t}`,
           },
