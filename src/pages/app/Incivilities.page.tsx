@@ -3,6 +3,7 @@ import { AxiosResponse } from "axios";
 import { LoaderIcon } from "lucide-react";
 
 import { CommentModeration } from "@/components/layout/incivilities/CommentModeration";
+import { Loader } from "@/components/ui/loadingSpinner";
 import { api } from "@/lib/api";
 import { Comment } from "@/types";
 

@@ -75,3 +75,46 @@ export interface Profile {
   email: string;
   avatar_url: string;
 }
+
+interface ModerationActivityItem {
+  month: string;
+  comments: number;
+  flags: number;
+}
+
+interface RecentFlaggedItem {
+  author: string;
+  severity: string;
+  action: string;
+}
+
+interface RadarFlagsItem {
+  category: string;
+  value: number;
+}
+
+interface ModerationActionsData {
+  total: number;
+  data: { name: string; value: number }[];
+}
+
+export interface DashboardChartsProps {
+  moderationActivity: ModerationActivityItem[];
+  recentFlagged: RecentFlaggedItem[];
+  radarFlags: RadarFlagsItem[];
+  moderationActions: ModerationActionsData;
+}
+
+export interface DashboardCardsProps {
+  overview: {
+    averageCommentScore: number;
+    medianCommentScore: number;
+    totalComments: number;
+    resolvedComments: number;
+  };
+}
+
+export interface DashboardHeaderProps {
+  period: string;
+  onPeriodChange: (value: string) => void;
+}
