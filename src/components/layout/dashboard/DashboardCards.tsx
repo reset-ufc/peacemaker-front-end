@@ -1,28 +1,12 @@
+import { DashboardCardsProps } from "@/types";
 import { CheckCircle2Icon, FileTextIcon, Flag, MessageSquare } from "lucide-react";
-import { useEffect } from "react";
-import { DashboardHeader } from "./DashboardHeader";
 import { MetricCard } from "./MetricCard";
-
-interface DashboardCardsProps {
-  overview: {
-    averageCommentScore: number;
-    medianCommentScore: number;
-    totalComments: number;
-    resolvedComments: number;
-  };
-}
 
 export function DashboardCards({ overview }: DashboardCardsProps) {
   const { averageCommentScore, medianCommentScore, totalComments, resolvedComments } = overview;
 
-
-  useEffect(() => {
-    console.log("DashboardCards overview", overview);
-  }, [overview]);
   return (
     <div>
-      <DashboardHeader />
-
       <div className="grid grid-cols-4 gap-4 pb-5">
         <MetricCard
           value={averageCommentScore?.toFixed(3)}
