@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import type { Comment, CommentState, Suggestion } from "@/types";
 
 import { SuggestionList } from "./SuggestionList";
+
 interface CommentDetailProps {
   comment: Comment;
   showDetails: boolean;
@@ -308,7 +309,11 @@ export const CommentDetail = memo(function CommentDetail({
 
           {/* Suggestion Selector */}
           {comment.suggestions.length > 0 && !commentState?.editedContent && (
-            <SuggestionList suggestions={comment.suggestions} />
+            <SuggestionList
+              suggestions={comment.suggestions}
+              comment={comment}
+              suggestionAcceptedId={comment.suggestion_id}
+            />
           )}
         </div>
       </div>

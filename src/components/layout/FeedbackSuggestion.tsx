@@ -1,27 +1,38 @@
+import { useState } from "react";
+
 import { useMutation } from "@tanstack/react-query";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
-import { useState } from "react";
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/api";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { Textarea } from "../ui/textarea";
 
 export function FeedbackSuggestion() {
-  const [feedbackType, setFeedbackType] = useState<"useful" | "not-useful" | null>(null);
+  const [feedbackType, setFeedbackType] = useState<
+    "useful" | "not-useful" | null
+  >(null);
   const [feedbackReason, setFeedbackReason] = useState<string>("");
   const [feedbackComment, setFeedbackComment] = useState<string>("");
 
   const feedbackMutation = useMutation({
-    mutationFn: async (feedbackData: { type: string | null; reason: string; comment: string }) => {
+    mutationFn: async (feedbackData: {
+      type: string | null;
+      reason: string;
+      comment: string;
+    }) => {
       const token = localStorage.getItem("access_token");
-      const response = await api.post("/suggestions/feedback", feedbackData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.post(
+        "/api/suggestions/feedback",
+        feedbackData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     },
     onSuccess: () => {
@@ -36,7 +47,7 @@ export function FeedbackSuggestion() {
       toast.error("Error submitting feedback", {
         description: "Please try again later.",
       });
-    }
+    },
   });
 
   const handleFeedbackSubmit = () => {
@@ -119,13 +130,18 @@ export function FeedbackSuggestion() {
               id="feedback-comment"
               placeholder="Please provide more details..."
               value={feedbackComment}
-              onChange={(e) => setFeedbackComment(e.target.value)}
+              onChange={e => setFeedbackComment(e.target.value)}
               className="min-h-[100px]"
             />
           </div>
 
-          <Button onClick={handleFeedbackSubmit} disabled={feedbackMutation.status === "pending"}>
-            {feedbackMutation.status === "pending" ? "Submitting..." : "Submit Feedback"}
+          <Button
+            onClick={handleFeedbackSubmit}
+            disabled={feedbackMutation.status === "pending"}
+          >
+            {feedbackMutation.status === "pending"
+              ? "Submitting..."
+              : "Submit Feedback"}
           </Button>
         </div>
       )}

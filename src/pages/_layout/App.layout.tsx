@@ -9,8 +9,6 @@ export function AppLayout() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  console.log("isAuthenticated", isAuthenticated);
-
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/auth/sign-in/github");
