@@ -25,7 +25,7 @@ export function NavItem({
     <ActiveLink
       to={href}
       className={cn(
-        "hover:bg-muted hover:text-foreground",
+        "hover:bg-muted transition-colors hover:text-foreground",
         className,
         type === "nav" &&
           "data-[current=true]:bg-muted flex items-center gap-2 rounded-md px-4 py-2"

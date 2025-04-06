@@ -36,6 +36,11 @@ export function AppHeader() {
                 href: "/repositories",
                 target: undefined,
               },
+              {
+                text: "Dashboard",
+                href: "/dashboard",
+                target: undefined,
+              }
             ].map(
               (link: {
                 icon?: LucideIcon;

@@ -7,6 +7,7 @@ import { TermsPage } from "./pages/Terms.page";
 import { AppLayout } from "./pages/_layout/App.layout";
 import { AuthLayout } from "./pages/_layout/Auth.layout";
 import { PublicLayout } from "./pages/_layout/Public.layout";
+import { DashboardPage } from "./pages/app/Dashboard.page";
 import { IncivilitiesPage } from "./pages/app/Incivilities.page";
 import { RepositoriesPage } from "./pages/app/Repositories.page";
 import { GithubAuthPage } from "./pages/auth/GithubAuth.page";
@@ -60,6 +61,10 @@ const routes = createBrowserRouter([
         path: "incivilities",
         element: <IncivilitiesPage />,
       },
+      {
+        path: "dashboard",
+        element: <DashboardPage />,
+      }
     ],
   },
 ]);
