@@ -64,7 +64,7 @@ const routes = createBrowserRouter([
       {
         path: "dashboard",
         element: <DashboardPage />,
-      }
+      },
     ],
   },
 ]);

@@ -40,7 +40,7 @@ export function AppHeader() {
                 text: "Dashboard",
                 href: "/dashboard",
                 target: undefined,
-              }
+              },
             ].map(
               (link: {
                 icon?: LucideIcon;

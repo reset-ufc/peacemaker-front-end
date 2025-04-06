@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import type { Comment, CommentState, Suggestion } from "@/types";
 
 import { SuggestionList } from "./SuggestionList";
+
 interface CommentDetailProps {
   comment: Comment;
   showDetails: boolean;

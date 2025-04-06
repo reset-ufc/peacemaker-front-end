@@ -1,10 +1,18 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { DashboardHeaderProps } from "@/types";
 
-export function DashboardHeader({ period, onPeriodChange }: DashboardHeaderProps) {
+export function DashboardHeader({
+  period,
+  onPeriodChange,
+}: DashboardHeaderProps) {
   return (
-    <div className="flex items-center justify-between mb-4">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
+    <div className="mb-4 flex items-center justify-between">
       <Select value={period} onValueChange={onPeriodChange}>
         <SelectTrigger className="w-40">
           <SelectValue placeholder="Select period" />

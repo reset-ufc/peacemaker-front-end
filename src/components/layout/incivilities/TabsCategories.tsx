@@ -33,7 +33,7 @@ export function TabsCategories({
             <TabsTrigger
               key={category.id}
               value={category.id}
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hover:bg-secondary cursor-pointer transition-colors h-auto rounded-xl border px-3 py-1 text-sm"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hover:bg-secondary h-auto cursor-pointer rounded-xl border px-3 py-1 text-sm transition-colors"
             >
               {category.name}
             </TabsTrigger>

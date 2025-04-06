@@ -1,8 +1,8 @@
-import { Loader } from "@/components/ui/loadingSpinner";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
 import { CommentModeration } from "@/components/layout/incivilities/CommentModeration";
+import { Loader } from "@/components/ui/loadingSpinner";
 import { api } from "@/lib/api";
 import { Comment } from "@/types";
 

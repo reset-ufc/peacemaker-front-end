@@ -1,4 +1,3 @@
-import { DashboardChartsProps } from "@/types";
 import {
   Area,
   AreaChart,
@@ -14,8 +13,10 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis
+  YAxis,
 } from "recharts";
+
+import { DashboardChartsProps } from "@/types";
 
 //A definir as cores do gráfico de pizza
 const PIE_COLORS = ["#f87171", "#60a5fa", "#fbbf24", "#34d399"];
@@ -29,16 +30,22 @@ export function DashboardCharts({
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-2 border p-4 rounded shadow">
-          <h3 className="text-lg font-semibold mb-2">Moderation Activity</h3>
-          <p className="text-sm text-muted-foreground mb-4">
+        <div className="col-span-2 rounded border p-4 shadow">
+          <h3 className="mb-2 text-lg font-semibold">Moderation Activity</h3>
+          <p className="text-muted-foreground mb-4 text-sm">
             Comments and Flags over time
           </p>
           <div style={{ width: "100%", height: 300 }}>
             <ResponsiveContainer>
               <AreaChart data={moderationActivity}>
                 <defs>
-                  <linearGradient id="colorComments" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="colorComments"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="5%" stopColor="#ff805d" stopOpacity={0.8} />
                     <stop offset="95%" stopColor="#ff805d" stopOpacity={0} />
                   </linearGradient>
@@ -70,13 +77,15 @@ export function DashboardCharts({
           </div>
         </div>
 
-        <div className="border p-4 rounded shadow">
-          <h3 className="text-lg font-semibold mb-2">Recent Flagged Comments</h3>
-          <p className="text-sm text-muted-foreground mb-4">
+        <div className="rounded border p-4 shadow">
+          <h3 className="mb-2 text-lg font-semibold">
+            Recent Flagged Comments
+          </h3>
+          <p className="text-muted-foreground mb-4 text-sm">
             The most recent flagged comments
           </p>
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between font-medium border-b pb-1">
+            <div className="flex justify-between border-b pb-1 font-medium">
               <span>Author</span>
               <span>Severity</span>
               <span>Action</span>
@@ -86,12 +95,12 @@ export function DashboardCharts({
                 <span>{item.author}</span>
                 <span>
                   <span
-                    className={`px-2 py-1 rounded-full text-white text-xs ${
+                    className={`rounded-full px-2 py-1 text-xs text-white ${
                       item.severity === "High"
                         ? "bg-red-500"
                         : item.severity === "Medium"
-                        ? "bg-yellow-500"
-                        : "bg-green-500"
+                          ? "bg-yellow-500"
+                          : "bg-green-500"
                     }`}
                   >
                     {item.severity}
@@ -105,9 +114,9 @@ export function DashboardCharts({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="border p-4 rounded shadow flex flex-col">
-          <h3 className="text-lg font-semibold mb-2">Incivility Categories</h3>
-          <p className="text-sm text-muted-foreground mb-4">
+        <div className="flex flex-col rounded border p-4 shadow">
+          <h3 className="mb-2 text-lg font-semibold">Incivility Categories</h3>
+          <p className="text-muted-foreground mb-4 text-sm">
             Distribution by classification
           </p>
           <div className="flex-1" style={{ width: "100%", height: 300 }}>
@@ -127,15 +136,15 @@ export function DashboardCharts({
               </RadarChart>
             </ResponsiveContainer>
           </div>
-          <span className="text-xs text-muted-foreground mt-2">
+          <span className="text-muted-foreground mt-2 text-xs">
             Data for last 30 days
           </span>
         </div>
 
         {/* Ainda não terminado */}
-        <div className="border p-4 rounded shadow flex flex-col items-center">
-          <h3 className="text-lg font-semibold mb-2">Moderation Actions</h3>
-          <p className="text-sm text-muted-foreground mb-4">
+        <div className="flex flex-col items-center rounded border p-4 shadow">
+          <h3 className="mb-2 text-lg font-semibold">Moderation Actions</h3>
+          <p className="text-muted-foreground mb-4 text-sm">
             Distribution of actions taken
           </p>
           <div className="relative" style={{ width: 300, height: 300 }}>
@@ -150,7 +159,10 @@ export function DashboardCharts({
                   label
                 >
                   {moderationActions.data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={PIE_COLORS[index % PIE_COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -158,11 +170,13 @@ export function DashboardCharts({
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-              <span className="text-2xl font-bold">{moderationActions.total}</span>
-              <p className="text-sm text-muted-foreground">Total Actions</p>
+              <span className="text-2xl font-bold">
+                {moderationActions.total}
+              </span>
+              <p className="text-muted-foreground text-sm">Total Actions</p>
             </div>
           </div>
-          <span className="text-xs text-muted-foreground mt-2">
+          <span className="text-muted-foreground mt-2 text-xs">
             Last 30 days
           </span>
         </div>

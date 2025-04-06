@@ -1,23 +1,25 @@
 // src/pages/DashboardPage.tsx
+import { useState } from "react";
+
+import { useQuery } from "@tanstack/react-query";
+
 import { DashboardCards } from "@/components/layout/dashboard/DashboardCards";
 import { DashboardCharts } from "@/components/layout/dashboard/DashboardCharts";
 import { DashboardHeader } from "@/components/layout/dashboard/DashboardHeader";
 import { Loader } from "@/components/ui/loadingSpinner";
 import { api } from "@/lib/api";
-import { useQuery } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
-import { useState } from "react";
 
 export function DashboardPage() {
   const [period, setPeriod] = useState("24h");
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["dashboardMetrics", period],
+    queryKey: ["dashboard-metrics", period],
     queryFn: async () => {
       const t = localStorage.getItem("access_token");
-      const response: AxiosResponse<any> = await api.get("/dashboard/metrics", {
+
+      const response = await api.get("/api/dashboard/metrics", {
         headers: { Authorization: `Bearer ${t}` },
-        params: { period }, // Envia o parâmetro para o back‑end
+        params: { period },
       });
       return response.data;
     },

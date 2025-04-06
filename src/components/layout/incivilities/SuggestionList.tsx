@@ -1,39 +1,52 @@
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Textarea } from "@/components/ui/textarea"
-import { api } from "@/lib/api"
-import type { Suggestion } from "@/types"
-import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group"
-import { useMutation } from "@tanstack/react-query"
-import { ThumbsDown, ThumbsUp } from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
-import { toast } from "sonner"
-import { SuggestionGroup } from "./SuggestionGroup"
+import { useEffect, useMemo, useState } from "react";
 
-export function SuggestionList({ suggestions }: { suggestions: Suggestion[] | any[] }) {
+import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
+import { useMutation } from "@tanstack/react-query";
+import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { api } from "@/lib/api";
+import type { Suggestion } from "@/types";
+
+import { SuggestionGroup } from "./SuggestionGroup";
+
+export function SuggestionList({
+  suggestions,
+}: {
+  suggestions: Suggestion[] | any[];
+}) {
   const groups = useMemo(() => {
     return suggestions.length > 0 && suggestions[0].suggestions === undefined
-      ? [{
-          suggestion_selected_index: null,
-          gh_comment_id: suggestions[0].gh_comment_id || "",
-          suggestions: suggestions,
-          is_edited: false,
-          created_at: suggestions[0].created_at || "",
-        }]
-      : suggestions
-  }, [suggestions])
+      ? [
+          {
+            suggestion_selected_index: null,
+            gh_comment_id: suggestions[0].gh_comment_id || "",
+            suggestions: suggestions,
+            is_edited: false,
+            created_at: suggestions[0].created_at || "",
+          },
+        ]
+      : suggestions;
+  }, [suggestions]);
 
-  const [selectedGroup, setSelectedGroup] = useState<number | null>(null)
-  const [selectedSuggestion, setSelectedSuggestion] = useState<number | null>(null)
-  const [editedContent, setEditedContent] = useState<string>("")
-  const [isEditing, setIsEditing] = useState(false)
-  const [isAccepted, setIsAccepted] = useState(false)
+  const [selectedGroup, setSelectedGroup] = useState<number | null>(null);
+  const [selectedSuggestion, setSelectedSuggestion] = useState<number | null>(
+    null
+  );
+  const [editedContent, setEditedContent] = useState<string>("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [isAccepted, setIsAccepted] = useState(false);
 
-  const [showFeedback, setShowFeedback] = useState(false)
-  const [feedbackType, setFeedbackType] = useState<"useful" | "not-useful" | null>(null)
-  const [feedbackReason, setFeedbackReason] = useState<string>("")
-  const [feedbackComment, setFeedbackComment] = useState<string>("")
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackType, setFeedbackType] = useState<
+    "useful" | "not-useful" | null
+  >(null);
+  const [feedbackReason, setFeedbackReason] = useState<string>("");
+  const [feedbackComment, setFeedbackComment] = useState<string>("");
 
   const acceptSuggestionMutation = useMutation({
     mutationFn: async ({
@@ -50,7 +63,7 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestion[] | an
       const token = localStorage.getItem("access_token");
       const response = await api.post(
         `comments/${commentId}/suggestions/${suggestionId}/accept`,
-        { suggestion_content: content, is_edited: isEdited,  },
+        { suggestion_content: content, is_edited: isEdited },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -74,22 +87,24 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestion[] | an
   });
 
   useEffect(() => {
-    console.log(groups)
+    console.log(groups);
     if (groups && groups.length > 0) {
-      const group = groups[0]
+      const group = groups[0];
       if (
         group.suggestion_selected_index !== null &&
         group.suggestions &&
         group.suggestions[group.suggestion_selected_index]
       ) {
-        setSelectedGroup(0)
-        setSelectedSuggestion(group.suggestion_selected_index)
-        setEditedContent(group.suggestions[group.suggestion_selected_index].content)
-        setIsAccepted(true)
-        setShowFeedback(true)
+        setSelectedGroup(0);
+        setSelectedSuggestion(group.suggestion_selected_index);
+        setEditedContent(
+          group.suggestions[group.suggestion_selected_index].content
+        );
+        setIsAccepted(true);
+        setShowFeedback(true);
       }
     }
-  }, [groups])
+  }, [groups]);
 
   useEffect(() => {
     setShowFeedback(false);
@@ -102,38 +117,46 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestion[] | an
     setIsAccepted(false);
   }, [suggestions]);
 
-  const handleSelectSuggestion = (groupIndex: number, suggestionIndex: number) => {
-    const group = groups[groupIndex]
-    if (isAccepted || group?.suggestion_selected_index !== null) return
+  const handleSelectSuggestion = (
+    groupIndex: number,
+    suggestionIndex: number
+  ) => {
+    const group = groups[groupIndex];
+    if (isAccepted || group?.suggestion_selected_index !== null) return;
 
-    if (selectedGroup === groupIndex && selectedSuggestion === suggestionIndex) {
-      setSelectedGroup(null)
-      setSelectedSuggestion(null)
+    if (
+      selectedGroup === groupIndex &&
+      selectedSuggestion === suggestionIndex
+    ) {
+      setSelectedGroup(null);
+      setSelectedSuggestion(null);
     } else {
-      setSelectedGroup(groupIndex)
-      setSelectedSuggestion(suggestionIndex)
-      setEditedContent(group.suggestions[suggestionIndex].content)
-      setIsEditing(false)
+      setSelectedGroup(groupIndex);
+      setSelectedSuggestion(suggestionIndex);
+      setEditedContent(group.suggestions[suggestionIndex].content);
+      setIsEditing(false);
     }
-  }
+  };
 
   const handleEdit = () => {
-    setIsEditing(true)
-  }
+    setIsEditing(true);
+  };
 
   const handleConfirmEdit = () => {
-    setIsEditing(false)
+    setIsEditing(false);
     toast.info("Edit confirmed", {
       description: "You can now accept the edited suggestion.",
-    })
-  }
+    });
+  };
 
   const handleCancelEdit = () => {
-    setIsEditing(false)
+    setIsEditing(false);
     if (selectedGroup !== null && selectedSuggestion !== null) {
-      setEditedContent(groups[selectedGroup].suggestions[selectedSuggestion].content)
+      setEditedContent(
+        groups[selectedGroup].suggestions[selectedSuggestion].content
+      );
     }
-  }
+  };
 
   const handleAccept = () => {
     console.log("Suggestion accepted:", editedContent);
@@ -147,7 +170,11 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestion[] | an
   };
 
   const feedbackMutation = useMutation({
-    mutationFn: async (feedbackData: { type: string | null; reason: string; comment: string }) => {
+    mutationFn: async (feedbackData: {
+      type: string | null;
+      reason: string;
+      comment: string;
+    }) => {
       const token = localStorage.getItem("access_token");
       const response = await api.post("/suggestions/feedback", feedbackData, {
         headers: {
@@ -168,7 +195,7 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestion[] | an
       toast.error("Error submitting feedback", {
         description: "Please try again later.",
       });
-    }
+    },
   });
 
   const handleFeedbackSubmit = () => {
@@ -204,29 +231,39 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestion[] | an
           />
         ))}
         {groups.length === 0 && (
-          <p className="py-4 text-center text-muted-foreground">
+          <p className="text-muted-foreground py-4 text-center">
             No suggestions available for this comment.
           </p>
         )}
       </div>
 
       {showFeedback && (
-        <div className="mt-6 border rounded-lg p-4 bg-muted/20">
-          <h3 className="text-lg font-medium mb-3">Was this suggestion helpful?</h3>
+        <div className="bg-muted/20 mt-6 rounded-lg border p-4">
+          <h3 className="mb-3 text-lg font-medium">
+            Was this suggestion helpful?
+          </h3>
           {!feedbackType ? (
             <div className="flex gap-3">
-              <Button variant="outline" onClick={() => setFeedbackType("useful")} className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setFeedbackType("useful")}
+                className="flex items-center gap-2"
+              >
                 <ThumbsUp className="size-4" />
                 Yes, it was helpful
               </Button>
-              <Button variant="outline" onClick={() => setFeedbackType("not-useful")} className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setFeedbackType("not-useful")}
+                className="flex items-center gap-2"
+              >
                 <ThumbsDown className="size-4" />
                 No, it wasn't helpful
               </Button>
             </div>
           ) : feedbackType === "useful" ? (
             <div className="space-y-3">
-              <p className="text-green-600 flex items-center gap-2">
+              <p className="flex items-center gap-2 text-green-600">
                 <ThumbsUp className="size-4" />
                 Thank you for your feedback!
               </p>
@@ -237,18 +274,28 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestion[] | an
                 <ThumbsDown className="size-4" />
                 We're sorry to hear that. Please tell us why:
               </p>
-              <RadioGroup value={feedbackReason} onValueChange={setFeedbackReason} className="space-y-2">
+              <RadioGroup
+                value={feedbackReason}
+                onValueChange={setFeedbackReason}
+                className="space-y-2"
+              >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="incorrect" id="incorrect" />
-                  <Label htmlFor="incorrect">The suggestion was incorrect</Label>
+                  <Label htmlFor="incorrect">
+                    The suggestion was incorrect
+                  </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="inappropriate" id="inappropriate" />
-                  <Label htmlFor="inappropriate">The suggestion was inappropriate</Label>
+                  <Label htmlFor="inappropriate">
+                    The suggestion was inappropriate
+                  </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="not-useful" id="not-useful" />
-                  <Label htmlFor="not-useful">The suggestion wasn't useful</Label>
+                  <Label htmlFor="not-useful">
+                    The suggestion wasn't useful
+                  </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="other" id="other" />
@@ -256,12 +303,14 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestion[] | an
                 </div>
               </RadioGroup>
               <div className="space-y-2">
-                <Label htmlFor="feedback-comment">Additional comments (optional)</Label>
+                <Label htmlFor="feedback-comment">
+                  Additional comments (optional)
+                </Label>
                 <Textarea
                   id="feedback-comment"
                   placeholder="Please provide more details..."
                   value={feedbackComment}
-                  onChange={(e) => setFeedbackComment(e.target.value)}
+                  onChange={e => setFeedbackComment(e.target.value)}
                   className="min-h-[100px]"
                 />
               </div>
@@ -271,5 +320,5 @@ export function SuggestionList({ suggestions }: { suggestions: Suggestion[] | an
         </div>
       )}
     </div>
-  )
+  );
 }
