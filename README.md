@@ -36,7 +36,7 @@ Feel free to explore the repository and contribute to making GitHub a more civil
 
 Before you begin, ensure you have the following installed on your machine:
 
-- [Node.js](https://nodejs.org/) (version 14 or higher)
+- [Node.js](https://nodejs.org/) (version 20 or higher)
 - [pnpm](https://pnpm.js.org/) (package manager)
 
 ---
@@ -46,13 +46,13 @@ Before you begin, ensure you have the following installed on your machine:
 1. Clone the repository to your local machine:
 
   ```bash
-  git clone https://github.com/your-username/peacemaker-bot-frontend.git
+  git clone https://github.com/reset-ufc/peacemaker-bot-frontend.git
   ```
 2. Navigate to the project directory:
 
 
  ```bash
- cd peacemaker-bot-frontend
+ cd peacemaker-front-end
  ```
 3. Install the dependencies:
  ```bash
