@@ -64,7 +64,7 @@ Before you begin, ensure you have the following installed on your machine:
   ```bash
   pnpm run dev
   ```
-# The application will be available at http://localhost:5173 by default.
+## The application will be available at http://localhost:5173 by default.
 
 ## 📂 Project Structure
 
