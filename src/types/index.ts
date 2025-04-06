@@ -1,4 +1,3 @@
-
 export interface Repository {
   gh_repository_id: string;
   name: string;
@@ -7,53 +6,6 @@ export interface Repository {
   private: boolean;
   owner_gh_id: string;
   created_at: string;
-}
-
-export interface SuggestionItem {
-  content: string
-}
-
-export interface SuggestionGroup {
-  suggestion_selected_index: number | null
-  gh_comment_id: string
-  suggestions: SuggestionItem[]
-  is_edited: boolean
-  created_at: string
-}
-
-export interface SuggestionResponse {
-  suggestions: SuggestionGroup[]
-}
-
-export interface SuggestionItemCardProps {
-  suggestion: SuggestionItem
-  isSelected: boolean
-  isPreviouslySelected: boolean
-  isDisabled: boolean
-  isEditing: boolean
-  editedContent: string
-  onClick: () => void
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-}
-
-export interface SuggestionGroupComponentProps {
-  group: SuggestionGroup
-  groupIndex: number
-  selectedGroup: number | null
-  selectedSuggestion: number | null
-  editedContent: string
-  isEditing: boolean
-  isAccepted: boolean
-  handleSelectSuggestion: (groupIndex: number, suggestionIndex: number) => void
-  setEditedContent: (content: string) => void
-  handleEdit: () => void
-  handleConfirmEdit: () => void
-  handleCancelEdit: () => void
-  handleAccept: () => void
-}
-
-export interface SuggestionResponse {
-  suggestions: SuggestionGroup[];
 }
 
 export interface Comment {
@@ -68,7 +20,7 @@ export interface Comment {
   toxicity_score: number;
   classification: string;
   solutioned: boolean;
-  suggestion_id: string;
+  suggestion_id: string | null;
   comment_html_url: string;
   issue_id: string;
   created_at: string;
@@ -93,6 +45,12 @@ export interface Suggestion {
   content: string;
   is_edited: boolean;
   created_at: string;
+}
+
+export interface Feedback {
+  suggestion_id: string;
+  type: "positive" | "negative";
+  justification?: string;
 }
 
 export interface CommentsResponse {
