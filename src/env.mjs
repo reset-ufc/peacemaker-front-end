@@ -34,14 +34,21 @@ export const env = createEnv({
     VERCEL_ENV: z
       .enum(["production", "preview", "development"])
       .default("development"),
-    BASE_API_URL: z.string().url().default("http://localhost:3333"),
+    BASE_API_URL: z.string().url().default("http://localhost:3000"),
   },
   /**
    * Specify your client-side environment variables schema here.
    * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_`.
    */
   client: {
-    VITE_PUBLIC_BASE_URL: z.string().url().default("http://localhost:4173"),
+    VITE_PUBLIC_BASE_URL: z
+      .string()
+      .url()
+      .default(
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:5173"
+          : "http://localhost:4173"
+      ),
     VITE_PUBLIC_GOOGLE_ANALYTICS_ID: z.string().optional(),
     VITE_PUBLIC_STATIC_EXPORT: z.string().transform(v => v === "true"),
   },
