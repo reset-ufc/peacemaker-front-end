@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { Comment, Feedback, Suggestion } from "@/types";
+import { Comment, Feedback as FeedbackType, Suggestion } from "@/types";
 
 interface SuggestionListProps {
   suggestions: Array<Suggestion>;
@@ -34,7 +34,6 @@ export function SuggestionList({
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isContentEdited, setIsContentEdited] = useState<boolean>(false);
 
-  // Feedback states
   const [showFeedback, setShowFeedback] = useState<boolean>(false);
   const [feedbackType, setFeedbackType] = useState<
     "positive" | "negative" | null
@@ -81,7 +80,6 @@ export function SuggestionList({
     },
   });
 
-  // Select a suggestion
   const handleSelectSuggestion = (suggestionId: string) => {
     if (suggestionAcceptedId) return;
 
@@ -98,12 +96,10 @@ export function SuggestionList({
     }
   };
 
-  // Activate edit mode
   const handleEdit = () => {
     setIsEditing(true);
   };
 
-  // Confirm edit
   const handleConfirmEdit = () => {
     setIsContentEdited(true);
     setIsEditing(false);
@@ -112,7 +108,6 @@ export function SuggestionList({
     });
   };
 
-  // Cancel edit
   const handleCancelEdit = () => {
     setIsEditing(false);
     if (selectedSuggestionId) {
@@ -124,16 +119,8 @@ export function SuggestionList({
     setIsContentEdited(false);
   };
 
-  // Accept suggestion
   const handleAccept = () => {
     if (!selectedSuggestionId) return;
-
-    // Here you would implement the logic to send the suggestion to the backend
-    console.log("Suggestion accepted:", {
-      id: selectedSuggestionId,
-      content: editedContent,
-      isEdited: isContentEdited,
-    });
 
     acceptSuggestionMutation.mutate({
       commentId: comment.gh_comment_id,
@@ -141,13 +128,18 @@ export function SuggestionList({
       content: editedContent,
       isEdited: isContentEdited,
     });
+
+    setShowFeedback(true);
+    setFeedbackType(null);
+    setFeedbackJustification("");
+
+    setSelectedSuggestionId(selectedSuggestionId);
   };
 
-  // Handle feedback submission
   const handleFeedbackSubmit = () => {
     if (!selectedSuggestionId || !feedbackType) return;
 
-    const feedback: Feedback = {
+    const feedback: FeedbackType = {
       suggestion_id: selectedSuggestionId,
       type: feedbackType,
       ...(feedbackJustification
@@ -160,85 +152,21 @@ export function SuggestionList({
     toast.success("Feedback submitted", {
       description: "Thank you for your feedback!",
     });
+
+    setShowFeedback(false);
   };
 
   return (
     <div className="flex flex-col">
-      {/* Feedback Component */}
-      {showFeedback && selectedSuggestionId && (
-        <div className="bg-muted/20 rounded-lg border p-4">
-          <h3 className="mb-3 text-lg font-medium">
-            Was this suggestion helpful?
-          </h3>
-
-          {!feedbackType ? (
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={() => setFeedbackType("positive")}
-                className="flex items-center gap-2"
-              >
-                <ThumbsUp className="size-4" />
-                Yes, it was helpful
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setFeedbackType("negative")}
-                className="flex items-center gap-2"
-              >
-                <ThumbsDown className="size-4" />
-                No, it wasn't helpful
-              </Button>
-            </div>
-          ) : feedbackType === "positive" ? (
-            <div className="space-y-3">
-              <p className="flex items-center gap-2 text-green-600">
-                <ThumbsUp className="size-4" />
-                Thank you for your feedback!
-              </p>
-              <Button onClick={handleFeedbackSubmit}>Submit Feedback</Button>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <p className="text-muted-foreground flex items-center gap-2">
-                <ThumbsDown className="size-4" />
-                We're sorry to hear that. Please tell us why:
-              </p>
-
-              <RadioGroup
-                value={feedbackJustification}
-                onValueChange={setFeedbackJustification}
-                className="space-y-2"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="incorrect" id="incorrect" />
-                  <Label htmlFor="incorrect">
-                    The suggestion was incorrect
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="inappropriate" id="inappropriate" />
-                  <Label htmlFor="inappropriate">
-                    The suggestion was inappropriate
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="not-useful" id="not-useful" />
-                  <Label htmlFor="not-useful">
-                    The suggestion wasn't useful
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="other" id="other" />
-                  <Label htmlFor="other">Other reason</Label>
-                </div>
-              </RadioGroup>
-
-              <Button onClick={handleFeedbackSubmit}>Submit Feedback</Button>
-            </div>
-          )}
-        </div>
-      )}
+      <Feedback
+        showFeedback={showFeedback}
+        selectedSuggestionId={selectedSuggestionId}
+        feedbackType={feedbackType}
+        setFeedbackType={setFeedbackType}
+        feedbackJustification={feedbackJustification}
+        setFeedbackJustification={setFeedbackJustification}
+        handleFeedbackSubmit={handleFeedbackSubmit}
+      />
 
       <h2 className="mb-2 text-xl font-semibold">Correction Suggestions</h2>
 
@@ -247,6 +175,7 @@ export function SuggestionList({
       <div className="space-y-3 px-2 pb-5">
         {suggestions.map(suggestion => {
           const isSelected = selectedSuggestionId === suggestion._id;
+          const isAccepted = suggestionAcceptedId === suggestion._id;
           const isDisabled =
             !!suggestionAcceptedId && suggestionAcceptedId !== suggestion._id;
 
@@ -257,8 +186,10 @@ export function SuggestionList({
                 "p-2 transition-colors",
                 isDisabled && "cursor-not-allowed opacity-50",
                 isSelected && "border-primary border-2",
+                isAccepted && "bg-primary/10",
                 !isDisabled &&
                   !isSelected &&
+                  !isAccepted &&
                   "hover:border-muted-foreground/50 cursor-pointer",
                 isSelected && suggestionAcceptedId && "bg-primary/5"
               )}
@@ -352,6 +283,95 @@ export function SuggestionList({
           </p>
         )}
       </div>
+    </div>
+  );
+}
+
+function Feedback({
+  showFeedback,
+  selectedSuggestionId,
+  feedbackType,
+  setFeedbackType,
+  feedbackJustification,
+  setFeedbackJustification,
+  handleFeedbackSubmit,
+}: {
+  showFeedback: boolean;
+  selectedSuggestionId: string | null;
+  feedbackType: "positive" | "negative" | null;
+  setFeedbackType: (type: "positive" | "negative" | null) => void;
+  feedbackJustification: string;
+  setFeedbackJustification: (justification: string) => void;
+  handleFeedbackSubmit: () => void;
+}) {
+  if (!showFeedback || !selectedSuggestionId) return null;
+
+  return (
+    <div className="bg-muted/20 rounded-lg border p-4">
+      <h3 className="mb-3 text-lg font-medium">Was this suggestion helpful?</h3>
+
+      {!feedbackType ? (
+        <div className="flex gap-3">
+          <Button
+            variant="outline"
+            onClick={() => setFeedbackType("positive")}
+            className="flex items-center gap-2"
+          >
+            <ThumbsUp className="size-4" />
+            Yes, it was helpful
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => setFeedbackType("negative")}
+            className="flex items-center gap-2"
+          >
+            <ThumbsDown className="size-4" />
+            No, it wasn't helpful
+          </Button>
+        </div>
+      ) : feedbackType === "positive" ? (
+        <div className="space-y-3">
+          <p className="flex items-center gap-2 text-green-600">
+            <ThumbsUp className="size-4" />
+            Thank you for your feedback!
+          </p>
+          <Button onClick={handleFeedbackSubmit}>Submit Feedback</Button>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <p className="text-muted-foreground flex items-center gap-2">
+            <ThumbsDown className="size-4" />
+            We're sorry to hear that. Please tell us why:
+          </p>
+
+          <RadioGroup
+            value={feedbackJustification}
+            onValueChange={setFeedbackJustification}
+            className="space-y-2"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="incorrect" id="incorrect" />
+              <Label htmlFor="incorrect">The suggestion was incorrect</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="inappropriate" id="inappropriate" />
+              <Label htmlFor="inappropriate">
+                The suggestion was inappropriate
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="not-useful" id="not-useful" />
+              <Label htmlFor="not-useful">The suggestion wasn't useful</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="other" id="other" />
+              <Label htmlFor="other">Other reason</Label>
+            </div>
+          </RadioGroup>
+
+          <Button onClick={handleFeedbackSubmit}>Submit Feedback</Button>
+        </div>
+      )}
     </div>
   );
 }
