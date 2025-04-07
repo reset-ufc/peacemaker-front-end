@@ -11,7 +11,7 @@ export function GithubAuthPage() {
 
   useEffect(() => {
     const fetchUrl = async () => {
-      const request = await api.get<{ url: string }>("/oauth/github", {
+      const request = await api.get<{ url: string }>("/api/oauth/github", {
         params: {
           redirect_uri: `${env.VITE_PUBLIC_BASE_URL}/auth/sign-in/github/callback`,
           client_type: "extension",

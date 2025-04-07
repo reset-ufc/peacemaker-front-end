@@ -3,7 +3,6 @@ import { AxiosResponse } from "axios";
 import { LoaderIcon } from "lucide-react";
 
 import { CommentModeration } from "@/components/layout/incivilities/CommentModeration";
-import { Loader } from "@/components/ui/loadingSpinner";
 import { api } from "@/lib/api";
 import { Comment } from "@/types";
 
@@ -17,7 +16,7 @@ export function IncivilitiesPage() {
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       const request: AxiosResponse<{ comments: Array<Comment> }> =
-        await api.get("/api/comments?with_parent=true", {
+        await api.get("/api/comments", {
           headers: {
             Authorization: `Bearer ${t}`,
           },

@@ -26,19 +26,8 @@ export const CommentDetail = memo(function CommentDetail({
   comment,
   showDetails,
   onToggleDetails,
-  // onSuggestionSelect,
-  // onSuggestionConfirm,
   commentState,
 }: CommentDetailProps) {
-  // const [editedContent, setEditedContent] = useState<string>("");
-
-  // // Update edited content when comment state changes
-  // useState(() => {
-  //   if (commentState?.editedContent) {
-  //     setEditedContent(commentState.editedContent);
-  //   }
-  // });
-
   const getToxicityLevel = useCallback((score: number) => {
     if (score >= 0.75) return "High";
     if (score >= 0.5) return "Medium";
@@ -72,19 +61,6 @@ export const CommentDetail = memo(function CommentDetail({
       return "";
     }
   }, []);
-
-  // const handleUpdateEditedContent = useCallback((content: string) => {
-  //   setEditedContent(content);
-  // }, []);
-
-  // const selectedSuggestion = useMemo(() => {
-  //   if (!commentState?.selectedSuggestionId) return null
-  //   return (
-  //     comment.suggestions.find(
-  //       s => s._id === commentState.selectedSuggestionId
-  //     ) || null
-  //   )
-  // }, [comment.suggestions, commentState?.selectedSuggestionId])
 
   const toxicityLevel = getToxicityLevel(comment.toxicity_score);
 
