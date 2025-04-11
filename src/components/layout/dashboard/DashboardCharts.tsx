@@ -16,25 +16,72 @@ import {
   YAxis,
 } from "recharts";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { api } from "@/lib/api";
 import { DashboardChartsProps } from "@/types";
+import { Select } from "@radix-ui/react-select";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 //A definir as cores do gráfico de pizza
 const PIE_COLORS = ["#f87171", "#60a5fa", "#fbbf24", "#34d399"];
+interface ModerationResponseItem {
+ month: string;
+ comments: number;
+ flags: number;
+}
+
+type ModerationResponse = ModerationResponseItem[];
 
 export function DashboardCharts({
-  moderationActivity,
   recentFlagged,
   radarFlags,
   moderationActions,
 }: DashboardChartsProps) {
+  const [period, setPeriod] = useState("24h");
+  const t = localStorage.getItem("access_token");
+
+  async function getModerationActions() {
+    const response = await api.get<ModerationResponse>("/dashboard/moderation-activity", {
+      headers: { Authorization: `Bearer ${t}` },
+      params: { period },
+    })
+    return response.data
+  }
+
+  const { data: moderationActivity } = useQuery({
+    queryFn: getModerationActions,
+    queryKey: ["moderation-activity"],
+  })
+
+  if (!moderationActivity) {
+    return null
+  }
+
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-3 gap-4">
         <div className="col-span-2 rounded border p-4 shadow">
-          <h3 className="mb-2 text-lg font-semibold">Moderation Activity</h3>
-          <p className="text-muted-foreground mb-4 text-sm">
-            Comments and Flags over time
-          </p>
+         <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col">
+            <h3 className="mb-2 text-lg font-semibold">Moderation Activity</h3>
+              <p className="text-muted-foreground mb-4 text-sm">
+                Comments and Flags over time
+              </p>
+          </div>
+            <Select value={period} onValueChange={setPeriod}>
+              <SelectTrigger className="w-40">
+                <SelectValue placeholder="Select period" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="24h">Last 24 hours</SelectItem>
+                <SelectItem value="7d">Last 7 days</SelectItem>
+                <SelectItem value="30d">Last 30 days</SelectItem>
+              </SelectContent>
+            </Select>
+         </div>
           <div style={{ width: "100%", height: 300 }}>
             <ResponsiveContainer>
               <AreaChart data={moderationActivity}>
@@ -84,36 +131,42 @@ export function DashboardCharts({
           <p className="text-muted-foreground mb-4 text-sm">
             The most recent flagged comments
           </p>
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between border-b pb-1 font-medium">
-              <span>Author</span>
-              <span>Severity</span>
-              <span>Action</span>
+          <div className="text-sm">
+            <div className="grid grid-cols-3 gap-4 border-b pb-2 font-medium">
+              <span className="ml-2">Author</span>
+              <span className="text-center">Severity</span>
+              <span className="text-right mr-2">Action</span>
             </div>
-            {recentFlagged.map((item, idx) => (
-              <div key={idx} className="flex justify-between">
-                <span>{item.author}</span>
-                <span>
-                  <span
-                    className={`rounded-full px-2 py-1 text-xs text-white ${
+            <div className="mt-2 space-y-3">
+              {recentFlagged.map((item, idx) => (
+                <div key={idx} className="grid grid-cols-3 items-center gap-4 border-b pb-3">
+                  <span className="truncate ml-2">{item.author}</span>
+                  <div className="flex justify-center">
+                    <Badge
+                      className={`text-white ${
                       item.severity === "High"
                         ? "bg-red-500"
                         : item.severity === "Medium"
                           ? "bg-yellow-500"
                           : "bg-green-500"
-                    }`}
-                  >
-                    {item.severity}
-                  </span>
-                </span>
-                <span>{item.action}</span>
-              </div>
-            ))}
+                          }`}
+                    >
+                      {item.severity}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-end mr-2">
+                    <Button size="sm" variant="outline">
+                      {item.action}
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 pb-14">
         <div className="flex flex-col rounded border p-4 shadow">
           <h3 className="mb-2 text-lg font-semibold">Incivility Categories</h3>
           <p className="text-muted-foreground mb-4 text-sm">
@@ -136,9 +189,7 @@ export function DashboardCharts({
               </RadarChart>
             </ResponsiveContainer>
           </div>
-          <span className="text-muted-foreground mt-2 text-xs">
-            Data for last 30 days
-          </span>
+         
         </div>
 
         {/* Ainda não terminado */}
@@ -176,9 +227,6 @@ export function DashboardCharts({
               <p className="text-muted-foreground text-sm">Total Actions</p>
             </div>
           </div>
-          <span className="text-muted-foreground mt-2 text-xs">
-            Last 30 days
-          </span>
         </div>
       </div>
     </div>

@@ -1,91 +1,187 @@
-import {
-  CloudUploadIcon,
-  FingerprintIcon,
-  LockIcon,
-  type LucideIcon,
-  RefreshCwIcon,
-} from "lucide-react";
+"use client"
 
-type Features = {
-  name: string;
-  description: string;
-  icon: LucideIcon;
-  link?: string;
-};
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
+import { motion, useInView, useScroll, useTransform } from "framer-motion"
+import { ArrowRight, CloudUpload, Fingerprint, Lock, RefreshCw, Sparkles, type LucideIcon } from "lucide-react"
+import { useRef } from "react"
 
-const features: Array<Features> = [
+type Feature = {
+  name: string
+  description: string
+  icon: LucideIcon
+  link?: string
+  color?: string
+}
+
+const features: Array<Feature> = [
   {
     name: "Ease Installation",
-    description:
-      "To get the bot working in your repository all you need to do is install it on Github Marketplace. ",
-    icon: CloudUploadIcon,
+    description: "To get the bot working in your repository all you need to do is install it on Github Marketplace.",
+    icon: CloudUpload,
     link: "https://github.com/apps/thepeacemakerbot",
+    color: "from-violet-600 to-purple-500",
   },
   {
     name: "GitHub Integration",
     description:
-      "You can acess your incivilized comments and repositories analysis loging with your Github account.",
-    icon: LockIcon,
+      "You can access your incivilized comments and repositories analysis by logging in with your Github account.",
+    icon: Lock,
+    color: "from-purple-600 to-fuchsia-500",
   },
   {
     name: "Fast and Simple",
     description:
       "The bot is very easy to use and doesn't require any configuration, with the analysis of the comments starting automatically.",
-    icon: RefreshCwIcon,
+    icon: RefreshCw,
+    color: "from-indigo-500 to-violet-600",
   },
   {
     name: "No intrusive politics",
-    description: "The bot doesn't interfere with your comments ",
-    icon: FingerprintIcon,
+    description: "The bot doesn't interfere with your comments.",
+    icon: Fingerprint,
+    color: "from-fuchsia-500 to-purple-700",
   },
-];
+]
 
 export function Features() {
+  const containerRef = useRef(null)
+  const titleRef = useRef(null)
+  const isInView = useInView(containerRef, { once: true, amount: 0.2 })
+  const isTitleInView = useInView(titleRef, { once: true, amount: 0.5 })
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  })
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
+
   return (
-    <div className="py-20 sm:py-28">
+    <section className="relative py-24 sm:py-32 overflow-hidden" ref={containerRef}>
+      <motion.div className="absolute inset-0 -z-10 opacity-[0.08]" style={{ y: backgroundY }}>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-gradient-to-r from-violet-600 to-purple-500 blur-3xl" />
+        <div className="absolute bottom-1/3 right-1/3 w-64 h-64 rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-700 blur-3xl" />
+        <div className="absolute top-2/3 right-1/4 w-72 h-72 rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 blur-3xl" />
+      </motion.div>
+
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-primary text-base leading-7 font-semibold">
-            Moderate your repositories
-          </h2>
-          <p className="text-foreground mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            {/* Everything you need moderate your issues, pull requests and comments */}
-            The Peacemaker is a non intrusive Github bot that helps you manage
-            your repositories issues and pull requests.
-          </p>
-          {/* <p className="mt-6 text-lg leading-8 text-muted-foreground">
-            Quis tellus eget adipiscing convallis sit sit eget aliquet quis. Suspendisse eget egestas a elementum
-            pulvinar et feugiat blandit at. In mi viverra elit nunc.
-          </p> */}
-        </div>
-        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
-          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-            {features.map(feature => (
-              <div key={feature.name} className="relative pl-16">
-                <dt className="text-foreground text-base leading-7 font-semibold">
-                  <div className="bg-primary absolute top-0 left-0 flex h-10 w-10 items-center justify-center rounded-lg">
-                    <feature.icon
-                      aria-hidden="true"
-                      className="text-primary-foreground size-6"
-                    />
+        <motion.div
+          ref={titleRef}
+          className="mx-auto max-w-2xl lg:text-center"
+          initial={{ opacity: 0, y: 40 }}
+          animate={isTitleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isTitleInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="mx-auto mb-6 flex justify-center"
+          >
+            <Badge
+              variant="outline"
+              className="px-4 py-1.5 text-sm font-medium border-violet-500/30 bg-violet-500/10 text-violet-500 backdrop-blur-sm"
+            >
+              <Sparkles className="mr-1.5 h-3.5 w-3.5 animate-pulse text-violet-400" />
+              Moderate your repositories
+            </Badge>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={isTitleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-foreground text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
+          >
+            <span className="inline-block">The Peacemaker</span>{" "}
+            <span className="inline-block bg-gradient-to-r from-violet-600 to-purple-500 bg-clip-text text-transparent">
+              keeps your GitHub community civil
+            </span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={isTitleInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-muted-foreground mt-6 text-lg leading-8 max-w-3xl mx-auto"
+          >
+            A non-intrusive Github bot that helps you manage your repositories issues and pull requests with AI-powered
+            moderation.
+          </motion.p>
+        </motion.div>
+
+        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-5xl">
+          <motion.div
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.15,
+                },
+              },
+            }}
+            className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-2 lg:gap-y-16"
+            style={{ gridAutoRows: "1fr" }}
+          >
+            {features.map((feature) => (
+              <motion.div
+                key={feature.name}
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+                }}
+                whileHover={{ y: -5 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                className="group relative"
+              >
+                <div className="relative rounded-2xl border border-violet-500/10 bg-card/50 backdrop-blur-sm p-8 shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+                  <div className="flex items-center">
+                    <motion.div
+                      whileHover={{ rotate: 10, scale: 1.05 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                      className={cn(
+                        "flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br shadow-lg",
+                        feature.color || "from-violet-600 to-purple-500",
+                      )}
+                    >
+                      <feature.icon className="text-white size-7" />
+                    </motion.div>
+                    <h3 className="ml-5 text-xl font-semibold text-foreground group-hover:text-violet-500 transition-colors duration-300">
+                      {feature.name}
+                    </h3>
                   </div>
-                  {feature.name}
-                </dt>
-                <dd className="text-muted-foreground mt-2 text-base leading-7">
-                  {feature.description}
-                </dd>
-                <p>
+
+                  <p className="mt-5 text-gray-400 text-base leading-7 flex-grow">{feature.description}</p>
+
                   {feature.link && (
-                    <a href={feature.link} target="_blank" rel="noreferrer">
-                      See more
-                    </a>
+                    <motion.a
+                      href={feature.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-5 inline-flex items-center text-sm font-medium text-violet-500 hover:text-violet-600 transition-colors self-start"
+                      whileHover={{ x: 5 }}
+                    >
+                      Learn more
+                      <ArrowRight className="ml-1.5 h-4 w-4" />
+                    </motion.a>
                   )}
-                </p>
-              </div>
+
+                  <motion.div
+                    className="absolute -z-10 inset-0 rounded-2xl bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300"
+                    style={{
+                      background: `linear-gradient(to bottom right, var(--${feature.color?.split(" ")[0].substring(5)}, var(--${feature.color?.split(" ")[1].substring(3)})`,
+                    }}
+                  />
+                </div>
+              </motion.div>
             ))}
-          </dl>
+          </motion.div>
         </div>
       </div>
-    </div>
-  );
+    </section>
+  )
 }

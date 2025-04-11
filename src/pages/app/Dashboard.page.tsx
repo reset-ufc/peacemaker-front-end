@@ -17,7 +17,7 @@ export function DashboardPage() {
     queryFn: async () => {
       const t = localStorage.getItem("access_token");
 
-      const response = await api.get("/api/dashboard/metrics", {
+      const response = await api.get("/dashboard/metrics", {
         headers: { Authorization: `Bearer ${t}` },
         params: { period },
       });
@@ -31,7 +31,7 @@ export function DashboardPage() {
   if (isError) return <div>Error: {(error as Error).message}</div>;
 
   return (
-    <main className="h-[calc(100vh-4rem)] w-full p-8">
+    <main className="h-[calc(100vh-4rem)] w-full px-8 py-10">
       <DashboardHeader period={period} onPeriodChange={setPeriod} />
       <DashboardCards overview={data} />
       <DashboardCharts
