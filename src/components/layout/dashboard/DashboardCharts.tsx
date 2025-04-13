@@ -158,7 +158,7 @@ export function DashboardCharts({
                   outerRadius={100}
                   label
                 >
-                  {moderationActions.data.map((entry, index) => (
+                  {moderationActions.data.map((_entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={PIE_COLORS[index % PIE_COLORS.length]}
