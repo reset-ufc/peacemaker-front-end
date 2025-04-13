@@ -30,30 +30,30 @@ export default function CookieBanner() {
   }
 
   return (
-    <div className="bg-background fixed right-0 bottom-0 left-0 z-50 border-t p-4 shadow-md">
-      <div className="container mx-auto h-full">
-        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-          <div className="flex-1">
-            <p className="text-sm">
+    <div className='bg-background fixed right-0 bottom-0 left-0 z-50 border-t p-4 shadow-md'>
+      <div className='container mx-auto h-full'>
+        <div className='flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'>
+          <div className='flex-1'>
+            <p className='text-sm'>
               Este site utiliza cookies para coletar métricas de uso e para
               autenticação. Ao continuar navegando, você concorda com nossa
               política de cookies.
             </p>
           </div>
-          <div className="flex items-center gap-2 self-end sm:self-auto">
+          <div className='flex items-center gap-2 self-end sm:self-auto'>
             <Button
-              variant="outline"
-              size="sm"
+              variant='outline'
+              size='sm'
               onClick={handleReject}
-              className="h-8 text-xs"
+              className='h-8 text-xs'
             >
               Rejeitar
             </Button>
             <Button
-              variant="default"
-              size="sm"
+              variant='default'
+              size='sm'
               onClick={handleAccept}
-              className="h-8 text-xs"
+              className='h-8 text-xs'
             >
               Aceitar
             </Button>

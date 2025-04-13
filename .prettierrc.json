@@ -1,5 +1,11 @@
 {
+  "$schema": "https://json.schemastore.org/prettierrc",
   "singleQuote": false,
+  "jsxSingleQuote": true,
+  "htmlWhitespaceSensitivity": "css",
+  "quoteProps": "as-needed",
+  "objectWrap": "preserve",
+  "singleAttributePerLine": false,
   "trailingComma": "es5",
   "tabWidth": 2,
   "arrowParens": "avoid",
@@ -9,6 +15,10 @@
   "useTabs": false,
   "endOfLine": "lf",
   "printWidth": 80,
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss"
+  ],
   "importOrder": [
     "^(react|next?/?([a-zA-Z/]*))$",
     "<THIRD_PARTY_MODULES>",
@@ -17,8 +27,5 @@
   ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
-  "plugins": [
-    "@trivago/prettier-plugin-sort-imports",
-    "prettier-plugin-tailwindcss"
-  ]
+  "tailwindPreserveWhitespace": true
 }

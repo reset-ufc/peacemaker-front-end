@@ -15,7 +15,7 @@
 - [Contributing](#-contributing)
 - [License](#-license)
 - [Contact](#-contact)
-  
+
 ---
 
 The Peacemaker Bot Frontend provides an intuitive interface for users to engage with the moderation features of the Peacemaker Bot. Key functionalities include:
@@ -31,7 +31,6 @@ Feel free to explore the repository and contribute to making GitHub a more civil
 
 ---
 
-
 ## ✅ Prerequisites
 
 Before you begin, ensure you have the following installed on your machine:
@@ -45,54 +44,56 @@ Before you begin, ensure you have the following installed on your machine:
 
 1. Clone the repository to your local machine:
 
-  ```bash
-  git clone https://github.com/reset-ufc/peacemaker-bot-frontend.git
-  ```
+```bash
+git clone https://github.com/reset-ufc/peacemaker-bot-frontend.git
+```
+
 2. Navigate to the project directory:
 
+```bash
+cd peacemaker-front-end
+```
 
- ```bash
- cd peacemaker-front-end
- ```
 3. Install the dependencies:
- ```bash
- pnpm install
- ```
+
+```bash
+pnpm install
+```
+
 ## 🚀 Usage
 
 1. To start the development server, run:
-  ```bash
-  pnpm run dev
-  ```
+
+```bash
+pnpm run dev
+```
+
 ## The application will be available at http://localhost:5173 by default.
 
 ## 📂 Project Structure
 
 An overview of the folder and file structure:
 
- ```
- peacemaker-front-end/
+```
+peacemaker-front-end/
 
- ├── public/                   # Static files served by the application
- │   └── index.html            # Main HTML file
- ├── src/                      # Source code for the application
- │   ├── app/                  # Application-specific components and pages
- │   │   ├── (app)/            # Main application layout
- │   │   ├── (auth)/           # Authentication-related components
- │   │   └── (public)/         # Public-facing components
- │   ├── components/           # Reusable UI components
- │   ├── config/               # Configuration files
- │   ├── hooks/                # Custom React hooks
- │   ├── lib/                  # Utility functions and libraries
- │   ├── providers/            # Context providers for state management
- │   ├── styles/               # CSS and styling files
- │   └── types/                # TypeScript type definitions
- ├── .gitignore                # Git ignore file
- ├── package.json              # Project metadata and dependencies
- ├── pnpm-lock.yaml            # pnpm lock file
- ├── README.md                 # Project documentation
- └── tsconfig.json             # TypeScript configuration
- ```
-
-
-
+├── public/                   # Static files served by the application
+│   └── index.html            # Main HTML file
+├── src/                      # Source code for the application
+│   ├── app/                  # Application-specific components and pages
+│   │   ├── (app)/            # Main application layout
+│   │   ├── (auth)/           # Authentication-related components
+│   │   └── (public)/         # Public-facing components
+│   ├── components/           # Reusable UI components
+│   ├── config/               # Configuration files
+│   ├── hooks/                # Custom React hooks
+│   ├── lib/                  # Utility functions and libraries
+│   ├── providers/            # Context providers for state management
+│   ├── styles/               # CSS and styling files
+│   └── types/                # TypeScript type definitions
+├── .gitignore                # Git ignore file
+├── package.json              # Project metadata and dependencies
+├── pnpm-lock.yaml            # pnpm lock file
+├── README.md                 # Project documentation
+└── tsconfig.json             # TypeScript configuration
+```

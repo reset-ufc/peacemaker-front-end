@@ -36,18 +36,18 @@ export function TabsCategories({
 }: TabsCategoriesProps) {
   return (
     /* Category Tabs */
-    <div className="flex items-start border-b ps-4 pt-1 pb-2">
+    <div className='flex items-start border-b ps-4 pt-1 pb-2'>
       <Tabs value={activeFilter} onValueChange={handleFilterChange}>
-        <TabsList className="flex h-auto w-full gap-x-1.5 overflow-x-auto bg-transparent px-2">
+        <TabsList className='flex h-auto w-full gap-x-1.5 overflow-x-auto bg-transparent px-2'>
           {categories.map(category => (
-            <div key={category.name} className="flex flex-col gap-y-1">
-              <p className="pb-px text-sm font-medium">{category.name}</p>
-              <div className="flex flex-row gap-x-1.5">
+            <div key={category.name} className='flex flex-col gap-y-1'>
+              <p className='pb-px text-sm font-medium'>{category.name}</p>
+              <div className='flex flex-row gap-x-1.5'>
                 {category.filters.map(filter => (
                   <TabsTrigger
                     key={filter.id}
                     value={filter.id}
-                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hover:bg-secondary h-auto cursor-pointer rounded-xl border px-3 py-1 text-sm transition-colors"
+                    className='data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hover:bg-secondary h-auto cursor-pointer rounded-xl border px-3 py-1 text-sm transition-colors'
                   >
                     {filter.name}
                   </TabsTrigger>

@@ -28,8 +28,8 @@ export function DashboardPage() {
 
   if (query.isLoading) {
     return (
-      <div className="flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center">
-        <LoaderIcon className="size-12 animate-spin" />
+      <div className='flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center'>
+        <LoaderIcon className='size-12 animate-spin' />
       </div>
     );
   }
@@ -37,14 +37,14 @@ export function DashboardPage() {
   // Handle errors with a fallback component
   if (query.isError) {
     return (
-      <div className="flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center">
+      <div className='flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center'>
         <p>Error: {query.error.message}</p>
       </div>
     );
   }
 
   return (
-    <main className="h-[calc(100vh-4rem)] w-full p-8">
+    <main className='h-[calc(100vh-4rem)] w-full p-8'>
       <DashboardHeader period={period} onPeriodChange={setPeriod} />
       <DashboardCards overview={query.data} />
       <DashboardCharts

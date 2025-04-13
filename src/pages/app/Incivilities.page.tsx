@@ -13,7 +13,7 @@ export function IncivilitiesPage() {
       const t = localStorage.getItem("access_token");
 
       // Simulate a delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // await new Promise(resolve => setTimeout(resolve, 1500));
 
       const request: AxiosResponse<{ comments: Array<Comment> }> =
         await api.get("/api/comments", {
@@ -30,8 +30,8 @@ export function IncivilitiesPage() {
 
   if (query.isLoading) {
     return (
-      <div className="flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center">
-        <LoaderIcon className="size-12 animate-spin" />
+      <div className='flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center'>
+        <LoaderIcon className='size-12 animate-spin' />
       </div>
     );
   }
@@ -39,14 +39,14 @@ export function IncivilitiesPage() {
   // Handle errors with a fallback component
   if (query.isError) {
     return (
-      <div className="flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center">
+      <div className='flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center'>
         <p>Error: {query.error.message}</p>
       </div>
     );
   }
 
   return (
-    <main className="bg-background h-[calc(100vh-4rem)]">
+    <main className='bg-background h-[calc(100vh-4rem)]'>
       <CommentModeration commentsData={query.data ?? []} />
     </main>
   );

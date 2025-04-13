@@ -157,7 +157,7 @@ export function SuggestionList({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className='flex flex-col'>
       <Feedback
         showFeedback={showFeedback}
         selectedSuggestionId={selectedSuggestionId}
@@ -168,11 +168,11 @@ export function SuggestionList({
         handleFeedbackSubmit={handleFeedbackSubmit}
       />
 
-      <h2 className="mb-2 text-xl font-semibold">Correction Suggestions</h2>
+      <h2 className='mb-2 text-xl font-semibold'>Correction Suggestions</h2>
 
-      <Separator className="mb-4" />
+      <Separator className='mb-4' />
 
-      <div className="space-y-3 px-2 pb-5">
+      <div className='space-y-3 px-2 pb-5'>
         {suggestions.map(suggestion => {
           const isSelected = selectedSuggestionId === suggestion._id;
           const isAccepted = suggestionAcceptedId === suggestion._id;
@@ -197,7 +197,7 @@ export function SuggestionList({
                 !isDisabled && handleSelectSuggestion(suggestion._id)
               }
             >
-              <CardContent className="p-2">
+              <CardContent className='p-2'>
                 {isEditing && isSelected ? (
                   <Textarea
                     value={editedContent}
@@ -208,31 +208,31 @@ export function SuggestionList({
                       }
                     }}
                     onClick={e => e.stopPropagation()}
-                    className="min-h-[100px] w-full outline-none"
+                    className='min-h-[100px] w-full outline-none'
                   />
                 ) : (
-                  <p className="whitespace-pre-wrap">
+                  <p className='whitespace-pre-wrap'>
                     {isSelected ? editedContent : suggestion.content}
                   </p>
                 )}
               </CardContent>
 
               {isSelected && !suggestionAcceptedId && (
-                <CardFooter className="flex justify-end gap-2 p-3 pt-0">
+                <CardFooter className='flex justify-end gap-2 p-3 pt-0'>
                   {isEditing ? (
                     <>
                       <Button
-                        variant="destructive"
+                        variant='destructive'
                         onClick={e => {
                           e.stopPropagation();
                           handleCancelEdit();
                         }}
                       >
-                        <X className="size-4" />
+                        <X className='size-4' />
                         Cancel edit
                       </Button>
                       <Button
-                        variant="outline"
+                        variant='outline'
                         onClick={e => {
                           e.stopPropagation();
                           handleConfirmEdit();
@@ -243,30 +243,30 @@ export function SuggestionList({
                           editedContent === comment.content.trimEnd()
                         }
                       >
-                        <Check className="size-4" />
+                        <Check className='size-4' />
                         Confirm edit
                       </Button>
                     </>
                   ) : (
                     <>
                       <Button
-                        variant="outline"
+                        variant='outline'
                         onClick={e => {
                           e.stopPropagation();
                           handleEdit();
                         }}
                       >
-                        <Edit className="size-4" />
+                        <Edit className='size-4' />
                         Edit suggestion
                       </Button>
                       <Button
-                        variant="outline"
+                        variant='outline'
                         onClick={e => {
                           e.stopPropagation();
                           handleAccept();
                         }}
                       >
-                        <Check className="size-4" />
+                        <Check className='size-4' />
                         Accept suggestion
                       </Button>
                     </>
@@ -278,7 +278,7 @@ export function SuggestionList({
         })}
 
         {suggestions.length === 0 && (
-          <p className="text-muted-foreground py-4 text-center">
+          <p className='text-muted-foreground py-4 text-center'>
             No suggestions available for this comment.
           </p>
         )}
@@ -307,65 +307,65 @@ function Feedback({
   if (!showFeedback || !selectedSuggestionId) return null;
 
   return (
-    <div className="bg-muted/20 rounded-lg border p-4">
-      <h3 className="mb-3 text-lg font-medium">Was this suggestion helpful?</h3>
+    <div className='bg-muted/20 rounded-lg border p-4'>
+      <h3 className='mb-3 text-lg font-medium'>Was this suggestion helpful?</h3>
 
       {!feedbackType ? (
-        <div className="flex gap-3">
+        <div className='flex gap-3'>
           <Button
-            variant="outline"
+            variant='outline'
             onClick={() => setFeedbackType("positive")}
-            className="flex items-center gap-2"
+            className='flex items-center gap-2'
           >
-            <ThumbsUp className="size-4" />
+            <ThumbsUp className='size-4' />
             Yes, it was helpful
           </Button>
           <Button
-            variant="outline"
+            variant='outline'
             onClick={() => setFeedbackType("negative")}
-            className="flex items-center gap-2"
+            className='flex items-center gap-2'
           >
-            <ThumbsDown className="size-4" />
+            <ThumbsDown className='size-4' />
             No, it wasn't helpful
           </Button>
         </div>
       ) : feedbackType === "positive" ? (
-        <div className="space-y-3">
-          <p className="flex items-center gap-2 text-green-600">
-            <ThumbsUp className="size-4" />
+        <div className='space-y-3'>
+          <p className='flex items-center gap-2 text-green-600'>
+            <ThumbsUp className='size-4' />
             Thank you for your feedback!
           </p>
           <Button onClick={handleFeedbackSubmit}>Submit Feedback</Button>
         </div>
       ) : (
-        <div className="space-y-4">
-          <p className="text-muted-foreground flex items-center gap-2">
-            <ThumbsDown className="size-4" />
+        <div className='space-y-4'>
+          <p className='text-muted-foreground flex items-center gap-2'>
+            <ThumbsDown className='size-4' />
             We're sorry to hear that. Please tell us why:
           </p>
 
           <RadioGroup
             value={feedbackJustification}
             onValueChange={setFeedbackJustification}
-            className="space-y-2"
+            className='space-y-2'
           >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="incorrect" id="incorrect" />
-              <Label htmlFor="incorrect">The suggestion was incorrect</Label>
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='incorrect' id='incorrect' />
+              <Label htmlFor='incorrect'>The suggestion was incorrect</Label>
             </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="inappropriate" id="inappropriate" />
-              <Label htmlFor="inappropriate">
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='inappropriate' id='inappropriate' />
+              <Label htmlFor='inappropriate'>
                 The suggestion was inappropriate
               </Label>
             </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="not-useful" id="not-useful" />
-              <Label htmlFor="not-useful">The suggestion wasn't useful</Label>
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='not-useful' id='not-useful' />
+              <Label htmlFor='not-useful'>The suggestion wasn't useful</Label>
             </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="other" id="other" />
-              <Label htmlFor="other">Other reason</Label>
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='other' id='other' />
+              <Label htmlFor='other'>Other reason</Label>
             </div>
           </RadioGroup>
 

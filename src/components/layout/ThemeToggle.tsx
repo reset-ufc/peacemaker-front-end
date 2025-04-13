@@ -11,12 +11,12 @@ type ThemeToggleProps = {
 export function ThemeToggle({ onClick = () => {} }: ThemeToggleProps) {
   return (
     <button
-      type="button"
+      type='button'
       onClick={onClick}
-      className="border-border flex size-10 cursor-pointer items-center justify-center rounded-md border"
+      className='border-border flex size-10 cursor-pointer items-center justify-center rounded-md border'
     >
-      <MoonIcon className="block dark:hidden" height="20" />
-      <SunIcon className="hidden dark:block" height="20" />
+      <MoonIcon className='block dark:hidden' height='20' />
+      <SunIcon className='hidden dark:block' height='20' />
     </button>
   );
 }

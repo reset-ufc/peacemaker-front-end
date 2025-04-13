@@ -49,33 +49,33 @@ const team: Array<TeamMember> = [
 
 export function Team() {
   return (
-    <div className="py-24 sm:py-32">
-      <div className="mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
-        <div className="max-w-2xl">
-          <h2 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
+    <div className='py-24 sm:py-32'>
+      <div className='mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3'>
+        <div className='max-w-2xl'>
+          <h2 className='text-foreground text-3xl font-bold tracking-tight sm:text-4xl'>
             Our Team
           </h2>
-          <p className="text-muted-foreground mt-6 text-lg leading-8">
+          <p className='text-muted-foreground mt-6 text-lg leading-8'>
             We are a team of passionate and dedicated individuals who are
             committed to making a positive impact on the world through their
             work. We believe in the power of technology to bring people together
             and create a better future.
           </p>
         </div>
-        <ul className="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2">
+        <ul className='grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2'>
           {team.map(person => (
             <li key={person.name}>
-              <div className="flex items-center gap-x-6">
+              <div className='flex items-center gap-x-6'>
                 <img
-                  alt=""
+                  alt=''
                   src={person.imageUrl}
-                  className="h-16 w-16 rounded-full"
+                  className='h-16 w-16 rounded-full'
                 />
                 <div>
-                  <h3 className="text-foreground text-base leading-7 font-semibold tracking-tight">
+                  <h3 className='text-foreground text-base leading-7 font-semibold tracking-tight'>
                     {person.name}
                   </h3>
-                  <p className="text-primary text-sm leading-6 font-semibold">
+                  <p className='text-primary text-sm leading-6 font-semibold'>
                     {person.role}
                   </p>
                 </div>

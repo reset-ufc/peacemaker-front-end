@@ -19,15 +19,15 @@ export function LoginButton({
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
+        <CardHeader className='text-center'>
+          <CardTitle className='text-xl'>Welcome back</CardTitle>
           <CardDescription>Login with your Github account</CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+        <CardContent className='flex flex-col gap-4'>
           <a
             href={url}
-            target="_parent"
-            rel="noreferrer"
+            target='_parent'
+            rel='noreferrer'
             className={cn(
               "w-full rounded-xl",
               buttonVariants({
@@ -35,17 +35,17 @@ export function LoginButton({
               })
             )}
           >
-            <GitHubIcon className="size-4" /> Login with Github
+            <GitHubIcon className='size-4' /> Login with Github
           </a>
         </CardContent>
       </Card>
-      <div className="text-muted-foreground [&_a]:hover:text-primary text-center text-xs text-balance [&_a]:underline [&_a]:underline-offset-4">
+      <div className='text-muted-foreground [&_a]:hover:text-primary text-center text-xs text-balance [&_a]:underline [&_a]:underline-offset-4'>
         By clicking continue, you agree to our{" "}
-        <a href="/terms" target="_blank" rel="noreferrer">
+        <a href='/terms' target='_blank' rel='noreferrer'>
           Terms of Service
         </a>{" "}
         and{" "}
-        <a href="/privacy" target="_blank" rel="noreferrer">
+        <a href='/privacy' target='_blank' rel='noreferrer'>
           Privacy Policy
         </a>
         .

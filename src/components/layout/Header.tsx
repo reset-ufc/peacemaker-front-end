@@ -16,24 +16,24 @@ export function Header() {
   return (
     <HeaderRoot>
       <HeaderNav>
-        <HeaderSide className="gap-8">
-          <Link to="/">
-            <h1 className="text-xl font-bold">PeaceMakerBot</h1>
+        <HeaderSide className='gap-8'>
+          <Link to='/'>
+            <h1 className='text-xl font-bold'>PeaceMakerBot</h1>
           </Link>
         </HeaderSide>
 
         <HeaderSide>
           {hasAuthCookie && (
-            <Button asChild variant="outline">
-              <Link to="/incivilities">
+            <Button asChild variant='outline'>
+              <Link to='/incivilities'>
                 Go to incivilities page
-                <ArrowUpRightIcon className="ml-2 size-4" />
+                <ArrowUpRightIcon className='ml-2 size-4' />
               </Link>
             </Button>
           )}
           <ThemeToggle onClick={toggleCurrentTheme} />
           <Button asChild>
-            <Link to="/auth/sign-in/github">Sign in</Link>
+            <Link to='/auth/sign-in/github'>Sign in</Link>
           </Button>
         </HeaderSide>
       </HeaderNav>
