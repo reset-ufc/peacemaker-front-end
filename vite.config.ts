@@ -12,10 +12,13 @@ export default defineConfig({
   define: {
     "process.env": process.env,
   },
+
   build: {
+    cssMinify: "esbuild",
     minify: true,
     rollupOptions: {
       output: {
+        compact: true,
         manualChunks(id) {
           if (id.includes("node_modules")) {
             if (id.includes("react")) {
