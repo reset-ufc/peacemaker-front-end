@@ -1,25 +1,26 @@
 // src/pages/DashboardPage.tsx
-import { useState } from "react";
-
-import { useQuery } from "@tanstack/react-query";
-
 import { DashboardCards } from "@/components/layout/dashboard/DashboardCards";
-import { DashboardCharts } from "@/components/layout/dashboard/DashboardCharts";
 import { DashboardHeader } from "@/components/layout/dashboard/DashboardHeader";
+import { ModerationActionsChart } from "@/components/layout/dashboard/ModerationActionsChart";
+import { ModerationActivityChart } from "@/components/layout/dashboard/ModerationActivityChart";
+import { RadarFlagsChart } from "@/components/layout/dashboard/RadarFlagsChart";
+import { RecentFlaggedComments } from "@/components/layout/dashboard/RecentFlaggedComments";
 import { Loader } from "@/components/ui/loadingSpinner";
 import { api } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
+import { useState } from "react";
 
 export function DashboardPage() {
-  const [period, setPeriod] = useState("24h");
+  const [globalPeriod, setGlobalPeriod] = useState("24h");
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["dashboard-metrics", period],
+    queryKey: ["dashboard-overview", globalPeriod],
     queryFn: async () => {
       const t = localStorage.getItem("access_token");
-
-      const response = await api.get("/dashboard/metrics", {
+      const response: AxiosResponse<any> = await api.get("/dashboard/overview", {
         headers: { Authorization: `Bearer ${t}` },
-        params: { period },
+        params: { period: globalPeriod },
       });
       return response.data;
     },
@@ -32,14 +33,19 @@ export function DashboardPage() {
 
   return (
     <main className="h-[calc(100vh-4rem)] w-full px-8 py-10">
-      <DashboardHeader period={period} onPeriodChange={setPeriod} />
-      <DashboardCards overview={data} />
-      <DashboardCharts
-        moderationActivity={data.moderationActivity}
-        recentFlagged={data.recentFlagged}
-        radarFlags={data.radarFlags}
-        moderationActions={data.moderationActions}
-      />
+      <DashboardHeader period={globalPeriod} onPeriodChange={setGlobalPeriod} />
+      <DashboardCards initialData={data} period={globalPeriod} />
+
+      <div className="grid grid-cols-1 gap-4">
+        <div className="flex">
+          <ModerationActivityChart />
+          <RecentFlaggedComments />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <RadarFlagsChart />
+          <ModerationActionsChart />
+        </div>
+      </div>
     </main>
   );
 }
