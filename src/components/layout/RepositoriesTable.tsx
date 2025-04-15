@@ -41,15 +41,15 @@ const columns: Array<ColumnDef<Repository>> = [
     header: ({ column }) => {
       return (
         <Button
-          variant="ghost"
+          variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="flex items-center gap-1 p-0 hover:bg-transparent"
+          className='flex items-center gap-1 p-0 hover:bg-transparent'
         >
-          <span className="font-semibold">Repository</span>
+          <span className='font-semibold'>Repository</span>
           {column.getIsSorted() === "asc" ? (
-            <ChevronUpIcon className="h-4 w-4" />
+            <ChevronUpIcon className='h-4 w-4' />
           ) : column.getIsSorted() === "desc" ? (
-            <ChevronDownIcon className="h-4 w-4" />
+            <ChevronDownIcon className='h-4 w-4' />
           ) : null}
         </Button>
       );
@@ -57,20 +57,20 @@ const columns: Array<ColumnDef<Repository>> = [
     cell: ({ row }) => {
       const isPrivate = row.original.private;
       return (
-        <div className="flex items-center gap-2">
-          <div className="bg-primary/10 flex h-8 w-8 items-center justify-center rounded-md">
-            <GithubIcon className="text-primary h-4 w-4" />
+        <div className='flex items-center gap-2'>
+          <div className='bg-primary/10 flex h-8 w-8 items-center justify-center rounded-md'>
+            <GithubIcon className='text-primary h-4 w-4' />
           </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span className="font-medium">{row.original.name}</span>
+          <div className='flex flex-col'>
+            <div className='flex items-center gap-2'>
+              <span className='font-medium'>{row.original.name}</span>
               {isPrivate ? (
-                <LockIcon className="h-3.5 w-3.5 text-amber-500" />
+                <LockIcon className='h-3.5 w-3.5 text-amber-500' />
               ) : (
-                <UnlockIcon className="h-3.5 w-3.5 text-green-500" />
+                <UnlockIcon className='h-3.5 w-3.5 text-green-500' />
               )}
             </div>
-            <span className="text-muted-foreground text-xs">
+            <span className='text-muted-foreground text-xs'>
               {row.original.gh_repo_fullname}
             </span>
           </div>
@@ -103,22 +103,22 @@ const columns: Array<ColumnDef<Repository>> = [
     header: ({ column }) => {
       return (
         <Button
-          variant="ghost"
+          variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="flex items-center gap-1 p-0 hover:bg-transparent"
+          className='flex items-center gap-1 p-0 hover:bg-transparent'
         >
-          <span className="font-semibold">Created</span>
+          <span className='font-semibold'>Created</span>
           {column.getIsSorted() === "asc" ? (
-            <ChevronUpIcon className="h-4 w-4" />
+            <ChevronUpIcon className='h-4 w-4' />
           ) : column.getIsSorted() === "desc" ? (
-            <ChevronDownIcon className="h-4 w-4" />
+            <ChevronDownIcon className='h-4 w-4' />
           ) : null}
         </Button>
       );
     },
     cell: ({ row }) => {
       return (
-        <span className="text-muted-foreground text-sm">
+        <span className='text-muted-foreground text-sm'>
           {format(new Date(row.original.created_at), "MMM dd, yyyy")}
         </span>
       );
@@ -131,12 +131,12 @@ const columns: Array<ColumnDef<Repository>> = [
       return (
         <a
           href={row.original.gh_url}
-          target="_blank"
-          rel="noreferrer"
-          className="text-primary flex items-center gap-1 text-sm hover:underline"
+          target='_blank'
+          rel='noreferrer'
+          className='text-primary flex items-center gap-1 text-sm hover:underline'
         >
           View on GitHub
-          <ExternalLinkIcon className="h-3.5 w-3.5" />
+          <ExternalLinkIcon className='h-3.5 w-3.5' />
         </a>
       );
     },
@@ -182,21 +182,21 @@ export function RepositoriesTable({
   };
 
   return (
-    <div className="flex h-full flex-col justify-between">
-      <div className="space-y-4">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative w-full max-w-sm">
-            <SearchIcon className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
+    <div className='flex h-full flex-col justify-between'>
+      <div className='space-y-4'>
+        <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
+          <div className='relative w-full max-w-sm'>
+            <SearchIcon className='text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4' />
             <Input
-              placeholder="Search repositories..."
+              placeholder='Search repositories...'
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="pl-9"
+              className='pl-9'
             />
           </div>
         </div>
 
-        <div className="rounded-md border">
+        <div className='rounded-md border'>
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map(headerGroup => (
@@ -235,7 +235,7 @@ export function RepositoriesTable({
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-24 text-center"
+                    className='h-24 text-center'
                   >
                     No repositories found.
                   </TableCell>
@@ -246,38 +246,38 @@ export function RepositoriesTable({
         </div>
       </div>
 
-      <div className="flex items-center justify-end">
-        <div className="flex items-center gap-2">
+      <div className='flex items-center justify-end'>
+        <div className='flex items-center gap-2'>
           <Button
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={() => handlePageChange(0)}
             disabled={!table.getCanPreviousPage()}
           >
             First
           </Button>
           <Button
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={() => handlePageChange(Number(pageIndex) - 1)}
             disabled={!table.getCanPreviousPage()}
           >
             Previous
           </Button>
-          <span className="text-sm">
+          <span className='text-sm'>
             Page {Number(pageIndex) + 1} of {table.getPageCount()}
           </span>
           <Button
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={() => handlePageChange(Number(pageIndex) + 1)}
             disabled={!table.getCanNextPage()}
           >
             Next
           </Button>
           <Button
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={() => handlePageChange(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >

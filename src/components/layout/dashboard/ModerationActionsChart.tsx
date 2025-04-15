@@ -32,7 +32,7 @@ export function ModerationActionsChart() {
   const { data, isLoading } = useQuery<ModerationActionsData>({
     queryKey: ["moderation-actions", period],
     queryFn: async () => {
-      const response = await api.get("/dashboard/moderation-actions", {
+      const response = await api.get("/api/dashboard/moderation-actions", {
         headers: { Authorization: `Bearer ${token}` },
         params: { period },
       });

@@ -27,7 +27,7 @@ export function RadarFlagsChart() {
   const { data, isLoading } = useQuery<RadarFlagsItem[]>({
     queryKey: ["radar-flags", period],
     queryFn: async () => {
-      const response = await api.get("/dashboard/radar-flags", {
+      const response = await api.get("/api/dashboard/radar-flags", {
         headers: { Authorization: `Bearer ${token}` },
         params: { period },
       });

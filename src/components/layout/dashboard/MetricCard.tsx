@@ -23,12 +23,12 @@ export function MetricCard({
   }
 
   return (
-    <div className="flex items-start gap-4 rounded border p-4 shadow">
-      <div className="flex flex-col pl-2">
-        <span className="text-muted-foreground text-sm">{label}</span>
-        <span className="text-2xl font-bold">{value}</span>
+    <div className='flex items-start gap-4 rounded border p-4 shadow'>
+      <div className='flex flex-col pl-2'>
+        <span className='text-muted-foreground text-sm'>{label}</span>
+        <span className='text-2xl font-bold'>{value}</span>
         {description && (
-          <span className="text-muted-foreground text-xs">{description}</span>
+          <span className='text-muted-foreground text-xs'>{description}</span>
         )}
         {variation !== undefined && (
           <span className={cn("text-xs font-medium", variationColor)}>
@@ -37,7 +37,7 @@ export function MetricCard({
         )}
       </div>
       {icon && (
-        <div className="flex w-full items-end justify-end bg-inherit p-2">
+        <div className='flex w-full items-end justify-end bg-inherit p-2'>
           {icon}
         </div>
       )}

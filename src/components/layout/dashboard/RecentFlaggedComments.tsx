@@ -26,7 +26,7 @@ export function RecentFlaggedComments() {
   const { data, isLoading } = useQuery<FlaggedItem[]>({
     queryKey: ["recent-flagged", period],
     queryFn: async () => {
-      const response = await api.get("/dashboard/recent-flagged", {
+      const response = await api.get("/api/dashboard/recent-flagged", {
         headers: { Authorization: `Bearer ${token}` },
         params: { period },
       });

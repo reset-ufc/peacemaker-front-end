@@ -1,14 +1,13 @@
-// src/pages/DashboardPage.tsx
 import { DashboardCards } from "@/components/layout/dashboard/DashboardCards";
 import { DashboardHeader } from "@/components/layout/dashboard/DashboardHeader";
 import { ModerationActionsChart } from "@/components/layout/dashboard/ModerationActionsChart";
 import { ModerationActivityChart } from "@/components/layout/dashboard/ModerationActivityChart";
 import { RadarFlagsChart } from "@/components/layout/dashboard/RadarFlagsChart";
 import { RecentFlaggedComments } from "@/components/layout/dashboard/RecentFlaggedComments";
-import { Loader } from "@/components/ui/loadingSpinner";
 import { api } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
+import { LoaderIcon } from "lucide-react";
 import { useState } from "react";
 
 export function DashboardPage() {
@@ -18,7 +17,7 @@ export function DashboardPage() {
     queryKey: ["dashboard-overview", globalPeriod],
     queryFn: async () => {
       const t = localStorage.getItem("access_token");
-      const response: AxiosResponse<any> = await api.get("/dashboard/overview", {
+      const response: AxiosResponse<any> = await api.get("/api/dashboard/overview", {
         headers: { Authorization: `Bearer ${t}` },
         params: { period: globalPeriod },
       });
@@ -28,8 +27,21 @@ export function DashboardPage() {
     refetchOnMount: false,
   });
 
-  if (isLoading) return <Loader />;
-  if (isError) return <div>Error: {(error as Error).message}</div>;
+  if (isLoading) {
+    return (
+      <div className='flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center'>
+        <LoaderIcon className='size-12 animate-spin' />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className='flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center'>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
 
   return (
     <main className="h-[calc(100vh-4rem)] w-full px-8 py-10">

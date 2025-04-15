@@ -12,7 +12,7 @@ export interface SelectPropsNative
 const SelectNative = React.forwardRef<HTMLSelectElement, SelectPropsNative>(
   ({ className, children, ...props }, ref) => {
     return (
-      <div className="relative">
+      <div className='relative'>
         <select
           className={cn(
             "peer border-input bg-background text-foreground focus-visible:border-ring focus-visible:ring-ring/20 has-[option[disabled]:checked]:text-muted-foreground inline-flex w-full cursor-pointer appearance-none items-center rounded-lg border text-sm shadow-sm shadow-black/5 transition-shadow focus-visible:ring-[3px] focus-visible:outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
@@ -27,8 +27,8 @@ const SelectNative = React.forwardRef<HTMLSelectElement, SelectPropsNative>(
           {children}
         </select>
         {!props.multiple && (
-          <span className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center peer-disabled:opacity-50">
-            <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />
+          <span className='text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center peer-disabled:opacity-50'>
+            <ChevronDown size={16} strokeWidth={2} aria-hidden='true' />
           </span>
         )}
       </div>

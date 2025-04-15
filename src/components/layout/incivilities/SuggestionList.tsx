@@ -1,52 +1,45 @@
-import { useEffect, useMemo, useState } from "react";
+"use client";
 
-import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
+import { useState } from "react";
+
 import { useMutation } from "@tanstack/react-query";
-import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { Check, Edit, ThumbsDown, ThumbsUp, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/api";
-import type { Suggestion } from "@/types";
+import { cn } from "@/lib/utils";
+import { Comment, Feedback as FeedbackType, Suggestion } from "@/types";
 
-import { SuggestionGroup } from "./SuggestionGroup";
+interface SuggestionListProps {
+  suggestions: Array<Suggestion>;
+  comment: Comment;
+  suggestionAcceptedId: string | null;
+}
 
 export function SuggestionList({
   suggestions,
-}: {
-  suggestions: Suggestion[] | any[];
-}) {
-  const groups = useMemo(() => {
-    return suggestions.length > 0 && suggestions[0].suggestions === undefined
-      ? [
-          {
-            suggestion_selected_index: null,
-            gh_comment_id: suggestions[0].gh_comment_id || "",
-            suggestions: suggestions,
-            is_edited: false,
-            created_at: suggestions[0].created_at || "",
-          },
-        ]
-      : suggestions;
-  }, [suggestions]);
-
-  const [selectedGroup, setSelectedGroup] = useState<number | null>(null);
-  const [selectedSuggestion, setSelectedSuggestion] = useState<number | null>(
-    null
-  );
-  const [editedContent, setEditedContent] = useState<string>("");
-  const [isEditing, setIsEditing] = useState(false);
-  const [isAccepted, setIsAccepted] = useState(false);
-
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [feedbackType, setFeedbackType] = useState<
-    "useful" | "not-useful" | null
+  comment,
+  suggestionAcceptedId,
+}: SuggestionListProps) {
+  const [selectedSuggestionId, setSelectedSuggestionId] = useState<
+    string | null
   >(null);
-  const [feedbackReason, setFeedbackReason] = useState<string>("");
-  const [feedbackComment, setFeedbackComment] = useState<string>("");
+  const [editedContent, setEditedContent] = useState<string>("");
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isContentEdited, setIsContentEdited] = useState<boolean>(false);
+
+  const [showFeedback, setShowFeedback] = useState<boolean>(false);
+  const [feedbackType, setFeedbackType] = useState<
+    "positive" | "negative" | null
+  >(null);
+  const [feedbackJustification, setFeedbackJustification] =
+    useState<string>("");
 
   const acceptSuggestionMutation = useMutation({
     mutationFn: async ({
@@ -61,8 +54,9 @@ export function SuggestionList({
       isEdited?: boolean;
     }) => {
       const token = localStorage.getItem("access_token");
+
       const response = await api.post(
-        `comments/${commentId}/suggestions/${suggestionId}/accept`,
+        `api/comments/${commentId}/suggestions/${suggestionId}/accept`,
         { suggestion_content: content, is_edited: isEdited },
         {
           headers: {
@@ -76,7 +70,7 @@ export function SuggestionList({
       toast.success("Suggestion accepted", {
         description: "The suggestion has been successfully applied.",
       });
-      setIsAccepted(true);
+
       setShowFeedback(true);
     },
     onError: () => {
@@ -86,55 +80,19 @@ export function SuggestionList({
     },
   });
 
-  useEffect(() => {
-    console.log(groups);
-    if (groups && groups.length > 0) {
-      const group = groups[0];
-      if (
-        group.suggestion_selected_index !== null &&
-        group.suggestions &&
-        group.suggestions[group.suggestion_selected_index]
-      ) {
-        setSelectedGroup(0);
-        setSelectedSuggestion(group.suggestion_selected_index);
-        setEditedContent(
-          group.suggestions[group.suggestion_selected_index].content
-        );
-        setIsAccepted(true);
-        setShowFeedback(true);
-      }
-    }
-  }, [groups]);
+  const handleSelectSuggestion = (suggestionId: string) => {
+    if (suggestionAcceptedId) return;
 
-  useEffect(() => {
-    setShowFeedback(false);
-    setFeedbackType(null);
-    setFeedbackReason("");
-    setFeedbackComment("");
-    setSelectedGroup(null);
-    setSelectedSuggestion(null);
-    setEditedContent("");
-    setIsAccepted(false);
-  }, [suggestions]);
-
-  const handleSelectSuggestion = (
-    groupIndex: number,
-    suggestionIndex: number
-  ) => {
-    const group = groups[groupIndex];
-    if (isAccepted || group?.suggestion_selected_index !== null) return;
-
-    if (
-      selectedGroup === groupIndex &&
-      selectedSuggestion === suggestionIndex
-    ) {
-      setSelectedGroup(null);
-      setSelectedSuggestion(null);
+    if (selectedSuggestionId === suggestionId) {
+      setSelectedSuggestionId(null);
+      setEditedContent("");
     } else {
-      setSelectedGroup(groupIndex);
-      setSelectedSuggestion(suggestionIndex);
-      setEditedContent(group.suggestions[suggestionIndex].content);
-      setIsEditing(false);
+      const suggestion = suggestions.find(s => s._id === suggestionId);
+      if (suggestion) {
+        setSelectedSuggestionId(suggestionId);
+        setEditedContent(suggestion.content);
+        setIsEditing(false);
+      }
     }
   };
 
@@ -143,6 +101,7 @@ export function SuggestionList({
   };
 
   const handleConfirmEdit = () => {
+    setIsContentEdited(true);
     setIsEditing(false);
     toast.info("Edit confirmed", {
       description: "You can now accept the edited suggestion.",
@@ -151,172 +110,266 @@ export function SuggestionList({
 
   const handleCancelEdit = () => {
     setIsEditing(false);
-    if (selectedGroup !== null && selectedSuggestion !== null) {
-      setEditedContent(
-        groups[selectedGroup].suggestions[selectedSuggestion].content
-      );
+    if (selectedSuggestionId) {
+      const suggestion = suggestions.find(s => s._id === selectedSuggestionId);
+      if (suggestion) {
+        setEditedContent(suggestion.content);
+      }
     }
+    setIsContentEdited(false);
   };
 
   const handleAccept = () => {
-    console.log("Suggestion accepted:", editedContent);
-    if (selectedGroup !== null && selectedSuggestion !== null) {
-      acceptSuggestionMutation.mutate({
-        commentId: groups[selectedGroup].gh_comment_id,
-        suggestionId: groups[selectedGroup].suggestions[selectedSuggestion]._id,
-        content: editedContent,
-      });
-    }
+    if (!selectedSuggestionId) return;
+
+    acceptSuggestionMutation.mutate({
+      commentId: comment.gh_comment_id,
+      suggestionId: selectedSuggestionId,
+      content: editedContent,
+      isEdited: isContentEdited,
+    });
+
+    setShowFeedback(true);
+    setFeedbackType(null);
+    setFeedbackJustification("");
+
+    setSelectedSuggestionId(selectedSuggestionId);
   };
 
-  const feedbackMutation = useMutation({
-    mutationFn: async (feedbackData: {
-      type: string | null;
-      reason: string;
-      comment: string;
-    }) => {
-      const token = localStorage.getItem("access_token");
-      const response = await api.post("/suggestions/feedback", feedbackData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    },
-    onSuccess: () => {
-      toast.success("Feedback submitted", {
-        description: "Thank you for your feedback!",
-      });
-      setFeedbackType(null);
-      setFeedbackReason("");
-      setFeedbackComment("");
-    },
-    onError: () => {
-      toast.error("Error submitting feedback", {
-        description: "Please try again later.",
-      });
-    },
-  });
-
   const handleFeedbackSubmit = () => {
-    feedbackMutation.mutate({
+    if (!selectedSuggestionId || !feedbackType) return;
+
+    const feedback: FeedbackType = {
+      suggestion_id: selectedSuggestionId,
       type: feedbackType,
-      reason: feedbackReason,
-      comment: feedbackComment,
+      ...(feedbackJustification
+        ? { justification: feedbackJustification }
+        : {}),
+    };
+
+    console.log("Feedback submitted:", feedback);
+
+    toast.success("Feedback submitted", {
+      description: "Thank you for your feedback!",
     });
+
+    setShowFeedback(false);
   };
 
   return (
-    <div className="w-full">
-      <h2 className="mb-2 text-xl font-semibold">Correction Suggestions</h2>
-      <Separator className="mb-4" />
+    <div className='flex flex-col'>
+      <Feedback
+        showFeedback={showFeedback}
+        selectedSuggestionId={selectedSuggestionId}
+        feedbackType={feedbackType}
+        setFeedbackType={setFeedbackType}
+        feedbackJustification={feedbackJustification}
+        setFeedbackJustification={setFeedbackJustification}
+        handleFeedbackSubmit={handleFeedbackSubmit}
+      />
 
-      <div className="space-y-3 px-2 pb-10">
-        {groups.map((group, groupIndex) => (
-          <SuggestionGroup
-            key={groupIndex}
-            group={group}
-            groupIndex={groupIndex}
-            selectedGroup={selectedGroup}
-            selectedSuggestion={selectedSuggestion}
-            editedContent={editedContent}
-            isEditing={isEditing}
-            isAccepted={isAccepted}
-            handleSelectSuggestion={handleSelectSuggestion}
-            setEditedContent={setEditedContent}
-            handleEdit={handleEdit}
-            handleConfirmEdit={handleConfirmEdit}
-            handleCancelEdit={handleCancelEdit}
-            handleAccept={handleAccept}
-          />
-        ))}
-        {groups.length === 0 && (
-          <p className="text-muted-foreground py-4 text-center">
+      <h2 className='mb-2 text-xl font-semibold'>Correction Suggestions</h2>
+
+      <Separator className='mb-4' />
+
+      <div className='space-y-3 px-2 pb-5'>
+        {suggestions.map(suggestion => {
+          const isSelected = selectedSuggestionId === suggestion._id;
+          const isAccepted = suggestionAcceptedId === suggestion._id;
+          const isDisabled =
+            !!suggestionAcceptedId && suggestionAcceptedId !== suggestion._id;
+
+          return (
+            <Card
+              key={suggestion._id}
+              className={cn(
+                "p-2 transition-colors",
+                isDisabled && "cursor-not-allowed opacity-50",
+                isSelected && "border-primary border-2",
+                isAccepted && "bg-primary/10",
+                !isDisabled &&
+                  !isSelected &&
+                  !isAccepted &&
+                  "hover:border-muted-foreground/50 cursor-pointer",
+                isSelected && suggestionAcceptedId && "bg-primary/5"
+              )}
+              onClick={() =>
+                !isDisabled && handleSelectSuggestion(suggestion._id)
+              }
+            >
+              <CardContent className='p-2'>
+                {isEditing && isSelected ? (
+                  <Textarea
+                    value={editedContent}
+                    onChange={e => {
+                      setEditedContent(e.target.value);
+                      if (e.target.value === "") {
+                        setIsContentEdited(false);
+                      }
+                    }}
+                    onClick={e => e.stopPropagation()}
+                    className='min-h-[100px] w-full outline-none'
+                  />
+                ) : (
+                  <p className='whitespace-pre-wrap'>
+                    {isSelected ? editedContent : suggestion.content}
+                  </p>
+                )}
+              </CardContent>
+
+              {isSelected && !suggestionAcceptedId && (
+                <CardFooter className='flex justify-end gap-2 p-3 pt-0'>
+                  {isEditing ? (
+                    <>
+                      <Button
+                        variant='destructive'
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleCancelEdit();
+                        }}
+                      >
+                        <X className='size-4' />
+                        Cancel edit
+                      </Button>
+                      <Button
+                        variant='outline'
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleConfirmEdit();
+                        }}
+                        disabled={
+                          editedContent === "" ||
+                          editedContent === suggestion.content.trimEnd() ||
+                          editedContent === comment.content.trimEnd()
+                        }
+                      >
+                        <Check className='size-4' />
+                        Confirm edit
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        variant='outline'
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleEdit();
+                        }}
+                      >
+                        <Edit className='size-4' />
+                        Edit suggestion
+                      </Button>
+                      <Button
+                        variant='outline'
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleAccept();
+                        }}
+                      >
+                        <Check className='size-4' />
+                        Accept suggestion
+                      </Button>
+                    </>
+                  )}
+                </CardFooter>
+              )}
+            </Card>
+          );
+        })}
+
+        {suggestions.length === 0 && (
+          <p className='text-muted-foreground py-4 text-center'>
             No suggestions available for this comment.
           </p>
         )}
       </div>
+    </div>
+  );
+}
 
-      {showFeedback && (
-        <div className="bg-muted/20 mt-6 rounded-lg border p-4">
-          <h3 className="mb-3 text-lg font-medium">
-            Was this suggestion helpful?
-          </h3>
-          {!feedbackType ? (
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={() => setFeedbackType("useful")}
-                className="flex items-center gap-2"
-              >
-                <ThumbsUp className="size-4" />
-                Yes, it was helpful
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setFeedbackType("not-useful")}
-                className="flex items-center gap-2"
-              >
-                <ThumbsDown className="size-4" />
-                No, it wasn't helpful
-              </Button>
+function Feedback({
+  showFeedback,
+  selectedSuggestionId,
+  feedbackType,
+  setFeedbackType,
+  feedbackJustification,
+  setFeedbackJustification,
+  handleFeedbackSubmit,
+}: {
+  showFeedback: boolean;
+  selectedSuggestionId: string | null;
+  feedbackType: "positive" | "negative" | null;
+  setFeedbackType: (type: "positive" | "negative" | null) => void;
+  feedbackJustification: string;
+  setFeedbackJustification: (justification: string) => void;
+  handleFeedbackSubmit: () => void;
+}) {
+  if (!showFeedback || !selectedSuggestionId) return null;
+
+  return (
+    <div className='bg-muted/20 rounded-lg border p-4'>
+      <h3 className='mb-3 text-lg font-medium'>Was this suggestion helpful?</h3>
+
+      {!feedbackType ? (
+        <div className='flex gap-3'>
+          <Button
+            variant='outline'
+            onClick={() => setFeedbackType("positive")}
+            className='flex items-center gap-2'
+          >
+            <ThumbsUp className='size-4' />
+            Yes, it was helpful
+          </Button>
+          <Button
+            variant='outline'
+            onClick={() => setFeedbackType("negative")}
+            className='flex items-center gap-2'
+          >
+            <ThumbsDown className='size-4' />
+            No, it wasn't helpful
+          </Button>
+        </div>
+      ) : feedbackType === "positive" ? (
+        <div className='space-y-3'>
+          <p className='flex items-center gap-2 text-green-600'>
+            <ThumbsUp className='size-4' />
+            Thank you for your feedback!
+          </p>
+          <Button onClick={handleFeedbackSubmit}>Submit Feedback</Button>
+        </div>
+      ) : (
+        <div className='space-y-4'>
+          <p className='text-muted-foreground flex items-center gap-2'>
+            <ThumbsDown className='size-4' />
+            We're sorry to hear that. Please tell us why:
+          </p>
+
+          <RadioGroup
+            value={feedbackJustification}
+            onValueChange={setFeedbackJustification}
+            className='space-y-2'
+          >
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='incorrect' id='incorrect' />
+              <Label htmlFor='incorrect'>The suggestion was incorrect</Label>
             </div>
-          ) : feedbackType === "useful" ? (
-            <div className="space-y-3">
-              <p className="flex items-center gap-2 text-green-600">
-                <ThumbsUp className="size-4" />
-                Thank you for your feedback!
-              </p>
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='inappropriate' id='inappropriate' />
+              <Label htmlFor='inappropriate'>
+                The suggestion was inappropriate
+              </Label>
             </div>
-          ) : (
-            <div className="space-y-4">
-              <p className="text-muted-foreground flex items-center gap-2">
-                <ThumbsDown className="size-4" />
-                We're sorry to hear that. Please tell us why:
-              </p>
-              <RadioGroup
-                value={feedbackReason}
-                onValueChange={setFeedbackReason}
-                className="space-y-2"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="incorrect" id="incorrect" />
-                  <Label htmlFor="incorrect">
-                    The suggestion was incorrect
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="inappropriate" id="inappropriate" />
-                  <Label htmlFor="inappropriate">
-                    The suggestion was inappropriate
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="not-useful" id="not-useful" />
-                  <Label htmlFor="not-useful">
-                    The suggestion wasn't useful
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="other" id="other" />
-                  <Label htmlFor="other">Other reason</Label>
-                </div>
-              </RadioGroup>
-              <div className="space-y-2">
-                <Label htmlFor="feedback-comment">
-                  Additional comments (optional)
-                </Label>
-                <Textarea
-                  id="feedback-comment"
-                  placeholder="Please provide more details..."
-                  value={feedbackComment}
-                  onChange={e => setFeedbackComment(e.target.value)}
-                  className="min-h-[100px]"
-                />
-              </div>
-              <Button onClick={handleFeedbackSubmit}>Submit Feedback</Button>
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='not-useful' id='not-useful' />
+              <Label htmlFor='not-useful'>The suggestion wasn't useful</Label>
             </div>
-          )}
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='other' id='other' />
+              <Label htmlFor='other'>Other reason</Label>
+            </div>
+          </RadioGroup>
+
+          <Button onClick={handleFeedbackSubmit}>Submit Feedback</Button>
         </div>
       )}
     </div>

@@ -19,14 +19,14 @@ export function Providers({ children }: PropsWithChildren) {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
+            attribute='class'
+            defaultTheme='dark'
             enableSystem
-            storageKey="theme"
+            storageKey='theme'
           >
             <NuqsAdapter>{children}</NuqsAdapter>
             <Toaster
-              position="bottom-right"
+              position='bottom-right'
               richColors
               closeButton
               duration={3500}

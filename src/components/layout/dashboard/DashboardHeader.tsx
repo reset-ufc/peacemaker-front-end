@@ -15,8 +15,8 @@ export function DashboardHeader({
     <div className="mb-4 flex items-center justify-between">
       <h1 className="text-2xl font-bold">Dashboard</h1>
       <Select value={period} onValueChange={onPeriodChange}>
-        <SelectTrigger className="w-40">
-          <SelectValue placeholder="Select period" />
+        <SelectTrigger className='w-40'>
+          <SelectValue placeholder='Select period' />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="24h">Last 24 hours</SelectItem>

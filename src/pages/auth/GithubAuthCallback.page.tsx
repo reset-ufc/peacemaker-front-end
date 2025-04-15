@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { Loader2Icon } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { useAuth } from "@/hooks/user-auth";
+import { useAuthentication } from "@/hooks/use-authentication";
 import { api } from "@/lib/api";
 
 export function GithubAuthCallback() {
   const [isLoading, setIsLoading] = useState(true);
-  const auth = useAuth();
+  const auth = useAuthentication();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -22,7 +22,7 @@ export function GithubAuthCallback() {
     }
 
     api
-      .get("/users/me", {
+      .get("/api/users/me", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -53,8 +53,8 @@ export function GithubAuthCallback() {
   }, [auth, navigate, location.search]);
 
   return (
-    <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-      {isLoading && <Loader2Icon className="size-12 animate-spin" />}
+    <div className='bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10'>
+      {isLoading && <Loader2Icon className='size-12 animate-spin' />}
     </div>
   );
 }

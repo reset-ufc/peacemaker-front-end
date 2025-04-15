@@ -41,19 +41,19 @@ export const CommentList = memo(function CommentList({
 
   if (isLoading) {
     return (
-      <div className="space-y-4 px-4 py-6">
+      <div className='space-y-4 px-4 py-6'>
         {[1, 2, 3].map(i => (
-          <div key={i} className="rounded-xl border p-4">
-            <div className="mb-2 flex justify-between">
-              <Skeleton className="h-4 w-24" />
-              <Skeleton className="h-4 w-16" />
+          <div key={i} className='rounded-xl border p-4'>
+            <div className='mb-2 flex justify-between'>
+              <Skeleton className='h-4 w-24' />
+              <Skeleton className='h-4 w-16' />
             </div>
-            <Skeleton className="mb-3 h-3 w-full" />
-            <div className="mb-3 flex gap-2">
-              <Skeleton className="h-5 w-16 rounded-full" />
-              <Skeleton className="h-5 w-20 rounded-full" />
+            <Skeleton className='mb-3 h-3 w-full' />
+            <div className='mb-3 flex gap-2'>
+              <Skeleton className='h-5 w-16 rounded-full' />
+              <Skeleton className='h-5 w-20 rounded-full' />
             </div>
-            <Skeleton className="h-10 w-full" />
+            <Skeleton className='h-10 w-full' />
           </div>
         ))}
       </div>
@@ -62,14 +62,14 @@ export const CommentList = memo(function CommentList({
 
   if (comments.length === 0) {
     return (
-      <div className="text-muted-foreground px-4 py-6 text-center">
+      <div className='text-muted-foreground px-4 py-6 text-center'>
         No comments found
       </div>
     );
   }
 
   return (
-    <div className="space-y-4 px-2 py-6">
+    <div className='space-y-4 px-2 py-6'>
       {comments.map(comment => {
         const toxicityLevel = getToxicityLevel(comment.toxicity_score);
         const hasEdits = commentStates.some(
@@ -88,22 +88,22 @@ export const CommentList = memo(function CommentList({
             )}
             onClick={() => onSelect(comment)}
           >
-            <div className="mb-3 flex justify-between">
-              <div className="font-medium">
+            <div className='mb-3 flex justify-between'>
+              <div className='font-medium'>
                 {comment.gh_comment_sender_login}
               </div>
-              <div className="text-muted-foreground text-xs">
+              <div className='text-muted-foreground text-xs'>
                 {getTimeAgo(comment.created_at)}
               </div>
             </div>
 
             {/* Truncated comment content as title */}
-            <div className="mb-3 truncate text-sm">{comment.content}</div>
+            <div className='mb-3 truncate text-sm'>{comment.content}</div>
 
             {/* Badges at the bottom */}
-            <div className="flex flex-wrap gap-2">
+            <div className='flex flex-wrap gap-2'>
               <Badge
-                variant="outline"
+                variant='outline'
                 className={` ${
                   toxicityLevel === "High"
                     ? "border-red-500/20 bg-red-500/10 text-red-500"
@@ -116,19 +116,19 @@ export const CommentList = memo(function CommentList({
               >
                 {toxicityLevel}
               </Badge>
-              <Badge variant="outline">{comment.classification}</Badge>
+              <Badge variant='outline'>{comment.classification}</Badge>
               {comment.solutioned && (
                 <Badge
-                  variant="outline"
-                  className="border-emerald-500/20 bg-emerald-500/10 text-emerald-500"
+                  variant='outline'
+                  className='border-emerald-500/20 bg-emerald-500/10 text-emerald-500'
                 >
                   Resolved
                 </Badge>
               )}
               {hasEdits && (
                 <Badge
-                  variant="outline"
-                  className="border-blue-500/20 bg-blue-500/10 text-blue-500"
+                  variant='outline'
+                  className='border-blue-500/20 bg-blue-500/10 text-blue-500'
                 >
                   Edited
                 </Badge>

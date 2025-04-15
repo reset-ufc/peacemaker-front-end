@@ -28,7 +28,7 @@ export function ModerationActivityChart() {
   const { data, isLoading } = useQuery<ModerationActivityItem[]>({
     queryKey: ["moderation-activity", period],
     queryFn: async () => {
-      const response = await api.get("/dashboard/moderation-activity", {
+      const response = await api.get("/api/dashboard/moderation-activity", {
         headers: { Authorization: `Bearer ${token}` },
         params: { period },
       });

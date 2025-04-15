@@ -17,9 +17,9 @@ export function AppHeader() {
 
   return (
     <HeaderRoot>
-      <HeaderNav className="min-w-full">
-        <HeaderSide className="gap-8">
-          <ul className="hidden flex-row gap-4 sm:flex">
+      <HeaderNav className='min-w-full'>
+        <HeaderSide className='gap-8'>
+          <ul className='hidden flex-row gap-4 sm:flex'>
             {[
               {
                 text: "Home",
@@ -54,7 +54,7 @@ export function AppHeader() {
                     href={link.href}
                     icon={link.icon}
                     target={link.target}
-                    className="flex flex-row"
+                    className='flex flex-row'
                   >
                     {link.text}
                   </NavItem>
@@ -63,8 +63,8 @@ export function AppHeader() {
             )}
           </ul>
 
-          <Button variant="ghost" size="icon" className="block sm:hidden">
-            <PanelLeftIcon className="size-6" />
+          <Button variant='ghost' size='icon' className='block sm:hidden'>
+            <PanelLeftIcon className='size-6' />
           </Button>
         </HeaderSide>
         <HeaderSide>

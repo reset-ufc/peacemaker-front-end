@@ -24,7 +24,7 @@ export function DashboardCards({ initialData, period }: DashboardCardsProps) {
     queryKey: ["dashboard-overview", period],
     queryFn: async () => {
       const token = localStorage.getItem("access_token");
-      const response = await api.get("/dashboard/overview", {
+      const response = await api.get("/api/dashboard/overview", {
         headers: { Authorization: `Bearer ${token}` },
         params: { period },
       });

@@ -32,10 +32,10 @@ export function NavItem({
       )}
       target={target}
     >
-      <span className="text-sm">{children}</span>
+      <span className='text-sm'>{children}</span>
 
-      {target === "_blank" && <ArrowUpRightIcon className="size-4" />}
-      {Icon && target !== "_blank" ? <Icon className="size-4" /> : null}
+      {target === "_blank" && <ArrowUpRightIcon className='size-4' />}
+      {Icon && target !== "_blank" ? <Icon className='size-4' /> : null}
     </ActiveLink>
   );
 }

@@ -3,13 +3,11 @@ import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 import { AppHeader } from "@/components/layout/AppHeader";
-import { useAuth } from "@/hooks/user-auth";
+import { useAuthentication } from "@/hooks/use-authentication";
 
 export function AppLayout() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuthentication();
   const navigate = useNavigate();
-
-  console.log("isAuthenticated", isAuthenticated);
 
   useEffect(() => {
     if (!isAuthenticated) {
