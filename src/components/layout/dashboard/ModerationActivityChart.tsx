@@ -21,16 +21,18 @@ import {
   YAxis,
 } from "recharts";
 
-export function ModerationActivityChart() {
+export function ModerationActivityChart({ repo }: { repo?: string }) {
   const [period, setPeriod] = useState("24h");
   const token = localStorage.getItem("access_token");
 
   const { data, isLoading } = useQuery<ModerationActivityItem[]>({
-    queryKey: ["moderation-activity", period],
+    queryKey: ["moderation-activity", period, repo],
     queryFn: async () => {
+      const params: Record<string, string> = { period };
+      if (repo) params.repo = repo;
       const response = await api.get("/api/dashboard/moderation-activity", {
         headers: { Authorization: `Bearer ${token}` },
-        params: { period },
+        params,
       });
       return response.data;
     },

@@ -17,16 +17,20 @@ interface OverviewData {
 interface DashboardCardsProps {
   initialData: OverviewData;
   period: string;
+  repo?: string;
 }
 
-export function DashboardCards({ initialData, period }: DashboardCardsProps) {
+export function DashboardCards({ initialData, period, repo }: DashboardCardsProps) {
+  const token = localStorage.getItem("access_token");
+
   const { data, isLoading } = useQuery<OverviewData>({
-    queryKey: ["dashboard-overview", period],
+    queryKey: ["dashboard-overview", period, repo],
     queryFn: async () => {
-      const token = localStorage.getItem("access_token");
+      const params: Record<string, string> = { period };
+      if (repo) params.repo = repo;
       const response = await api.get("/api/dashboard/overview", {
         headers: { Authorization: `Bearer ${token}` },
-        params: { period },
+        params,
       });
       return response.data;
     },

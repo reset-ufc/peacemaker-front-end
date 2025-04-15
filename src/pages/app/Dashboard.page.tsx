@@ -4,6 +4,7 @@ import { ModerationActionsChart } from "@/components/layout/dashboard/Moderation
 import { ModerationActivityChart } from "@/components/layout/dashboard/ModerationActivityChart";
 import { RadarFlagsChart } from "@/components/layout/dashboard/RadarFlagsChart";
 import { RecentFlaggedComments } from "@/components/layout/dashboard/RecentFlaggedComments";
+import { RepositorySelect } from "@/components/layout/dashboard/RepositorySelect";
 import { api } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
@@ -12,14 +13,15 @@ import { useState } from "react";
 
 export function DashboardPage() {
   const [globalPeriod, setGlobalPeriod] = useState("24h");
+  const [selectedRepo, setSelectedRepo] = useState("all");
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["dashboard-overview", globalPeriod],
+    queryKey: ["dashboard-overview", globalPeriod, selectedRepo],
     queryFn: async () => {
       const t = localStorage.getItem("access_token");
       const response: AxiosResponse<any> = await api.get("/api/dashboard/overview", {
         headers: { Authorization: `Bearer ${t}` },
-        params: { period: globalPeriod },
+        params: { period: globalPeriod, repo: selectedRepo },
       });
       return response.data;
     },
@@ -45,17 +47,20 @@ export function DashboardPage() {
 
   return (
     <main className="h-[calc(100vh-4rem)] w-full px-8 py-10">
-      <DashboardHeader period={globalPeriod} onPeriodChange={setGlobalPeriod} />
-      <DashboardCards initialData={data} period={globalPeriod} />
+      <div className="flex items-center justify-between mb-4">
+        <DashboardHeader period={globalPeriod} onPeriodChange={setGlobalPeriod} />
+        <RepositorySelect selectedRepo={selectedRepo} onChange={setSelectedRepo} />
+      </div>
+      <DashboardCards initialData={data} period={globalPeriod} repo={selectedRepo} />
 
       <div className="grid grid-cols-1 gap-4">
         <div className="flex">
-          <ModerationActivityChart />
-          <RecentFlaggedComments />
+          <ModerationActivityChart repo={selectedRepo} />
+          <RecentFlaggedComments repo={selectedRepo} />
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <RadarFlagsChart />
-          <ModerationActionsChart />
+          <RadarFlagsChart repo={selectedRepo} />
+          <ModerationActionsChart repo={selectedRepo} />
         </div>
       </div>
     </main>

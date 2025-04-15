@@ -20,16 +20,18 @@ import {
   Tooltip,
 } from "recharts";
 
-export function RadarFlagsChart() {
+export function RadarFlagsChart({ repo }: { repo?: string }) {
   const [period, setPeriod] = useState("24h");
   const token = localStorage.getItem("access_token");
 
   const { data, isLoading } = useQuery<RadarFlagsItem[]>({
     queryKey: ["radar-flags", period],
     queryFn: async () => {
+      const params: Record<string, string> = { period };
+      if (repo) params.repo = repo;
       const response = await api.get("/api/dashboard/radar-flags", {
         headers: { Authorization: `Bearer ${token}` },
-        params: { period },
+        params,
       });
       return response.data;
     },

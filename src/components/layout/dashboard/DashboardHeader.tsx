@@ -12,7 +12,7 @@ export function DashboardHeader({
   onPeriodChange,
 }: DashboardHeaderProps) {
   return (
-    <div className="mb-4 flex items-center justify-between">
+    <div className="mb-4 flex flex-col items-start gap-3 justify-between">
       <h1 className="text-2xl font-bold">Dashboard</h1>
       <Select value={period} onValueChange={onPeriodChange}>
         <SelectTrigger className='w-40'>

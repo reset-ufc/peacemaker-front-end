@@ -25,16 +25,18 @@ interface ModerationActionsData {
   data: { name: string; value: number }[];
 }
 
-export function ModerationActionsChart() {
+export function ModerationActionsChart({ repo }: { repo?: string }) {
   const [period, setPeriod] = useState("24h");
   const token = localStorage.getItem("access_token");
 
   const { data, isLoading } = useQuery<ModerationActionsData>({
     queryKey: ["moderation-actions", period],
     queryFn: async () => {
+      const params: Record<string, string> = { period };
+      if (repo) params.repo = repo;
       const response = await api.get("/api/dashboard/moderation-actions", {
         headers: { Authorization: `Bearer ${token}` },
-        params: { period },
+        params,
       });
       return response.data;
     },

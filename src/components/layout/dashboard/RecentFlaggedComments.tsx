@@ -19,16 +19,18 @@ interface FlaggedItem {
   action: string;
 }
 
-export function RecentFlaggedComments() {
+export function RecentFlaggedComments({ repo }: { repo?: string }) {
   const [period, setPeriod] = useState("24h");
   const token = localStorage.getItem("access_token");
 
   const { data, isLoading } = useQuery<FlaggedItem[]>({
     queryKey: ["recent-flagged", period],
     queryFn: async () => {
+      const params: Record<string, string> = { period };
+      if (repo) params.repo = repo;
       const response = await api.get("/api/dashboard/recent-flagged", {
         headers: { Authorization: `Bearer ${token}` },
-        params: { period },
+        params,
       });
       return response.data;
     },
