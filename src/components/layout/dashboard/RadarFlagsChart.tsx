@@ -35,6 +35,30 @@ export function RadarFlagsChart() {
     },
   });
 
+  const defaultCategories = [
+    "bitter_frustration",
+    "mocking",
+    "irony",
+    "insulting",
+    "identity_attack",
+    "entitlement",
+    "impatience",
+    "threat",
+    "neutral",
+  ];
+
+  const apiData: RadarFlagsItem[] = data || [];
+
+  const radarData = defaultCategories.map((category) => {
+    const found = apiData.find(
+      (item) => item.category.toLowerCase() === category.toLowerCase()
+    );
+    return {
+      category,
+      value: found ? found.value : 0,
+    };
+  });
+
   const containerClass = isLoading ? "filter blur-sm transition duration-300" : "";
 
   return (
@@ -59,10 +83,16 @@ export function RadarFlagsChart() {
       <div className={containerClass} style={{ width: "100%", height: 300 }}>
         {isLoading ? <Loader /> : (
           <ResponsiveContainer>
-            <RadarChart data={data}>
+            <RadarChart data={radarData}>
               <PolarGrid />
               <PolarAngleAxis dataKey="category" stroke="#6b7280" />
-              <Radar name="Incivility" dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+              <Radar
+                name="Incivility"
+                dataKey="value"
+                stroke="#8884d8"
+                fill="#8884d8"
+                fillOpacity={0.4}
+              />
               <Tooltip />
             </RadarChart>
           </ResponsiveContainer>
