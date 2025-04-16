@@ -45,7 +45,7 @@ export function IssuesIncivilityChart({ repo }: IssuesIncivilityChartProps) {
   const containerClass = isLoading ? "filter blur-sm transition duration-300" : "";
 
   return (
-    <div className="border p-4 rounded shadow mb-8">
+    <div className="border p-4 rounded shadow">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-lg font-semibold">Issues Incivility Over Time</h3>

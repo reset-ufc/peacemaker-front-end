@@ -1,6 +1,6 @@
 // src/components/layout/dashboard/RecentFlaggedComments.tsx
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loadingSpinner";
 import {
   Select,
@@ -10,9 +10,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { api } from "@/lib/api";
+import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-
 interface FlaggedItem {
   author: string;
   severity: string;
@@ -32,6 +32,7 @@ export function RecentFlaggedComments({ repo }: { repo?: string }) {
         headers: { Authorization: `Bearer ${token}` },
         params,
       });
+      console.log(response.data);
       return response.data;
     },
   });
@@ -82,7 +83,18 @@ export function RecentFlaggedComments({ repo }: { repo?: string }) {
                   </Badge>
                 </div>
                 <div className="flex justify-end mr-2">
-                  <Button size="sm" variant="outline">{item.action}</Button>
+                  <a
+                    className={cn(
+                      "hidden items-center gap-1 md:flex",
+                      buttonVariants({ variant: "outline", size: "sm" })
+                    )}
+                    title='Reply on GitHub'
+                    href={item.comment_html_url}
+                    target='_blank'
+                    rel='noreferrer'
+                  >
+                    <span>{item.action}</span>
+                  </a>
                 </div>
               </div>
             ))}
