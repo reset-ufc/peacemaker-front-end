@@ -9,7 +9,7 @@ import { AuthLayout } from "./pages/_layout/Auth.layout";
 import { PublicLayout } from "./pages/_layout/Public.layout";
 import { DashboardPage } from "./pages/app/Dashboard.page";
 import { IncivilitiesPage } from "./pages/app/Incivilities.page";
-import { RepositoriesPage } from "./pages/app/Repositories.page";
+// import { RepositoriesPage } from "./pages/app/Repositories.page";
 import { GithubAuthPage } from "./pages/auth/GithubAuth.page";
 import { GithubAuthCallback } from "./pages/auth/GithubAuthCallback.page";
 import { Providers } from "./providers";
@@ -53,10 +53,10 @@ const routes = createBrowserRouter([
     path: "",
     element: <AppLayout />,
     children: [
-      {
-        path: "repositories",
-        element: <RepositoriesPage />,
-      },
+      // {
+      //   path: "repositories",
+      //   element: <RepositoriesPage />,
+      // },
       {
         path: "incivilities",
         element: <IncivilitiesPage />,

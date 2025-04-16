@@ -6,7 +6,8 @@ import { ModerationActivityChart } from "@/components/layout/dashboard/Moderatio
 import { PRIncivilityChart } from "@/components/layout/dashboard/PRIncivilityChart";
 import { RadarFlagsChart } from "@/components/layout/dashboard/RadarFlagsChart";
 import { RecentFlaggedComments } from "@/components/layout/dashboard/RecentFlaggedComments";
-import { RepositorySelect } from "@/components/layout/dashboard/RepositorySelect";
+import { RepositorySidebar } from "@/components/layout/dashboard/RepositorySideBar";
+import ToggleButton from "@/components/layout/dashboard/ToogleButton";
 import { api } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
@@ -14,8 +15,9 @@ import { LoaderIcon } from "lucide-react";
 import { useState } from "react";
 
 export function DashboardPage() {
-  const [globalPeriod, setGlobalPeriod] = useState("24h");
+  const [globalPeriod, setGlobalPeriod] = useState<"24h" | "7d" | "30d" | "1y">("24h");
   const [selectedRepo, setSelectedRepo] = useState("all");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["dashboard-overview", globalPeriod, selectedRepo],
@@ -48,27 +50,47 @@ export function DashboardPage() {
   }
 
   return (
-    <main className="h-[calc(100vh-4rem)] w-full px-8 py-10">
-      <div className="flex items-center justify-between mb-4">
-        <DashboardHeader period={globalPeriod} onPeriodChange={setGlobalPeriod} />
-        <RepositorySelect selectedRepo={selectedRepo} onChange={setSelectedRepo} />
+    <div className="flex h-[calc(100vh-4rem)]">
+      <div
+        className={`
+          relative
+          border-r
+          overflow-hidden
+          transition-all duration-300 ease-in-out
+          ${sidebarOpen ? "w-64" : "w-12"}
+        `}
+      >
+        <ToggleButton sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        {sidebarOpen && (
+          <RepositorySidebar
+            selectedRepo={selectedRepo}
+            onChange={setSelectedRepo}
+          />
+        )}
       </div>
-      <DashboardCards initialData={data} period={globalPeriod} repo={selectedRepo} />
 
-      <div className="grid grid-cols-1 gap-4">
-        <div className="grid grid-cols-2 gap-4">
-          <IssuesIncivilityChart repo={selectedRepo} />
-          <PRIncivilityChart repo={selectedRepo} />
+      <main className="flex-1 px-8 py-10">
+        <div className="flex items-center justify-between mb-4">
+          <DashboardHeader period={globalPeriod} onPeriodChange={(value: string) => setGlobalPeriod(value as "24h" | "7d" | "30d" | "1y")} />
         </div>
-        <div className="flex">
-          <ModerationActivityChart repo={selectedRepo} />
-          <RecentFlaggedComments repo={selectedRepo} />
+
+        <DashboardCards initialData={data} period={globalPeriod} repo={selectedRepo} />
+
+        <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-2 gap-4">
+            <IssuesIncivilityChart repo={selectedRepo} />
+            <PRIncivilityChart repo={selectedRepo} />
+          </div>
+          <div className="flex">
+            <ModerationActivityChart repo={selectedRepo} />
+            <RecentFlaggedComments repo={selectedRepo} />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <RadarFlagsChart repo={selectedRepo} />
+            <ModerationActionsChart repo={selectedRepo} />
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <RadarFlagsChart repo={selectedRepo} />
-          <ModerationActionsChart repo={selectedRepo} />
-        </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
