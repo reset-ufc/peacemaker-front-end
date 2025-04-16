@@ -1,4 +1,8 @@
-import { Link } from "react-router-dom";
+"use client"
+
+import { motion } from "framer-motion"
+import { Github, Heart } from "lucide-react"
+import { Link } from "react-router-dom"
 
 const footerLinks = [
   {
@@ -8,71 +12,103 @@ const footerLinks = [
       { title: "Privacy Policy", href: "/privacy" },
     ],
   },
-];
+  {
+    title: "Resources",
+    items: [
+      { title: "Documentation", href: "/docs" },
+      { title: "GitHub Repository", href: "https://github.com/apps/thepeacemakerbot" },
+    ],
+  },
+  {
+    title: "Contact",
+    items: [
+      { title: "Support", href: "/support" },
+      { title: "Feedback", href: "/feedback" },
+    ],
+  },
+]
 
 export function Footer() {
+  const currentYear = new Date().getFullYear()
+
   return (
-    <footer className='border-t py-4 not-sm:px-4'>
-      <div className='container mx-auto flex flex-col gap-8 pt-5'>
-        <section className='grid w-fit grid-cols-1 gap-6 md:grid-cols-3'>
-          {footerLinks.map(link => (
-            <div key={link.title} className='flex flex-col gap-2'>
-              <p className='text-xl font-semibold'>{link.title}</p>
-              <div className='flex flex-col gap-1'>
-                {link.items.map(item => (
-                  <Link
+    <footer className="relative border-t border-violet-500/10 py-8 not-sm:px-4 overflow-hidden mx-28">
+      {/* Background elements */}
+      <div className="absolute inset-0 -z-10 opacity-[0.03]">
+        <div className="absolute bottom-0 left-1/4 w-64 h-64 rounded-full bg-gradient-to-r from-violet-600 to-purple-500 blur-3xl" />
+      </div>
+
+      <div className="container mx-auto flex flex-col gap-8 pt-5">
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="grid w-full grid-cols-1 gap-8 md:grid-cols-3"
+        >
+          {footerLinks.map((link, index) => (
+            <motion.div
+              key={link.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col gap-3"
+            >
+              <p className="text-xl font-semibold bg-gradient-to-r from-violet-600 to-purple-500 bg-clip-text text-transparent">
+                {link.title}
+              </p>
+              <div className="flex flex-col gap-2">
+                {link.items.map((item) => (
+                  <motion.div
                     key={item.title}
-                    to={item.href}
-                    title={item.title}
-                    className='hover:underline'
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
                   >
-                    {item.title}
-                  </Link>
+                    <Link
+                      to={item.href}
+                      title={item.title}
+                      className="text-muted-foreground hover:text-violet-500 transition-colors duration-300 flex items-center gap-2"
+                    >
+                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-gradient-to-r from-violet-600 to-purple-500"></span>
+                      {item.title}
+                    </Link>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </section>
+        </motion.section>
 
-        {/* <section className="flex w-full flex-col items-center justify-between gap-8 md:flex-row">
-          <div className="flex flex-col items-center gap-1 md:items-end">
-            <p>PeaceMakerBot</p>
-            <p className="flex gap-1">
-              Powered by{" "}
-              <a
-                href="https://vercel.com"
-                target="_blank"
-                rel="noreferrer"
-                className="flex flex-row items-center gap-1 text-sm"
-                title="Vercel - The platform for next.js"
-              >
-                <span className="border-b-foreground h-0 w-0 border-r-[10px] border-b-[15px] border-l-[10px] border-r-transparent border-l-transparent" />
-                Vercel
-              </a>
-              and
-              <a
-                href="#"
-                target="_blank"
-                rel="noreferrer"
-                className="flex flex-row items-center text-sm"
-              >
-                <svg
-                  viewBox="0 0 256 549"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="size-6"
-                >
-                  <title>MongoDb</title>
-                  <path
-                    fill="currentColor"
-                    d="M175.622 61.108C152.612 33.807 132.797 6.078 128.749.32a1.03 1.03 0 0 0-1.492 0c-4.048 5.759-23.863 33.487-46.874 60.788-197.507 251.896 31.108 421.89 31.108 421.89l1.917 1.28c1.704 26.234 5.966 63.988 5.966 63.988h17.045s4.26-37.54 5.965-63.987l1.918-1.494c.213.214 228.828-169.78 31.32-421.677Zm-47.726 418.05s-10.227-8.744-12.997-13.222v-.428l12.358-274.292c0-.853 1.279-.853 1.279 0l12.357 274.292v.428c-2.77 4.478-12.997 13.223-12.997 13.223Z"
-                  />
-                </svg>
-                MongoDb
-              </a>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="flex flex-col md:flex-row justify-between items-center border-t border-violet-500/10 pt-6 mt-2"
+        >
+          <div className="flex items-center gap-2 mb-4 md:mb-0">
+            <div className="size-8 rounded-md bg-gradient-to-br from-violet-600 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-md">
+              P
+            </div>
+            <p className="text-sm text-muted-foreground">© {currentYear} PeaceMakerBot. All rights reserved.</p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <motion.a
+              href="https://github.com/apps/thepeacemakerbot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-violet-500 transition-colors duration-300"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Github className="size-5" />
+              <span className="sr-only">GitHub</span>
+            </motion.a>
+            <p className="text-sm text-muted-foreground flex items-center">
+              Made with <Heart className="size-3 text-violet-500 mx-1 animate-pulse" /> by the PeaceMaker Team
             </p>
           </div>
-        </section> */}
+        </motion.div>
       </div>
     </footer>
-  );
+  )
 }

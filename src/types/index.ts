@@ -8,6 +8,11 @@ export interface Repository {
   created_at: string;
 }
 
+export interface IncivilityData {
+  week: string;
+  count: number;
+}
+
 export interface Comment {
   gh_comment_id: string;
   gh_repository_id: string;
@@ -19,6 +24,7 @@ export interface Comment {
   event_type: string;
   toxicity_score: number;
   classification: string;
+  parentType: "issue" | "pull_request";
   solutioned: boolean;
   suggestion_id: string | null;
   comment_html_url: string;
@@ -76,35 +82,27 @@ export interface Profile {
   avatar_url: string;
 }
 
-interface ModerationActivityItem {
-  month: string;
-  comments: number;
-  flags: number;
-}
-
 interface RecentFlaggedItem {
   author: string;
-  severity: string;
+  severity: "High" | "Medium" | "Low";
   action: string;
 }
 
-interface RadarFlagsItem {
+export interface RadarFlagsItem {
   category: string;
   value: number;
 }
 
-interface ModerationActionsData {
-  total: number;
+interface ModerationActions {
   data: { name: string; value: number }[];
+  total: number;
 }
 
 export interface DashboardChartsProps {
-  moderationActivity: ModerationActivityItem[];
   recentFlagged: RecentFlaggedItem[];
   radarFlags: RadarFlagsItem[];
-  moderationActions: ModerationActionsData;
+  moderationActions: ModerationActions;
 }
-
 export interface DashboardCardsProps {
   overview: {
     averageCommentScore: number;
@@ -113,7 +111,11 @@ export interface DashboardCardsProps {
     resolvedComments: number;
   };
 }
-
+export interface ModerationActivityItem {
+  month: string;
+  comments: number;
+  flags: number;
+}
 export interface DashboardHeaderProps {
   period: string;
   onPeriodChange: (value: string) => void;
