@@ -1,7 +1,9 @@
 import { DashboardCards } from "@/components/layout/dashboard/DashboardCards";
 import { DashboardHeader } from "@/components/layout/dashboard/DashboardHeader";
+import { IssuesIncivilityChart } from "@/components/layout/dashboard/IssuesIncivilityChart";
 import { ModerationActionsChart } from "@/components/layout/dashboard/ModerationActionsChart";
 import { ModerationActivityChart } from "@/components/layout/dashboard/ModerationActivityChart";
+import { PRIncivilityChart } from "@/components/layout/dashboard/PRIncivilityChart";
 import { RadarFlagsChart } from "@/components/layout/dashboard/RadarFlagsChart";
 import { RecentFlaggedComments } from "@/components/layout/dashboard/RecentFlaggedComments";
 import { RepositorySelect } from "@/components/layout/dashboard/RepositorySelect";
@@ -54,6 +56,10 @@ export function DashboardPage() {
       <DashboardCards initialData={data} period={globalPeriod} repo={selectedRepo} />
 
       <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-2 gap-4">
+          <IssuesIncivilityChart repo={selectedRepo} />
+          <PRIncivilityChart repo={selectedRepo} />
+        </div>
         <div className="flex">
           <ModerationActivityChart repo={selectedRepo} />
           <RecentFlaggedComments repo={selectedRepo} />

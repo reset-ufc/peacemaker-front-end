@@ -116,8 +116,10 @@ export const CommentDetail = memo(function CommentDetail({
             {toxicityLevel} Toxicity
           </Badge>
           <Badge variant='outline'>{comment.classification}</Badge>
-          {comment.parent && (
-            <Badge variant='outline'>{comment.parent.type}</Badge>
+          {(comment.parent || comment.parentType) && (
+            <Badge variant='outline'>
+              {comment.parentType ? comment.parentType : String(comment.parent?.type)}
+            </Badge>
           )}
         </div>
       </div>
