@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
 import { useMutation } from "@tanstack/react-query";
 import { Check, Edit, ThumbsDown, ThumbsUp, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { Comment, Feedback as FeedbackType, Suggestion } from "@/types";
 
 interface SuggestionListProps {
-  suggestions: Array<Suggestion>;
+  suggestions: Suggestion[];
   comment: Comment;
   suggestionAcceptedId: string | null;
 }
@@ -27,19 +26,22 @@ export function SuggestionList({
   comment,
   suggestionAcceptedId,
 }: SuggestionListProps) {
-  const [selectedSuggestionId, setSelectedSuggestionId] = useState<
-    string | null
-  >(null);
+  const [selectedSuggestionId, setSelectedSuggestionId] = useState<string | null>(null);
+  const [localSuggestions, setLocalSuggestions] = useState(suggestions);
   const [editedContent, setEditedContent] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isContentEdited, setIsContentEdited] = useState<boolean>(false);
 
   const [showFeedback, setShowFeedback] = useState<boolean>(false);
-  const [feedbackType, setFeedbackType] = useState<
-    "positive" | "negative" | null
-  >(null);
-  const [feedbackJustification, setFeedbackJustification] =
-    useState<string>("");
+  const [feedbackType, setFeedbackType] = useState<"positive" | "negative" | null>(null);
+  const [feedbackJustification, setFeedbackJustification] = useState<string>("");
+
+  const [showRejectModal, setShowRejectModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    setLocalSuggestions(suggestions);
+  }, [suggestions]);
+
 
   const acceptSuggestionMutation = useMutation({
     mutationFn: async ({
@@ -54,7 +56,6 @@ export function SuggestionList({
       isEdited?: boolean;
     }) => {
       const token = localStorage.getItem("access_token");
-
       const response = await api.post(
         `api/comments/${commentId}/suggestions/${suggestionId}/accept`,
         { suggestion_content: content, is_edited: isEdited },
@@ -70,11 +71,40 @@ export function SuggestionList({
       toast.success("Suggestion accepted", {
         description: "The suggestion has been successfully applied.",
       });
-
       setShowFeedback(true);
     },
     onError: () => {
       toast.error("Failed to accept suggestion", {
+        description: "Please try again later.",
+      });
+    },
+  });
+
+  const rejectSuggestionMutation = useMutation({
+    mutationFn: async (suggestionId: string) => {
+      const token = localStorage.getItem("access_token");
+      const response = await api.patch(`api/suggestions/${suggestionId}/reject`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Suggestion rejected", {
+        description: "The suggestion has been rejected successfully.",
+      });
+
+      setLocalSuggestions(prev =>
+        prev.filter(suggestion => suggestion._id !== selectedSuggestionId)
+      );
+      setSelectedSuggestionId(null);
+      setEditedContent("");
+      setIsEditing(false);
+      setIsContentEdited(false);
+    },
+    onError: () => {
+      toast.error("Failed to reject suggestion", {
         description: "Please try again later.",
       });
     },
@@ -87,7 +117,7 @@ export function SuggestionList({
       setSelectedSuggestionId(null);
       setEditedContent("");
     } else {
-      const suggestion = suggestions.find(s => s._id === suggestionId);
+      const suggestion = localSuggestions.find(s => s._id === suggestionId);
       if (suggestion) {
         setSelectedSuggestionId(suggestionId);
         setEditedContent(suggestion.content);
@@ -111,7 +141,7 @@ export function SuggestionList({
   const handleCancelEdit = () => {
     setIsEditing(false);
     if (selectedSuggestionId) {
-      const suggestion = suggestions.find(s => s._id === selectedSuggestionId);
+      const suggestion = localSuggestions.find(s => s._id === selectedSuggestionId);
       if (suggestion) {
         setEditedContent(suggestion.content);
       }
@@ -121,19 +151,27 @@ export function SuggestionList({
 
   const handleAccept = () => {
     if (!selectedSuggestionId) return;
-
     acceptSuggestionMutation.mutate({
       commentId: comment.gh_comment_id,
       suggestionId: selectedSuggestionId,
       content: editedContent,
       isEdited: isContentEdited,
     });
-
     setShowFeedback(true);
-    setFeedbackType(null);
-    setFeedbackJustification("");
+  };
 
-    setSelectedSuggestionId(selectedSuggestionId);
+  const handleOpenRejectModal = () => {
+    setShowRejectModal(true);
+  };
+
+  const handleCancelReject = () => {
+    setShowRejectModal(false);
+  };
+
+  const handleConfirmReject = () => {
+    if (!selectedSuggestionId) return;
+    rejectSuggestionMutation.mutate(selectedSuggestionId);
+    setShowRejectModal(false);
   };
 
   const handleFeedbackSubmit = () => {
@@ -142,9 +180,7 @@ export function SuggestionList({
     const feedback: FeedbackType = {
       suggestion_id: selectedSuggestionId,
       type: feedbackType,
-      ...(feedbackJustification
-        ? { justification: feedbackJustification }
-        : {}),
+      ...(feedbackJustification ? { justification: feedbackJustification } : {}),
     };
 
     console.log("Feedback submitted:", feedback);
@@ -158,6 +194,25 @@ export function SuggestionList({
 
   return (
     <div className='flex flex-col'>
+      {showRejectModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-100 z-50">
+          <div className="bg-card text-card-foreground p-6 rounded shadow-lg max-w-sm w-full">
+            <h2 className="text-xl font-bold mb-4">Confirm Rejection</h2>
+            <p className="mb-4">
+              Are you sure you want to reject this suggestion? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" className="cursor-pointer" onClick={handleCancelReject}>
+                Cancel
+              </Button>
+              <Button variant="destructive" className="cursor-pointer" onClick={handleConfirmReject}>
+                Confirm Reject
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Feedback
         showFeedback={showFeedback}
         selectedSuggestionId={selectedSuggestionId}
@@ -169,15 +224,13 @@ export function SuggestionList({
       />
 
       <h2 className='mb-2 text-xl font-semibold'>Correction Suggestions</h2>
-
       <Separator className='mb-4' />
 
       <div className='space-y-3 px-2 pb-5'>
-        {suggestions.map(suggestion => {
+        {localSuggestions.map(suggestion => {
           const isSelected = selectedSuggestionId === suggestion._id;
           const isAccepted = suggestionAcceptedId === suggestion._id;
-          const isDisabled =
-            !!suggestionAcceptedId && suggestionAcceptedId !== suggestion._id;
+          const isDisabled = !!suggestionAcceptedId && suggestionAcceptedId !== suggestion._id;
 
           return (
             <Card
@@ -269,6 +322,17 @@ export function SuggestionList({
                         <Check className='size-4' />
                         Accept suggestion
                       </Button>
+                      <Button
+                        variant='destructive'
+                        className="cursor-pointer"
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleOpenRejectModal();
+                        }}
+                      >
+                        <ThumbsDown className='size-4' />
+                        Reject suggestion
+                      </Button>
                     </>
                   )}
                 </CardFooter>
@@ -277,7 +341,7 @@ export function SuggestionList({
           );
         })}
 
-        {suggestions.length === 0 && (
+        {localSuggestions.length === 0 && (
           <p className='text-muted-foreground py-4 text-center'>
             No suggestions available for this comment.
           </p>
@@ -343,7 +407,6 @@ function Feedback({
             <ThumbsDown className='size-4' />
             We're sorry to hear that. Please tell us why:
           </p>
-
           <RadioGroup
             value={feedbackJustification}
             onValueChange={setFeedbackJustification}
@@ -368,7 +431,6 @@ function Feedback({
               <Label htmlFor='other'>Other reason</Label>
             </div>
           </RadioGroup>
-
           <Button onClick={handleFeedbackSubmit}>Submit Feedback</Button>
         </div>
       )}
