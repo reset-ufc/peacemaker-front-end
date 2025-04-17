@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { Comment, Feedback as FeedbackType, Suggestion } from "@/types";
+import { Comment, Suggestion } from "@/types";
 
 interface SuggestionListProps {
   suggestions: Suggestion[];
@@ -71,7 +71,7 @@ export function SuggestionList({
       toast.success("Suggestion accepted", {
         description: "The suggestion has been successfully applied.",
       });
-      setShowFeedback(true);
+      // setShowFeedback(true);
     },
     onError: () => {
       toast.error("Failed to accept suggestion", {
@@ -95,18 +95,47 @@ export function SuggestionList({
         description: "The suggestion has been rejected successfully.",
       });
 
-      setLocalSuggestions(prev =>
-        prev.filter(suggestion => suggestion._id !== selectedSuggestionId)
-      );
-      setSelectedSuggestionId(null);
+      // setSelectedSuggestionId(null);
       setEditedContent("");
       setIsEditing(false);
       setIsContentEdited(false);
+
+      setShowFeedback(true);
     },
     onError: () => {
       toast.error("Failed to reject suggestion", {
         description: "Please try again later.",
       });
+    },
+  });
+
+  const feedbackMutation = useMutation({
+    mutationFn: async () => {
+      const token = localStorage.getItem("access_token");
+      return api.post(
+        "/api/suggestions/feedback",
+        {
+          comment_id: comment.gh_comment_id,
+          suggestion_id: selectedSuggestionId,
+          type: feedbackType,
+          comment: feedbackJustification,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    },
+    onSuccess: () => {
+      toast.success("Feedback sent");
+
+      setLocalSuggestions((prev) =>
+        prev.filter((s) => s._id !== selectedSuggestionId)
+      );
+      setShowFeedback(false);
+      setSelectedSuggestionId(null);
+      setFeedbackType(null);
+      setFeedbackJustification("");
+    },
+    onError: () => {
+      toast.error("Failed to send feedback");
     },
   });
 
@@ -130,8 +159,9 @@ export function SuggestionList({
     setIsEditing(true);
   };
 
-  const handleConfirmEdit = () => {
+  const handleConfirmEdit = (content: string) => {
     setIsContentEdited(true);
+    setEditedContent(content);
     setIsEditing(false);
     toast.info("Edit confirmed", {
       description: "You can now accept the edited suggestion.",
@@ -157,7 +187,6 @@ export function SuggestionList({
       content: editedContent,
       isEdited: isContentEdited,
     });
-    setShowFeedback(true);
   };
 
   const handleOpenRejectModal = () => {
@@ -177,19 +206,7 @@ export function SuggestionList({
   const handleFeedbackSubmit = () => {
     if (!selectedSuggestionId || !feedbackType) return;
 
-    const feedback: FeedbackType = {
-      suggestion_id: selectedSuggestionId,
-      type: feedbackType,
-      ...(feedbackJustification ? { justification: feedbackJustification } : {}),
-    };
-
-    console.log("Feedback submitted:", feedback);
-
-    toast.success("Feedback submitted", {
-      description: "Thank you for your feedback!",
-    });
-
-    setShowFeedback(false);
+    feedbackMutation.mutate();
   };
 
   return (
@@ -288,7 +305,7 @@ export function SuggestionList({
                         variant='outline'
                         onClick={e => {
                           e.stopPropagation();
-                          handleConfirmEdit();
+                          handleConfirmEdit(editedContent);
                         }}
                         disabled={
                           editedContent === "" ||
