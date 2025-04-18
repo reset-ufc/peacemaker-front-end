@@ -121,6 +121,11 @@ export const CommentDetail = memo(function CommentDetail({
               {comment.parentType ? comment.parentType : String(comment.parent?.type)}
             </Badge>
           )}
+          {comment.editAttempts >= 1 && (
+            <Badge variant='outline' className='border-red-500/20 bg-red-500/10 text-red-500'>
+              ⚠️ Needs Attention
+            </Badge>
+          )}
         </div>
       </div>
 
