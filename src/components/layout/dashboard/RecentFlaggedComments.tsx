@@ -1,6 +1,5 @@
-// src/components/layout/dashboard/RecentFlaggedComments.tsx
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loadingSpinner";
 import {
   Select,
@@ -12,19 +11,24 @@ import {
 import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
 interface FlaggedItem {
   author: string;
   severity: string;
   action: string;
+  comment_html_url: string;
 }
+
+const ITEMS_PER_PAGE = 4;
 
 export function RecentFlaggedComments({ repo }: { repo?: string }) {
   const [period, setPeriod] = useState("24h");
+  const [page, setPage] = useState(0);
   const token = localStorage.getItem("access_token");
 
   const { data, isLoading } = useQuery<FlaggedItem[]>({
-    queryKey: ["recent-flagged", period],
+    queryKey: ["recent-flagged", period, repo],
     queryFn: async () => {
       const params: Record<string, string> = { period };
       if (repo) params.repo = repo;
@@ -32,10 +36,25 @@ export function RecentFlaggedComments({ repo }: { repo?: string }) {
         headers: { Authorization: `Bearer ${token}` },
         params,
       });
-      console.log(response.data);
       return response.data;
     },
   });
+
+  // Resetar a página quando o período mudar
+  useEffect(() => {
+    setPage(0);
+  }, [period, repo]);
+
+  const totalPages = useMemo(
+    () => Math.ceil((data?.length ?? 0) / ITEMS_PER_PAGE),
+    [data]
+  );
+
+  const pagedData = useMemo(() => {
+    if (!data) return [];
+    const start = page * ITEMS_PER_PAGE;
+    return data.slice(start, start + ITEMS_PER_PAGE);
+  }, [data, page]);
 
   const containerClass = isLoading ? "filter blur-sm transition duration-300" : "";
 
@@ -66,7 +85,7 @@ export function RecentFlaggedComments({ repo }: { repo?: string }) {
               <span className="text-center">Severity</span>
               <span className="text-right mr-2">Action</span>
             </div>
-            {data?.map((item, idx) => (
+            {pagedData?.map((item, idx) => (
               <div key={idx} className="grid grid-cols-3 items-center gap-4 border-b pb-3">
                 <span className="truncate ml-2">{item.author}</span>
                 <div className="flex justify-center">
@@ -98,6 +117,30 @@ export function RecentFlaggedComments({ repo }: { repo?: string }) {
                 </div>
               </div>
             ))}
+            {pagedData.length === 0 && (
+              <p className="text-center text-muted-foreground mt-4">No flagged comments found.</p>
+            )}
+            <div className="mt-4 flex items-center justify-between">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page === 0}
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+              >
+                Previous
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                {page + 1} / {totalPages || 1}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page + 1 >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+              >
+                Next
+              </Button>
+            </div>
           </div>
         )}
       </div>
