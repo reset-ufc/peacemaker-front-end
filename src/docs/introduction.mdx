@@ -1,35 +1,72 @@
-# Documentação do Projeto
+# Ajuda & Onboarding do Peacemaker Bot
 
-Bem-vindo à documentação do nosso projeto! Este é um exemplo de como você pode usar MDX para criar documentação interativa.
+Bem-vindo! Aqui você vai aprender, passo a passo, como começar a usar o **Peacemaker Bot** para monitorar e manter a civilidade nos seus repositórios GitHub. Sinta-se à vontade para navegar nesta página toda vez que tiver dúvidas.
 
-## O que é MDX?
+---
 
-MDX é uma extensão do Markdown que permite que você use componentes React diretamente em seus arquivos de documentação.
+## 1. Instalar o Bot no GitHub
 
-## Exemplo de Código
+O primeiro passo é adicionar o Peacemaker Bot como um _GitHub App_ no seu repositório:
 
-```jsx
-import React from 'react';
+- Clique no link de instalação: [Instalar Peacemaker Bot](https://github.com/apps/peacemakerapppoc)
+- Autentique-se no GitHub e escolha o(s) repositório(s) onde o bot terá permissão para atuar.
 
-function MeuComponente() {
-  return <div>Olá, mundo!</div>;
-}
-```
+> **Dica:** você pode instalar em mais de um repositório, mas lembre-se de escolher apenas aqueles que deseja monitorar.
 
-## Recursos
+---
 
-- [Documentação oficial do MDX](https://mdxjs.com)
-- [Guia de Markdown](https://www.markdownguide.org)
+## 2. Primeiro comentário incivilizado
 
-## Como Usar
+Assim que alguém (inclusive você!) fizer um comentário com linguagem considerada _incivilizada_ num dos repositórios permitidos, o bot irá:
 
-1. Crie arquivos `.mdx` na pasta `src/docs`
-2. Importe componentes React quando necessário
-3. Use sintaxe Markdown para formatação
-4. Adicione exemplos de código quando relevante
+1. Detectar o comentário e calcular um **score de toxicidade**.
+2. Gerar sugestões de reformulação para tornar o texto mais amigável.
+3. Exibir, na aba **Incivilities**, o comentário original, a classificação de incivilidade e as sugestões.
 
-## Próximos Passos
+Na aba **Incivilities**, você tem três opções para cada sugestão:
 
-- [ ] Adicionar mais exemplos
-- [ ] Criar seção de FAQ
-- [ ] Documentar APIs 
+- **Aceitar**: confirma a sugestão e substitui o texto no GitHub.
+- **Editar**: ajusta a sugestão manualmente antes de aplicar.
+- **Recusar**: descarta aquela sugestão e gera uma nova.
+
+---
+
+## 3. Edição de sugestões & reavaliação
+
+Quando você **edita** e submete uma sugestão:
+
+1. O bot reanalisa o texto editado em busca de traços de incivilidade.
+2. Existem dois caminhos possíveis:
+
+   **A. Ainda incivilizado**
+
+   - Você vê um alerta informando que o texto ainda não está ok.
+   - Novas sugestões são geradas para melhorar novamente.
+   - Se, após **duas edições**, ainda houver incivilidade, o bot para de sugerir e exibe um alerta final: agora é você quem precisa reformular sem ajuda automática.
+
+   **B. Resolvido**
+
+   - O bot não detecta mais incivilidade e marca o comentário como _resolvido_.
+   - Parabéns! A conversa está num tom saudável.
+
+> **Atenção:** esse fluxo evita que você fique num ciclo infinito de edições sem sair do lugar.
+
+---
+
+## 4. Explorando a Dashboard
+
+Por fim, visite a **Dashboard** para acompanhar métricas e relatórios:
+
+- **Filtros de período**: escolha entre últimos 24h, 7d, 30d ou 1 ano.
+- **Visão geral**: cartões com média/mediana de toxicidade, total de comentários, itens resolvidos, etc.
+- **Gráficos interativos**: atividade de moderação, incivilidades por tipo (issues vs PRs), categorias de incivilidade e ações tomadas.
+- **Filtro por repositório**: foque em um projeto específico ou visualize todos de uma vez.
+
+Use esses dados para entender tendências, treinar sua equipe e manter a comunidade engajada num ambiente respeitoso.
+
+---
+
+### Pronto para começar?
+
+Se algo ainda não ficou claro, volte aqui ou abra um _issue_ no próprio repositório do bot. Estamos sempre melhorando!
+Bom trabalho e feliz moderação
