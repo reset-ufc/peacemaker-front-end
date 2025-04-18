@@ -30,6 +30,8 @@ export interface Comment {
   comment_html_url: string;
   issue_id: string;
   created_at: string;
+  needsAttention: boolean;
+  editAttempts: number;
   parent?: Parent;
   suggestions: Suggestion[];
 }

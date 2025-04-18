@@ -37,11 +37,21 @@ export function SuggestionList({
   const [feedbackJustification, setFeedbackJustification] = useState<string>("");
 
   const [showRejectModal, setShowRejectModal] = useState<boolean>(false);
+  const [showNeedsAttentionModal, setShowNeedsAttentionModal] = useState(false);
+  const [showFirstEditModal, setShowFirstEditModal] = useState(false);
+
+  useEffect(() => {
+    if (comment.editAttempts === 1) {
+      setShowFirstEditModal(true);
+    } else if (comment.needsAttention) {
+      setShowNeedsAttentionModal(true);
+    }
+  }, [comment.editAttempts, comment.needsAttention]);
 
   useEffect(() => {
     setLocalSuggestions(suggestions);
+    setEditedContent("");
   }, [suggestions]);
-
 
   const acceptSuggestionMutation = useMutation({
     mutationFn: async ({
@@ -211,6 +221,38 @@ export function SuggestionList({
 
   return (
     <div className='flex flex-col'>
+      {showFirstEditModal && (
+       <div className="fixed inset-0 z-50 bg-opacity-100 flex items-center justify-center">
+          <div className="bg-card text-card-foreground p-6 rounded-lg shadow-lg max-w-sm text-center">
+            <h2 className="text-xl font-bold mb-4">⚠️ Atenção!</h2>
+            <p className="mb-6">
+              Você editou esta sugestão pela primeira vez.<br/>
+              Ainda demonstra traços de incivilidade.<br/>
+              Por favor, revise bem antes de enviar outra edição.
+            </p>
+            <Button onClick={() => setShowFirstEditModal(false)}>
+              Entendi
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {showNeedsAttentionModal && (
+        <div className="fixed inset-0 z-50 bg-opacity-100 flex items-center justify-center">
+          <div className="bg-card text-card-foreground p-6 rounded-lg shadow-lg max-w-lg text-center">
+            <h2 className="text-xl font-bold mb-4">⛔ Atenção!</h2>
+            <p className="mb-6">
+              Você editou esta sugestão {comment.editAttempts} vezes e ela continua com traços de incivilidade.<br/>
+              Entendemos que você pode ter tentado melhorar a sugestão, mas ainda assim ela não atende aos padrões de civilidade.<br/>
+              Desta vez deixamos você enviar a edição, sem sugestões.<br/>
+              Por favor, revise cuidadosamente antes de enviar outra edição.
+            </p>
+            <Button onClick={() => setShowNeedsAttentionModal(false)}>
+              Entendi
+            </Button>
+          </div>
+        </div>
+      )}
       {showRejectModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-opacity-100 z-50">
           <div className="bg-card text-card-foreground p-6 rounded shadow-lg max-w-sm w-full">
@@ -240,14 +282,61 @@ export function SuggestionList({
         handleFeedbackSubmit={handleFeedbackSubmit}
       />
 
-      <h2 className='mb-2 text-xl font-semibold'>Correction Suggestions</h2>
+      {
+        comment.needsAttention ? (
+          <h2 className='mb-2 text-xl font-semibold pl-3'>Personal Correction</h2>
+        ) : (
+          <h2 className='mb-2 text-xl font-semibold pl-3'>Correction Suggestions</h2>
+        )
+      }
+
+      {
+        comment.needsAttention && (
+          <div className='space-y-3 pl-2 pr-2 pb-5'>
+            <Card
+              className={cn(
+                "p-2 transition-colors",
+              )}
+              onClick={() => {}}
+            >
+              <CardContent className='p-2'>
+                <Textarea
+                  value={editedContent}
+                  onChange={e => {
+                    setEditedContent(e.target.value);
+                    if (e.target.value === "") {
+                      setIsContentEdited(false);
+                    }
+                  }}
+                  onClick={e => e.stopPropagation()}
+                  className='min-h-[100px] w-full outline-none'
+                />
+              </CardContent>
+              <CardFooter className='flex justify-end gap-2 p-3 pt-0'>
+                  <>
+                    <Button
+                      variant='outline'
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleAccept();
+                      }}
+                    >
+                      <Check className='size-4' />
+                      Submit
+                    </Button>
+                  </>
+              </CardFooter>
+            </Card>
+          </div>
+        )
+      }
       <Separator className='mb-4' />
 
       <div className='space-y-3 px-2 pb-5'>
         {localSuggestions.map(suggestion => {
           const isSelected = selectedSuggestionId === suggestion._id;
           const isAccepted = suggestionAcceptedId === suggestion._id;
-          const isDisabled = !!suggestionAcceptedId && suggestionAcceptedId !== suggestion._id;
+          const isDisabled = (!!suggestionAcceptedId && suggestionAcceptedId !== suggestion._id) || comment.needsAttention;
 
           return (
             <Card
