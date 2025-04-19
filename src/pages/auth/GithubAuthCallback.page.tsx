@@ -42,7 +42,7 @@ export function GithubAuthCallback() {
 
         localStorage.setItem("user", JSON.stringify(data.profile));
 
-        navigate("/repositories");
+        navigate("/dashboard");
       })
       .catch(() => {
         navigate("/auth/sign-in/github");

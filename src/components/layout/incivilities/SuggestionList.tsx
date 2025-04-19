@@ -39,6 +39,8 @@ export function SuggestionList({
   const [showRejectModal, setShowRejectModal] = useState<boolean>(false);
   const [showNeedsAttentionModal, setShowNeedsAttentionModal] = useState(false);
   const [showFirstEditModal, setShowFirstEditModal] = useState(false);
+  // const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  // const [eventSource, setEventSource] = useState<EventSource>();
 
   useEffect(() => {
     if (comment.editAttempts === 1) {
@@ -47,6 +49,22 @@ export function SuggestionList({
       setShowNeedsAttentionModal(true);
     }
   }, [comment.editAttempts, comment.needsAttention]);
+
+  // useEffect(() => {
+  //   if (!comment.gh_comment_id) return;
+  //   // fecha conexão antiga
+  //   eventSource?.close();
+
+  //   const es = new EventSource(`/api/suggestions/events?commentId=${comment.gh_comment_id}`);
+  //   es.addEventListener("newSuggestion", (e: MessageEvent) => {
+  //     const nova: Suggestion = JSON.parse(e.data);
+  //     setLocalSuggestions((prev) => [...prev, nova]);
+  //     setLoadingSuggestions(false);
+  //   });
+  //   setEventSource(es);
+
+  //   return () => es.close();
+  // }, [comment.gh_comment_id, eventSource]);
 
   useEffect(() => {
     setLocalSuggestions(suggestions);
@@ -105,7 +123,6 @@ export function SuggestionList({
         description: "The suggestion has been rejected successfully.",
       });
 
-      // setSelectedSuggestionId(null);
       setEditedContent("");
       setIsEditing(false);
       setIsContentEdited(false);
@@ -191,6 +208,7 @@ export function SuggestionList({
 
   const handleAccept = () => {
     if (!selectedSuggestionId) return;
+    // setLoadingSuggestions(true);
     acceptSuggestionMutation.mutate({
       commentId: comment.gh_comment_id,
       suggestionId: selectedSuggestionId,
