@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuthentication } from "@/hooks/use-authentication";
 import { Profile } from "@/types";
+import { GitHubIcon } from "../svg/Github";
+import { GitHubTokenModal } from "../ui/GithubTokenModal";
 import { LLMSelectorModal } from "../ui/LLMSelectorModal";
 
 export function UserProfile() {
@@ -20,7 +22,8 @@ export function UserProfile() {
   const user = localStorage.getItem("user")!;
   const profile = JSON.parse(user) as Profile;
 
-  const [openModal, setOpenModal] = useState(false);
+  const [openLLM, setOpenLLM] = useState(false);
+  const [openGH, setOpenGH] = useState(false);
 
   return (
     <>
@@ -35,9 +38,13 @@ export function UserProfile() {
         </DropdownMenuTrigger>
         <DropdownMenuContent className='max-w-64' align='end'>
           <DropdownMenuGroup>
-            <DropdownMenuItem onClick={() => setOpenModal(true)}>
+            <DropdownMenuItem onClick={() => setOpenLLM(true)}>
               <Settings2Icon className='size-4 opacity-60' aria-hidden='true' />
               <span>Selecionar LLM</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setOpenGH(true)}>
+              <GitHubIcon className="size-4 opacity-60" aria-hidden="true" />
+              <span>GitHub Token</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
 
@@ -50,8 +57,8 @@ export function UserProfile() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <LLMSelectorModal open={openModal} onOpenChange={setOpenModal} />
-
+      <LLMSelectorModal open={openLLM} onOpenChange={setOpenLLM} />
+      <GitHubTokenModal open={openGH} onOpenChange={setOpenGH} />
     </>
   );
 }
