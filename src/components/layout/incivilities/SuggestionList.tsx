@@ -50,22 +50,6 @@ export function SuggestionList({
     }
   }, [comment.editAttempts, comment.needsAttention]);
 
-  // useEffect(() => {
-  //   if (!comment.gh_comment_id) return;
-  //   // fecha conexão antiga
-  //   eventSource?.close();
-
-  //   const es = new EventSource(`/api/suggestions/events?commentId=${comment.gh_comment_id}`);
-  //   es.addEventListener("newSuggestion", (e: MessageEvent) => {
-  //     const nova: Suggestion = JSON.parse(e.data);
-  //     setLocalSuggestions((prev) => [...prev, nova]);
-  //     setLoadingSuggestions(false);
-  //   });
-  //   setEventSource(es);
-
-  //   return () => es.close();
-  // }, [comment.gh_comment_id, eventSource]);
-
   useEffect(() => {
     setLocalSuggestions(suggestions);
     setEditedContent("");
@@ -101,10 +85,15 @@ export function SuggestionList({
       });
       // setShowFeedback(true);
     },
-    onError: () => {
-      toast.error("Failed to accept suggestion", {
-        description: "Please try again later.",
-      });
+    onError: (error: any) => {
+      const msg = error?.response?.data?.message;
+      if (msg?.includes("configure seu GitHub token")) {
+        toast.error(msg);
+      } else if (msg?.includes("inválido")) {
+        toast.error(msg);
+      } else {
+        toast.error("Falha ao aceitar sugestão. Tente novamente.");
+      }
     },
   });
 
@@ -444,7 +433,7 @@ export function SuggestionList({
                         }}
                       >
                         <Check className='size-4' />
-                        Accept suggestion
+                        {acceptSuggestionMutation.isPending ? "Verificando token…" : "Accept suggestion"}
                       </Button>
                       <Button
                         variant='destructive'
