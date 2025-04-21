@@ -75,7 +75,7 @@ export function ModerationActionsChart({ repo }: { repo?: string }) {
                 outerRadius={100}
                 label
               >
-                {data?.data.map((entry, index) => (
+                {data?.data.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                 ))}
               </Pie>

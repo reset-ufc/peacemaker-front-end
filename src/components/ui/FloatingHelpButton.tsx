@@ -18,6 +18,7 @@ export function FloatingHelpButton() {
         fixed bottom-6 right-6 z-50
         bg-indigo-600 hover:bg-indigo-700
         text-white p-4 rounded-full
+        transition duration-300
         shadow-xl
         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
       "
