@@ -4,11 +4,11 @@ import type { PropsWithChildren } from "react";
 import React from "react";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { NuqsAdapter } from "nuqs/adapters/react";
 import { Toaster } from "sonner";
 
-import { TooltipProvider } from "@/components/ui/tooltip";
-
+import { AuthProvider } from "./AuthProvider";
 import { ThemeProvider } from "./ThemeProvider";
 
 export function Providers({ children }: PropsWithChildren) {
@@ -16,26 +16,25 @@ export function Providers({ children }: PropsWithChildren) {
 
   return (
     <React.Fragment>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        enableSystem
-        storageKey="theme"
-      >
-        <NuqsAdapter>
-          <TooltipProvider>
-            <QueryClientProvider client={queryClient}>
-              {children}
-            </QueryClientProvider>
-          </TooltipProvider>
-        </NuqsAdapter>
-        <Toaster
-          position="bottom-right"
-          richColors
-          closeButton
-          duration={3500}
-        />
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='dark'
+            enableSystem
+            storageKey='theme'
+          >
+            <NuqsAdapter>{children}</NuqsAdapter>
+            <Toaster
+              position='bottom-right'
+              richColors
+              closeButton
+              duration={3500}
+            />
+          </ThemeProvider>
+        </AuthProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </React.Fragment>
   );
 }
