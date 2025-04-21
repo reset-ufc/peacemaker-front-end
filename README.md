@@ -16,8 +16,6 @@
 - [License](#-license)
 - [Contact](#-contact)
 
----
-
 The Peacemaker Bot Frontend provides an intuitive interface for users to engage with the moderation features of the Peacemaker Bot. Key functionalities include:
 
 - **Incivility Notifications**: Users receive alerts for uncivil comments, along with actionable recommendations for improvement.
@@ -36,6 +34,7 @@ Feel free to explore the repository and contribute to making GitHub a more civil
 Before you begin, ensure you have the following installed on your machine:
 
 - [Node.js](https://nodejs.org/) (version 20 or higher)
+
 - [pnpm](https://pnpm.js.org/) (package manager)
 
 ---
