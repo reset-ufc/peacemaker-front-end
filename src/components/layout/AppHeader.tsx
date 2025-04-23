@@ -31,11 +31,6 @@ export function AppHeader() {
                 href: "/incivilities",
                 target: undefined,
               },
-              // {
-              //   text: "Repositories",
-              //   href: "/repositories",
-              //   target: undefined,
-              // },
               {
                 text: "Dashboard",
                 href: "/dashboard",
