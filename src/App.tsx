@@ -14,6 +14,7 @@ import { HomePage } from "./pages/Index.page";
 import { PrivacyPage } from "./pages/Privacy.page";
 import { TermsPage } from "./pages/Terms.page";
 import { Providers } from "./providers";
+import "./utils/i18n";
 
 const routes = createBrowserRouter([
   {
