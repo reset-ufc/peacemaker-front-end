@@ -12,6 +12,7 @@ import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface FlaggedItem {
   author: string;
@@ -58,12 +59,14 @@ export function RecentFlaggedComments({ repo }: { repo?: string }) {
 
   const containerClass = isLoading ? "filter blur-sm transition duration-300" : "";
 
+  const { t } = useTranslation()
+
   return (
     <div className="border p-4 rounded shadow ml-4 basis-1/3">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold">Recent Flagged Comments</h3>
-          <p className="text-sm text-muted-foreground">The most recent flagged comments</p>
+          <h3 className="text-lg font-semibold">{t("Recent Flagged Comments")}</h3>
+          <p className="text-sm text-muted-foreground">{t("The most recent flagged comments")}</p>
         </div>
         <Select value={period} onValueChange={setPeriod}>
           <SelectTrigger className="w-32">
@@ -107,7 +110,7 @@ export function RecentFlaggedComments({ repo }: { repo?: string }) {
                       "hidden items-center gap-1 md:flex",
                       buttonVariants({ variant: "outline", size: "sm" })
                     )}
-                    title='Reply on GitHub'
+                    title={t("Reply on GitHub")}
                     href={item.comment_html_url}
                     target='_blank'
                     rel='noreferrer'

@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Comment, Suggestion } from "@/types";
+import { useTranslation } from "react-i18next";
 
 interface SuggestionListProps {
   suggestions: Suggestion[];
@@ -226,6 +227,8 @@ export function SuggestionList({
     feedbackMutation.mutate();
   };
 
+  const { t } = useTranslation()
+
   return (
     <div className='flex flex-col'>
       {showFirstEditModal && (
@@ -291,9 +294,9 @@ export function SuggestionList({
 
       {
         comment.needsAttention ? (
-          <h2 className='mb-2 text-xl font-semibold pl-3'>Personal Correction</h2>
+          <h2 className='mb-2 text-xl font-semibold pl-3'>{t("Personal Correction")}</h2>
         ) : (
-          <h2 className='mb-2 text-xl font-semibold pl-3'>Correction Suggestions</h2>
+          <h2 className='mb-2 text-xl font-semibold pl-3'>{t("Correction Suggestions")}</h2>
         )
       }
 
