@@ -5,7 +5,9 @@ import { cn } from "@/lib/utils"
 import { motion, useInView, useScroll, useTransform } from "framer-motion"
 import { ArrowRight, CloudUpload, Fingerprint, Lock, RefreshCw, Sparkles, type LucideIcon } from "lucide-react"
 import { useRef } from "react"
+import { useTranslation } from "react-i18next"
 
+import "../../utils/i18n"
 type Feature = {
   name: string
   description: string
@@ -14,41 +16,43 @@ type Feature = {
   color?: string
 }
 
-const features: Array<Feature> = [
-  {
-    name: "Ease Installation",
-    description: "To get the bot working in your repository all you need to do is install it on Github Marketplace.",
-    icon: CloudUpload,
-    link: "https://github.com/apps/thepeacemakerbot",
-    color: "from-violet-600 to-purple-500",
-  },
-  {
-    name: "GitHub Integration",
-    description:
-      "You can access your incivilized comments and repositories analysis by logging in with your Github account.",
-    icon: Lock,
-    color: "from-purple-600 to-fuchsia-500",
-  },
-  {
-    name: "Fast and Simple",
-    description:
-      "The bot is very easy to use and doesn't require any configuration, with the analysis of the comments starting automatically.",
-    icon: RefreshCw,
-    color: "from-indigo-500 to-violet-600",
-  },
-  {
-    name: "No intrusive politics",
-    description: "The bot doesn't interfere with your comments.",
-    icon: Fingerprint,
-    color: "from-fuchsia-500 to-purple-700",
-  },
-]
+
 
 export function Features() {
   const containerRef = useRef(null)
   const titleRef = useRef(null)
   const isInView = useInView(containerRef, { once: true, amount: 0.2 })
   const isTitleInView = useInView(titleRef, { once: true, amount: 0.5 })
+
+  const { t } = useTranslation()
+
+  const features: Array<Feature> = [
+    {
+      name: t("Ease Installation"),
+      description: t("To get the bot working in your repository all you need to do is install it on Github Marketplace."),
+      icon: CloudUpload,
+      link: "https://github.com/apps/thepeacemakerbot",
+      color: "from-violet-600 to-purple-500",
+    },
+    {
+      name: t("GitHub Integration"),
+      description: t("You can access your incivilized comments and repositories analysis by logging in with your Github account."),
+      icon: Lock,
+      color: "from-purple-600 to-fuchsia-500",
+    },
+    {
+      name: t("Fast and Simple"),
+      description: t("The bot is very easy to use and doesn't require any configuration, with the analysis of the comments starting automatically."),
+      icon: RefreshCw,
+      color: "from-indigo-500 to-violet-600",
+    },
+    {
+      name: t("No intrusive politics"),
+      description: t("The bot doesn't interfere with your comments."),
+      icon: Fingerprint,
+      color: "from-fuchsia-500 to-purple-700",
+    },
+  ];
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -84,7 +88,7 @@ export function Features() {
               className="px-4 py-1.5 text-sm font-medium border-violet-500/30 bg-violet-500/10 text-violet-500 backdrop-blur-sm"
             >
               <Sparkles className="mr-1.5 h-3.5 w-3.5 animate-pulse text-violet-400" />
-              Moderate your repositories
+              {t("Moderate your repositories")}
             </Badge>
           </motion.div>
 
@@ -96,7 +100,7 @@ export function Features() {
           >
             <span className="inline-block">The Peacemaker</span>{" "}
             <span className="inline-block bg-gradient-to-r from-violet-600 to-purple-500 bg-clip-text text-transparent">
-              keeps your GitHub community civil
+              {t("keeps your GitHub community civil")}
             </span>
           </motion.h2>
 
@@ -106,8 +110,7 @@ export function Features() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-muted-foreground mt-6 text-lg leading-8 max-w-3xl mx-auto"
           >
-            A non-intrusive Github bot that helps you manage your repositories issues and pull requests with AI-powered
-            moderation.
+            {t("A non-intrusive Github bot that helps you manage your repositories issues and pull requests with AI-powered moderation.")}
           </motion.p>
         </motion.div>
 
@@ -165,7 +168,7 @@ export function Features() {
                       className="mt-5 inline-flex items-center text-sm font-medium text-violet-500 hover:text-violet-600 transition-colors self-start"
                       whileHover={{ x: 5 }}
                     >
-                      Learn more
+                      {t("Learn more")} 
                       <ArrowRight className="ml-1.5 h-4 w-4" />
                     </motion.a>
                   )}

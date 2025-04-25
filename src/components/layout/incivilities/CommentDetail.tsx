@@ -12,8 +12,8 @@ import { cn } from "@/lib/utils";
 import type { Comment, CommentState, Suggestion } from "@/types";
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useTranslation } from "react-i18next";
 import { SuggestionList } from "./SuggestionList";
-
 interface CommentDetailProps {
   comment: Comment;
   showDetails: boolean;
@@ -71,12 +71,14 @@ export const CommentDetail = memo(function CommentDetail({
 
   const toxicityLevel = getToxicityLevel(comment.toxicity_score);
 
+  const { t } = useTranslation()
+
   return (
     <div className='flex h-full flex-col'>
       {/* Header with Action Buttons */}
       <div className='border-b p-4'>
         <div className='mb-2 flex items-center justify-between'>
-          <h2 className='text-xl font-semibold'>Comment Details</h2>
+          <h2 className='text-xl font-semibold'>{t("Comment Details")}</h2>
           <div className='flex items-center gap-2'>
             <a
               className={cn(
@@ -89,7 +91,7 @@ export const CommentDetail = memo(function CommentDetail({
               rel='noreferrer'
             >
               <Reply className='h-4 w-4' />
-              <span>Reply on GitHub</span>
+              <span>{t("Reply on GitHub")}</span>
             </a>
 
             {/* Mobile buttons (icons only) */}
@@ -162,7 +164,7 @@ export const CommentDetail = memo(function CommentDetail({
             {/* Original Comment */}
             <div className='mb-4 overflow-x-auto'>
                 <div className="flex flex-col gap-2 ml-2">
-                  <span className="text-muted-foreground">Original Comment:</span>
+                  <span className="text-muted-foreground">{t("Original Comment")}:</span>
                   <pre className='font-sans text-base whitespace-pre-wrap'>
                     {comment.content}
                   </pre>
@@ -175,7 +177,7 @@ export const CommentDetail = memo(function CommentDetail({
                 className='cursor-pointer mt-4 rounded-lg'
                 onClick={onToggleDetails}
               >
-                <span>{showDetails ? "Hide details" : "Show details"}</span>
+                <span>{showDetails ? t("Hide details") : t("Show details")}</span>
                 <ChevronRight
                   className={`h-3 w-3 transition-transform ${showDetails ? "rotate-180" : ""}`}
                 />
@@ -190,7 +192,7 @@ export const CommentDetail = memo(function CommentDetail({
                         <div className="rounded-lg border bg-card p-3 shadow-sm">
                           <h4 className="mb-2 flex items-center gap-2 text-xs font-medium uppercase text-muted-foreground">
                             <User className="h-3.5 w-3.5" />
-                            User
+                            {t("User")}
                           </h4>
                           <div className="flex items-center gap-3">
                             <Avatar className="h-8 w-8 ring-2 ring-primary/10">
@@ -209,7 +211,7 @@ export const CommentDetail = memo(function CommentDetail({
                         <div className="rounded-lg border bg-card p-3 shadow-sm">
                           <h4 className="mb-2 flex items-center gap-2 text-xs font-medium uppercase text-muted-foreground">
                             <Github className="h-3.5 w-3.5" />
-                            Repository
+                            {t("Repository")}
                           </h4>
                           <div className="space-y-1">
                             <div className="font-medium">{comment.gh_repository_name}</div>
@@ -223,7 +225,7 @@ export const CommentDetail = memo(function CommentDetail({
                         <div className="rounded-lg border bg-card p-3 shadow-sm">
                           <h4 className="mb-2 flex items-center gap-2 text-xs font-medium uppercase text-muted-foreground">
                             <Clock className="h-3.5 w-3.5" />
-                            Date
+                            {t("DATE")}
                           </h4>
                           <div className="space-y-1">
                             <div className="font-medium">{getFormattedDate(comment.created_at)}</div>
@@ -237,7 +239,7 @@ export const CommentDetail = memo(function CommentDetail({
                         <div className="rounded-lg border bg-card p-3 shadow-sm">
                           <h4 className="mb-2 flex items-center gap-2 text-xs font-medium uppercase text-muted-foreground">
                             <AlertTriangle className="h-3.5 w-3.5" />
-                            Toxicity Score
+                            {t("Toxicity Score")}
                           </h4>
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
@@ -276,7 +278,7 @@ export const CommentDetail = memo(function CommentDetail({
                           <div className="rounded-lg border bg-card p-3 shadow-sm">
                             <h4 className="mb-2 flex items-center gap-2 text-xs font-medium uppercase text-muted-foreground">
                               <FileText className="h-3.5 w-3.5" />
-                              Related {comment.parent.type}
+                              {t("Related")} {comment.parent.type}
                             </h4>
                             <div className="space-y-3">
                               <div className="flex items-center justify-between">
@@ -296,11 +298,11 @@ export const CommentDetail = memo(function CommentDetail({
                         <div className="rounded-lg border bg-card p-3 shadow-sm">
                           <h4 className="mb-2 flex items-center gap-2 text-xs font-medium uppercase text-muted-foreground">
                             <Github className="h-3.5 w-3.5" />
-                            Original Comment
+                            {t("Original Comment")}
                           </h4>
                           <Button variant="outline" size="sm" className="w-full justify-between" asChild>
                             <a href={comment.comment_html_url} target="_blank" rel="noreferrer">
-                              <span>View on GitHub</span>
+                              <span>{t("View on GitHub")}</span>
                               <ExternalLink className="h-3.5 w-3.5" />
                             </a>
                           </Button>
@@ -314,7 +316,7 @@ export const CommentDetail = memo(function CommentDetail({
             {commentState?.editedContent && (
               <div className='bg-primary/5 border-primary/10 mb-6 rounded-lg border p-3'>
                 <div className='text-muted-foreground mb-1 text-xs'>
-                  Edited Comment
+                  {t("Edited Comment")}
                 </div>
                 <pre className='font-sans text-base whitespace-pre-wrap'>
                   {commentState.editedContent}

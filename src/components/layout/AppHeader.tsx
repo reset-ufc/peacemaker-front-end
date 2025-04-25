@@ -8,12 +8,16 @@ import { NavItem } from "@/components/base/NavItem";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { UserProfile } from "@/components/layout/UserProfile";
 import { Button } from "@/components/ui/button";
+import { changeLanguage } from "i18next";
+import { useTranslation } from "react-i18next";
 
 export function AppHeader() {
   const { resolvedTheme, setTheme } = useTheme();
 
   const toggleCurrentTheme = () =>
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
+
+  const { t } = useTranslation()
 
   return (
     <HeaderRoot>
@@ -22,12 +26,12 @@ export function AppHeader() {
           <ul className='hidden flex-row gap-4 sm:flex'>
             {[
               {
-                text: "Home",
+                text: t("Home"),
                 href: "/",
                 target: undefined,
               },
               {
-                text: "Incivilities",
+                text: t("Incivilities"),
                 href: "/incivilities",
                 target: undefined,
               },
@@ -63,6 +67,10 @@ export function AppHeader() {
           </Button>
         </HeaderSide>
         <HeaderSide>
+        <select className="" onChange={(e) => changeLanguage(e.target.value)}>
+            <option className="dark:text-black" value="en">{t("English")}</option>
+            <option className="dark:text-black" value="pt">Português</option>
+           </select>
           <ThemeToggle onClick={toggleCurrentTheme} />
           <UserProfile />
         </HeaderSide>

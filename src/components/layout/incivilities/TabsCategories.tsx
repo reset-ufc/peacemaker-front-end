@@ -6,6 +6,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
 import { ChevronDown, ChevronUp, Filter, Tag } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 interface TabsCategoriesProps {
   activeFilter: string
@@ -14,32 +15,7 @@ interface TabsCategoriesProps {
   className?: string
 }
 
-const categories = [
-  {
-    name: "Filter",
-    icon: <Filter className="h-4 w-4" />,
-    filters: [
-      { id: "all", name: "All" },
-      { id: "resolved", name: "Resolved" },
-    ],
-  },
-  {
-    name: "Categories",
-    icon: <Tag className="h-4 w-4" />,
-    filters: [
-      { id: "bitter_frustration", name: "Frustration" },
-      { id: "mocking", name: "Mockery" },
-      { id: "irony", name: "Irony" },
-      { id: "insulting", name: "Insult" },
-      { id: "vulgarity", name: "Vulgarity" },
-      { id: "identity_attack", name: "Identity Attack" },
-      { id: "entitlement", name: "Entitlement" },
-      { id: "impatience", name: "Impatience" },
-      { id: "threat", name: "Threat" },
-      { id: "neutral", name: "Neutral" },
-    ],
-  },
-] as const
+
 
 export function TabsCategories({ activeFilter, handleFilterChange, filterCounts, className }: TabsCategoriesProps) {
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({
@@ -55,6 +31,35 @@ export function TabsCategories({ activeFilter, handleFilterChange, filterCounts,
   }
 
   const isFilterActive = (filterId: string) => activeFilter === filterId
+
+  const { t } = useTranslation()
+
+  const categories = [
+    {
+      name: t("Filter"),
+      icon: <Filter className="h-4 w-4" />,
+      filters: [
+        { id: "all", name: t("All") },
+        { id: "resolved", name: t("Resolved") },
+      ],
+    },
+    {
+      name: t("Categories"),
+      icon: <Tag className="h-4 w-4" />,
+      filters: [
+        { id: "bitter_frustration", name: t("Frustration") },
+        { id: "mocking", name: t("Mockery") },
+        { id: "irony", name: t("Irony") },
+        { id: "insulting", name: t("Insult") },
+        { id: "vulgarity", name: t("Vulgarity") },
+        { id: "identity_attack", name: t("Identity Attack") },
+        { id: "entitlement", name: t("Entitlement") },
+        { id: "impatience", name: t("Impatience") },
+        { id: "threat", name: t("Threat") },
+        { id: "neutral", name: t("Neutral") },
+      ],
+    },
+  ] as const
 
   return (
     <div

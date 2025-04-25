@@ -3,14 +3,28 @@ import { motion } from "framer-motion"
 import { ArrowUpRightIcon } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Link } from "react-router-dom"
+import "../../utils/i18n"
 
 import { HeaderNav, HeaderRoot, HeaderSide } from "@/components/base/Header"
 import { ThemeToggle } from "@/components/layout/ThemeToggle"
 import { Button } from "@/components/ui/button"
+import { useTranslation } from "react-i18next"
 
 export function Header() {
   const { setTheme, resolvedTheme } = useTheme()
   const hasAuthCookie = localStorage.getItem("access_token") ?? false
+
+  const { i18n, t } = useTranslation()
+
+  const changeLanguage = (language: string) => {
+    i18n.changeLanguage(language)
+    .then(() => {
+     console.log("Language changed to", language)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+  }
 
   const toggleCurrentTheme = () => setTheme(resolvedTheme === "dark" ? "light" : "dark")
 
@@ -47,12 +61,19 @@ export function Header() {
                 className="border-violet-500/20 hover:border-violet-500/40 hover:bg-violet-500/5 transition-all duration-300"
               >
                 <Link to="/incivilities" className="group">
-                  Go to incivilities page
+                  {t("Go to incivilities page")}
                   <ArrowUpRightIcon className="ml-2 size-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
                 </Link>
               </Button>
             )}
           </motion.div>
+          <div>
+          <select className="" onChange={(e) => changeLanguage(e.target.value)}>
+            <option className="dark:text-black" value="en">{t("English")}</option>
+            <option className="dark:text-black" value="pt">Português</option>
+           </select>
+           
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -77,7 +98,7 @@ export function Header() {
               asChild
               className="bg-gradient-to-r from-violet-600 to-purple-500 hover:from-violet-700 hover:to-purple-600 text-white border-none shadow-md hover:shadow-lg transition-all duration-300"
             >
-              <Link to="/auth/sign-in/github">Sign in</Link>
+              <Link to="/auth/sign-in/github">{t("Sign in")}</Link>
             </Button>
           </motion.div>
         </HeaderSide>

@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
+import { useTranslation } from "react-i18next"
 
 type TeamMember = {
   name: string
@@ -56,6 +57,8 @@ export function Team() {
   const isInView = useInView(containerRef, { once: true, amount: 0.2 })
   const isTitleInView = useInView(titleRef, { once: true, amount: 0.5 })
 
+  const { t } = useTranslation()
+
   return (
     <section className="relative py-24 sm:py-32 overflow-hidden" ref={containerRef}>
       {/* Background elements */}
@@ -79,9 +82,9 @@ export function Team() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
             >
-              <span className="inline-block">Our</span>{" "}
+              <span className="inline-block">{t("Our")}</span>{" "}
               <span className="inline-block bg-gradient-to-r from-violet-600 to-purple-500 bg-clip-text text-transparent">
-                Team
+                {t("Team")}
               </span>
             </motion.h2>
 
@@ -91,9 +94,7 @@ export function Team() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-muted-foreground mt-6 text-lg leading-8"
             >
-              We are a team of passionate and dedicated individuals who are committed to making a positive impact on the
-              world through their work. We believe in the power of technology to bring people together and create a
-              better future.
+              {t("We are a team of passionate and dedicated individuals who are committed to making a positive impact on the world through their work. We believe in the power of technology to bring people together and create a better future.")}
             </motion.p>
           </motion.div>
 

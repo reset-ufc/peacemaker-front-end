@@ -11,6 +11,7 @@ import { api } from "@/lib/api";
 import { IncivilityData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Area,
   AreaChart,
@@ -44,12 +45,14 @@ export function PRIncivilityChart({ repo }: PRIncivilityChartProps) {
 
   const containerClass = isLoading ? "filter blur-sm transition duration-300" : "";
 
+  const { t } = useTranslation()
+
   return (
     <div className="border p-4 rounded shadow">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold">Pull Request Incivility Over Time</h3>
-          <p className="text-sm text-muted-foreground">Incivilized comments on pull requests</p>
+          <h3 className="text-lg font-semibold">{t("Pull Request Incivility Over Time")}</h3>
+          <p className="text-sm text-muted-foreground">{t("Incivilized comments on pull requests")}</p>
         </div>
         <Select value={period} onValueChange={setPeriod}>
           <SelectTrigger className="w-32">

@@ -1,5 +1,3 @@
-// src/components/layout/dashboard/RepositorySidebar.tsx
-"use client";
 
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
@@ -8,7 +6,7 @@ import { Repository } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { LoaderIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-
+import { useTranslation } from "react-i18next";
 interface RepositorySidebarProps {
   selectedRepo: string;
   onChange: (repo: string) => void;
@@ -58,9 +56,11 @@ export function RepositorySidebar({
     );
   }
 
+  const { t } = useTranslation()
+
   return (
     <aside className="w-64 border-r p-4  flex flex-col">
-      <h2 className="mb-3 text-lg font-semibold">Repositories</h2>
+      <h2 className="mb-3 text-lg font-semibold">{t("Repositories")}</h2>
       <div className="flex-1 space-y-2 overflow-y-auto">
         <Button
           variant="ghost"
@@ -71,7 +71,7 @@ export function RepositorySidebar({
           )}
           onClick={() => onChange("all")}
         >
-          All repositories
+          {t("All repositories")}   
         </Button>
 
         {pagedData.map((repo) => {

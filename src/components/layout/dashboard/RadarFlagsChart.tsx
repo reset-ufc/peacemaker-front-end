@@ -11,6 +11,7 @@ import { api } from "@/lib/api";
 import { RadarFlagsItem } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -63,12 +64,14 @@ export function RadarFlagsChart({ repo }: { repo?: string }) {
 
   const containerClass = isLoading ? "filter blur-sm transition duration-300" : "";
 
+  const { t } = useTranslation()
+
   return (
     <div className="border p-4 rounded shadow mb-8">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold mb-1">Incivility Categories</h3>
-          <p className="text-sm text-muted-foreground">Distribution by classification</p>
+          <h3 className="text-lg font-semibold mb-1">{t("Incivility Categories")}</h3>
+          <p className="text-sm text-muted-foreground">{t("Distribution by classification")}</p>
         </div>
         <Select value={period} onValueChange={setPeriod}>
           <SelectTrigger className="w-32">
