@@ -16,6 +16,7 @@ export function RepositorySidebar({
   selectedRepo,
   onChange,
 }: RepositorySidebarProps) {
+  const { t } = useTranslation()
   const { data, isLoading, isError, error } = useQuery<Repository[]>({
     queryKey: ["repositories"],
     queryFn: async () => {
@@ -56,7 +57,6 @@ export function RepositorySidebar({
     );
   }
 
-  const { t } = useTranslation()
 
   return (
     <aside className="w-64 border-r p-4  flex flex-col">

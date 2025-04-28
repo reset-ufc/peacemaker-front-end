@@ -46,7 +46,7 @@ export function DashboardCards({ initialData, period, repo }: DashboardCardsProp
     <div className={containerClass}>
       <div className="grid grid-cols-4 gap-4 pb-5">
         <MetricCard
-          value={data.averageCommentScore?.toFixed(3)}
+          value={data.averageCommentScore?.toFixed(2)}
           label={t("Average Comment Score")}
           description={t("Average score of all comments")}
           icon={<MessageSquare className="text-muted-foreground h-5 w-5" />}
