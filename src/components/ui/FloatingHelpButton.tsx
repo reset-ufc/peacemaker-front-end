@@ -15,6 +15,7 @@ export function FloatingHelpButton() {
       animate={{ scale: [1, 1.1, 1] }}
       transition={{ duration: 2, repeat: Infinity }}
       className="
+        cursor-pointer
         fixed bottom-6 right-6 z-50
         bg-gradient-to-r from-purple-500 to-purple-600
         text-white p-4 rounded-full

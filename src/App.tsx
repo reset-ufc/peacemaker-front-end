@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import { NotFound } from "./components/layout/NotFound";
+import { Introduction } from "./docs/introduction";
 import { AppLayout } from "./pages/_layout/App.layout";
 import { AuthLayout } from "./pages/_layout/Auth.layout";
 import { PublicLayout } from "./pages/_layout/Public.layout";
@@ -9,7 +10,6 @@ import { IncivilitiesPage } from "./pages/app/Incivilities.page";
 import { RepositoriesPage } from "./pages/app/Repositories.page";
 import { GithubAuthPage } from "./pages/auth/GithubAuth.page";
 import { GithubAuthCallback } from "./pages/auth/GithubAuthCallback.page";
-import { DocumentationPage } from "./pages/Documentation.page";
 import { HomePage } from "./pages/Index.page";
 import { PrivacyPage } from "./pages/Privacy.page";
 import { TermsPage } from "./pages/Terms.page";
@@ -50,7 +50,7 @@ const routes = createBrowserRouter([
       },
       {
         path: "docs",
-        element: <DocumentationPage />,
+        element: <Introduction />,
       },
     ],
     errorElement: <NotFound />,
