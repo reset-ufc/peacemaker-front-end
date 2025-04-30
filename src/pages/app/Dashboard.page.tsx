@@ -71,10 +71,10 @@ export function DashboardPage() {
 
       <main className="flex-1 px-8 py-10">
         <div className="flex items-center justify-between mb-4">
-          <DashboardHeader period={globalPeriod} onPeriodChange={(value: string) => setGlobalPeriod(value as "24h" | "7d" | "30d" | "1y")} />
+          <DashboardHeader />
         </div>
 
-        <DashboardCards initialData={data} period={globalPeriod} repo={selectedRepo} />
+        <DashboardCards initialData={data} repo={selectedRepo} />
 
         <div className="grid grid-cols-1 gap-4">
           <div className="grid grid-cols-2 gap-4">

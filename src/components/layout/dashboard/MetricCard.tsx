@@ -23,7 +23,7 @@ export function MetricCard({
   }
 
   return (
-    <div className='flex items-start gap-4 rounded border p-3 shadow'>
+    <div className='flex items-start gap-4 p-3 border-r last:border-r-0'>
       <div className='flex flex-col'>
         <span className='text-muted-foreground text-sm max-w-[200px]'>{label}</span>
         <span className='text-2xl font-bold'>{value}</span>
