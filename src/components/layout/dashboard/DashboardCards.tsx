@@ -18,11 +18,10 @@ interface OverviewData {
 }
 
 interface DashboardCardsProps {
-  initialData: OverviewData;
   repo?: string;
 }
 
-export function DashboardCards({ repo, initialData }: DashboardCardsProps) {
+export function DashboardCards({ repo }: DashboardCardsProps) {
   const [period, setPeriod] = useState<string>("24h");
   const token = localStorage.getItem("access_token");
 
@@ -37,7 +36,6 @@ export function DashboardCards({ repo, initialData }: DashboardCardsProps) {
       });
       return response.data;
     },
-    initialData,
   });
 
   const containerClass = isLoading ? "filter blur-sm transition-filter duration-300" : "pb-5";
@@ -63,28 +61,28 @@ export function DashboardCards({ repo, initialData }: DashboardCardsProps) {
         </div>
         <div className="grid grid-cols-4 gap-0 pb-5">
           <MetricCard
-            value={data.averageCommentScore?.toFixed(2)}
+            value={data?.averageCommentScore?.toFixed(2) ?? '-'}
             label={t("Average Comment Score")}
             description={t("Average score of all comments")}
             icon={<MessageSquare className="text-muted-foreground h-5 w-5" />}
           />
           <MetricCard
-            value={data.medianCommentScore}
+            value={data?.medianCommentScore?.toFixed(2) ?? '-'}
             label={t("Median Comment Score")}
             description={t("Median score of all comments")}
             icon={<Flag className="text-muted-foreground h-5 w-5" />}
           />
           <MetricCard
-            value={data.totalComments}
+            value={data?.totalComments ?? '-'}
             label={t("Total Comments")}
             description={t("Total number of comments posted")}
             icon={<FileTextIcon className="text-muted-foreground h-5 w-5" />}
           />
           <MetricCard
-            value={data.resolvedComments}
+            value={data?.resolvedComments ?? '-'}
             label={t("Resolved Comments")}
             description={t("Total number of comments resolved")}
-            variation={data.resolvedComments}
+            variation={data?.resolvedComments ? Number(data.resolvedComments) : undefined}
             icon={<CheckCircle2Icon className="text-muted-foreground h-5 w-5" />}
           />
         </div>

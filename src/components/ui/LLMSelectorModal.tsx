@@ -46,7 +46,7 @@ export function LLMSelectorModal({
       return response.data as { models: ModelResponse };
     },
     onSuccess: (data) => {
-      setModels(data.models || []);
+      setModels(data.models.models);
     },
     onError: (error) => {
       console.error("Failed to fetch models, error: ", error);
@@ -86,7 +86,7 @@ export function LLMSelectorModal({
     if (open) {
       fetchModels.mutate();
     }
-  }, [open]);
+  }, [fetchModels, open]);
 
   const handleSave = () => {
     prefMutation.mutate();
