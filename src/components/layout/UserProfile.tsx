@@ -16,6 +16,7 @@ import { Profile } from "@/types";
 import { GitHubIcon } from "../svg/Github";
 import { GitHubTokenModal } from "../ui/GithubTokenModal";
 import { LLMSelectorModal } from "../ui/LLMSelectorModal";
+import { ThresholdSelectorModal } from "../ui/ThresholdSelectorModal";
 
 export function UserProfile() {
   const auth = useAuthentication();
@@ -24,7 +25,7 @@ export function UserProfile() {
 
   const [openLLM, setOpenLLM] = useState(false);
   const [openGH, setOpenGH] = useState(false);
-
+  const [openThreshold, setOpenThreshold] = useState(false);
   return (
     <>
       <DropdownMenu dir='ltr'>
@@ -46,6 +47,10 @@ export function UserProfile() {
               <GitHubIcon className="size-4 opacity-60" aria-hidden="true" />
               <span>GitHub Token</span>
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setOpenThreshold(true)}>
+              <Settings2Icon className="size-4 opacity-60" aria-hidden="true" />
+              <span>Threshold</span>
+            </DropdownMenuItem>
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
@@ -59,6 +64,7 @@ export function UserProfile() {
 
       <LLMSelectorModal open={openLLM} onOpenChange={setOpenLLM} />
       <GitHubTokenModal open={openGH} onOpenChange={setOpenGH} />
+      <ThresholdSelectorModal open={openThreshold} onOpenChange={setOpenThreshold} />
     </>
   );
 }

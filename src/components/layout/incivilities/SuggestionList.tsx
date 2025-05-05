@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Comment, Suggestion } from "@/types";
+import { useTranslation } from "react-i18next";
 
 interface SuggestionListProps {
   suggestions: Suggestion[];
@@ -43,6 +44,8 @@ export function SuggestionList({
   // const [eventSource, setEventSource] = useState<EventSource>();
 
   useEffect(() => {
+    setShowFirstEditModal(false);
+    setShowNeedsAttentionModal(false);
     if (comment.editAttempts === 1) {
       setShowFirstEditModal(true);
     } else if (comment.needsAttention) {
@@ -226,9 +229,11 @@ export function SuggestionList({
     feedbackMutation.mutate();
   };
 
+  const { t } = useTranslation()
+
   return (
     <div className='flex flex-col'>
-      {showFirstEditModal && (
+      {(showFirstEditModal && !comment.suggestion_id) && (
        <div className="fixed inset-0 z-50 bg-opacity-100 flex items-center justify-center">
           <div className="bg-card text-card-foreground p-6 rounded-lg shadow-lg max-w-sm text-center">
             <h2 className="text-xl font-bold mb-4">⚠️ Atenção!</h2>
@@ -244,7 +249,7 @@ export function SuggestionList({
         </div>
       )}
 
-      {showNeedsAttentionModal && (
+      {(showNeedsAttentionModal && !comment.suggestion_id) && (
         <div className="fixed inset-0 z-50 bg-opacity-100 flex items-center justify-center">
           <div className="bg-card text-card-foreground p-6 rounded-lg shadow-lg max-w-lg text-center">
             <h2 className="text-xl font-bold mb-4">⛔ Atenção!</h2>
@@ -291,9 +296,9 @@ export function SuggestionList({
 
       {
         comment.needsAttention ? (
-          <h2 className='mb-2 text-xl font-semibold pl-3'>Personal Correction</h2>
+          <h2 className='mb-2 text-xl font-semibold pl-3'>{t("Personal Correction")}</h2>
         ) : (
-          <h2 className='mb-2 text-xl font-semibold pl-3'>Correction Suggestions</h2>
+          <h2 className='mb-2 text-xl font-semibold pl-3'>{t("Correction Suggestions")}</h2>
         )
       }
 

@@ -11,6 +11,7 @@ import { api } from "@/lib/api";
 import { ModerationActivityItem } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Area,
   AreaChart,
@@ -39,14 +40,16 @@ export function ModerationActivityChart({ repo }: { repo?: string }) {
   });
 
   const containerClass = isLoading ? "filter blur-sm transition duration-300" : "";
+  
+  const { t } = useTranslation()
 
   return (
     <div className="basis-2/3">
       <div className="col-span-2 border p-4 rounded shadow">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-semibold mb-2">Moderation Activity</h3>
-            <p className="text-sm text-muted-foreground">Comments and Flags over time</p>
+            <h3 className="text-lg font-semibold mb-2">{t("Moderation Activity")}</h3>
+            <p className="text-sm text-muted-foreground">{t("Comments and Flags over time")}</p>
           </div>
           <Select value={period} onValueChange={setPeriod}>
             <SelectTrigger className="w-32">

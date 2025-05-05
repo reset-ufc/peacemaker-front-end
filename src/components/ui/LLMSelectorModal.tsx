@@ -43,10 +43,10 @@ export function LLMSelectorModal({
       const response = await api.get("/api/llms/models", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      return response.data as { models: ModelResponse };
+      return response.data as ModelResponse;
     },
     onSuccess: (data) => {
-      setModels(data.models.models || []);
+      setModels(data.models);
     },
     onError: (error) => {
       console.error("Failed to fetch models, error: ", error);
@@ -86,7 +86,7 @@ export function LLMSelectorModal({
     if (open) {
       fetchModels.mutate();
     }
-  }, [open]);
+  }, [fetchModels, open]);
 
   const handleSave = () => {
     prefMutation.mutate();
@@ -117,25 +117,30 @@ export function LLMSelectorModal({
           <div className="space-y-4">
             <div>
               <Label className="block text-sm font-medium">Modelo</Label>
-              <Select
-                value={selectedModel}
-                onValueChange={setSelectedModel}
-                disabled={fetchModels.status === 'pending'}
-              >
-                <SelectTrigger className="w-full mt-1">
-                  <SelectValue placeholder="Selecione um modelo" />
-                </SelectTrigger>
-                <SelectContent>
-                  {models.map((m) => (
-                    <SelectItem key={m.name} value={m.name}>
-                      {m.name}{" "}
-                      <span className="text-xs text-muted-foreground">
-                        ({m.provider})
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <Select
+                  value={selectedModel}
+                  onValueChange={setSelectedModel}
+                  // disabled={fetchModels.status === 'pending'}
+                >
+                  <SelectTrigger className="w-full mt-1">
+                    <SelectValue placeholder="Selecione um modelo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {models.map((m) => (
+
+                      <SelectItem
+                        key={m.name}
+                        value={m.name}
+                        disabled={["llama-guard-3-8b", "gemma2-9b-it", "llama-3.1-8b-instant"].includes(m.name)}
+                      >
+                        {m.name}{" "}
+                        <span className="text-xs text-muted-foreground">
+                          ({m.provider})
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
             </div>
 
             <div>

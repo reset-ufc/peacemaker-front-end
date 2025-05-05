@@ -28,11 +28,11 @@ export function NavItem({
         "hover:bg-muted hover:text-foreground transition-colors",
         className,
         type === "nav" &&
-          "data-[current=true]:bg-muted flex items-center gap-2 rounded-md px-4 py-2"
+          "data-[current=true]:bg-primary data-[current=true]:text-white flex items-center gap-2 rounded-md px-4 py-2"
       )}
       target={target}
     >
-      <span className='text-sm'>{children}</span>
+      <span className='text-sm font-semibold '>{children}</span>
 
       {target === "_blank" && <ArrowUpRightIcon className='size-4' />}
       {Icon && target !== "_blank" ? <Icon className='size-4' /> : null}
