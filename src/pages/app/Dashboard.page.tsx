@@ -1,9 +1,8 @@
 import { DashboardCards } from "@/components/layout/dashboard/DashboardCards";
 import { DashboardHeader } from "@/components/layout/dashboard/DashboardHeader";
-import { IssuesIncivilityChart } from "@/components/layout/dashboard/IssuesIncivilityChart";
+import { IncivilityByTypeChart } from "@/components/layout/dashboard/IncivilityByTypeChart";
 import { ModerationActionsChart } from "@/components/layout/dashboard/ModerationActionsChart";
 import { ModerationActivityChart } from "@/components/layout/dashboard/ModerationActivityChart";
-import { PRIncivilityChart } from "@/components/layout/dashboard/PRIncivilityChart";
 import { RadarFlagsChart } from "@/components/layout/dashboard/RadarFlagsChart";
 import { RecentFlaggedComments } from "@/components/layout/dashboard/RecentFlaggedComments";
 import { RepositorySidebar } from "@/components/layout/dashboard/RepositorySideBar";
@@ -43,8 +42,25 @@ export function DashboardPage() {
 
         <div className="grid grid-cols-1 gap-4">
           <div className="grid grid-cols-2 gap-4">
-            <IssuesIncivilityChart repo={selectedRepo} />
-            <PRIncivilityChart repo={selectedRepo} />
+            <IncivilityByTypeChart
+              repo={selectedRepo}
+              type="issue"
+              title="Incivilidades em Issues"
+              description="Comentários incivilizados em issues (últimas 4 semanas)"
+              gradientId="issuesGradient"
+              strokeColor="#34d399"
+              stopColor="#34d399"
+            />
+            <IncivilityByTypeChart
+              repo={selectedRepo}
+              type="pull_request"
+              title="Incivilidades em Pull Requests"
+              description="Comentários incivilizados em PRs (últimas 4 semanas)"
+              gradientId="prGradient"
+              strokeColor="#fbbf24"
+              stopColor="#fbbf24"
+            />
+
           </div>
           <div className="flex">
             <ModerationActivityChart repo={selectedRepo} />
