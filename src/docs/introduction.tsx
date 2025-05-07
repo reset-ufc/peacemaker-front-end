@@ -33,7 +33,11 @@ export function Introduction() {
                     <i className="fas fa-chevron-down text-gray-500"></i>
                 </div>
                 <div className="accordion-content mt-4">
-                    <p className="dark:text-gray-100 mb-4">{t("Assim que alguém (inclusive você!) fizer um comentário com linguagem considerada <em>incivilizada</em> num dos repositórios permitidos, o bot irá:")}</p>
+                    <p className="dark:text-gray-100 mb-4">
+                      {t("Assim que alguém (inclusive você!) fizer um comentário com linguagem considerada incivilizada ")}
+                      <span className="font-bold dark:text-blue-100">{t("num dos repositórios permitidos")}</span>
+                      {t(", o bot irá:")}
+                    </p>
                     <ol className="list-decimal pl-6 space-y-2 text-gray-100">
                         <li className="dark:text-gray-100 text-gray-800">{t("Detectar o comentário e calcular um score de toxicidade.")}</li>
                         <li className="dark:text-gray-100 text-gray-800">{t("Classificar o comentário como incivil ou civil.")}</li>
@@ -90,7 +94,7 @@ export function Introduction() {
                         <li>{t("O bot reanalisa o texto editado em busca de traços de incivilidade.")}</li>
                         <li>{t("Existem dois caminhos possíveis:")}</li>
                     </ol>
-                    
+
                     <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="p-4 bg-red-50 rounded-lg">
                             <h3 className="font-semibold text-red-800 mb-2">{t("A. Ainda incivilizado")}</h3>
