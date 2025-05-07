@@ -128,6 +128,22 @@
     "Se algo ainda não ficou claro, volte aqui ou abra um issue no próprio repositório do bot. Estamos sempre melhorando!": "Se algo ainda não ficou claro, volte aqui ou abra um issue no próprio repositório do bot. Estamos sempre melhorando!",
     "Bom trabalho e feliz moderação!": "Bom trabalho e feliz moderação!",
     "Foque em um projeto específico ou visualize todos de uma vez.": "Foque em um projeto específico ou visualize todos de uma vez.",
-    "Use esses dados para entender tendências, treinar sua equipe e manter a comunidade engajada num ambiente respeitoso.": "Use esses dados para entender tendências, treinar sua equipe e manter a comunidade engajada num ambiente respeitoso."
+    "Use esses dados para entender tendências, treinar sua equipe e manter a comunidade engajada num ambiente respeitoso.": "Use esses dados para entender tendências, treinar sua equipe e manter a comunidade engajada num ambiente respeitoso.",
+    "2. Configurando seu LLM": "2. Configurando seu LLM",
+    "Para começar a usar o Peacemaker Bot, você precisa configurar um LLM (Large Language Model) de sua preferência. Siga estes passos:": "Para começar a usar o Peacemaker Bot, você precisa configurar um LLM (Large Language Model) de sua preferência. Siga estes passos:",
+    "Acesse seu perfil": "Acesse seu perfil",
+    "Clique na sua foto de perfil no canto superior direito da tela.": "Clique na sua foto de perfil no canto superior direito da tela.",
+    "Selecione o LLM": "Selecione o LLM",
+    "No menu que aparece, clique em 'Selecionar LLM' para configurar seu modelo preferido.": "No menu que aparece, clique em 'Selecionar LLM' para configurar seu modelo preferido.",
+    "Configurando OpenAI": "Configurando OpenAI",
+    "Configurando Groq": "Configurando Groq",
+    "Acesse": "Acesse",
+    "Faça login na sua conta OpenAI": "Faça login na sua conta OpenAI",
+    "Clique em 'Create new secret key'": "Clique em 'Create new secret key'",
+    "Dê um nome para sua chave e copie o token gerado": "Dê um nome para sua chave e copie o token gerado",
+    "Cole o token no campo correspondente no Peacemaker Bot": "Cole o token no campo correspondente no Peacemaker Bot",
+    "Faça login na sua conta Groq": "Faça login na sua conta Groq",
+    "Clique em 'Create API Key'": "Clique em 'Create API Key'",
+    "Importante: Mantenha seu token em segurança e nunca o compartilhe. Se você suspeitar que seu token foi comprometido, revogue-o imediatamente e gere um novo.": "Importante: Mantenha seu token em segurança e nunca o compartilhe. Se você suspeitar que seu token foi comprometido, revogue-o imediatamente e gere um novo."
 }
 

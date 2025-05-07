@@ -27,9 +27,58 @@ export function Introduction() {
                 </div>
             </div>
 
+            <div className="section-card rounded-lg shadow-md p-6">
+                <div className="flex items-center justify-between cursor-pointer accordion-header">
+                    <h2 className="text-2xl font-semibold dark:text-gray-100">{t("2. Configurando seu LLM")}</h2>
+                    <i className="fas fa-chevron-down text-gray-500"></i>
+                </div>
+                <div className="accordion-content mt-4">
+                    <p className="dark:text-gray-100 mb-4">{t("Para começar a usar o Peacemaker Bot, você precisa configurar um LLM (Large Language Model) de sua preferência. Siga estes passos:")}</p>
+
+                    <ol className="list-decimal pl-6 space-y-4 text-gray-100">
+                        <li className="dark:text-gray-100 text-gray-800">
+                            <p className="font-semibold mb-2">{t("Acesse seu perfil")}</p>
+                            <p>{t("Clique na sua foto de perfil no canto superior direito da tela.")}</p>
+                        </li>
+                        <li className="dark:text-gray-100 text-gray-800">
+                            <p className="font-semibold mb-2">{t("Selecione o LLM")}</p>
+                            <p>{t("No menu que aparece, clique em 'Selecionar LLM' para configurar seu modelo preferido.")}</p>
+                        </li>
+                    </ol>
+
+                    <div className="mt-6 space-y-6">
+                        <div className="p-4 bg-blue-50 rounded-lg">
+                            <h3 className="font-semibold text-blue-800 mb-2">{t("Configurando OpenAI")}</h3>
+                            <ol className="list-decimal pl-6 space-y-2 text-blue-700">
+                                <li>{t("Acesse")} <a href="https://platform.openai.com/api-keys" className="underline" target="_blank" rel="noopener noreferrer">platform.openai.com/api-keys</a></li>
+                                <li>{t("Faça login na sua conta OpenAI")}</li>
+                                <li>{t("Clique em 'Create new secret key'")}</li>
+                                <li>{t("Dê um nome para sua chave e copie o token gerado")}</li>
+                                <li>{t("Cole o token no campo correspondente no Peacemaker Bot")}</li>
+                            </ol>
+                        </div>
+
+                        <div className="p-4 bg-purple-50 rounded-lg">
+                            <h3 className="font-semibold text-purple-800 mb-2">{t("Configurando Groq")}</h3>
+                            <ol className="list-decimal pl-6 space-y-2 text-purple-700">
+                                <li>{t("Acesse")} <a href="https://console.groq.com/keys" className="underline" target="_blank" rel="noopener noreferrer">console.groq.com/keys</a></li>
+                                <li>{t("Faça login na sua conta Groq")}</li>
+                                <li>{t("Clique em 'Create API Key'")}</li>
+                                <li>{t("Dê um nome para sua chave e copie o token gerado")}</li>
+                                <li>{t("Cole o token no campo correspondente no Peacemaker Bot")}</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div className="mt-4 p-4 bg-yellow-50 rounded-lg">
+                        <p className="text-yellow-800"><i className="fas fa-exclamation-triangle mr-2"></i> {t("Importante: Mantenha seu token em segurança e nunca o compartilhe. Se você suspeitar que seu token foi comprometido, revogue-o imediatamente e gere um novo.")}</p>
+                    </div>
+                </div>
+            </div>
+
             <div className="section-card  rounded-lg shadow-md p-6">
                 <div className="flex items-center justify-between cursor-pointer accordion-header">
-                    <h2 className="text-2xl font-semibold dark:text-gray-100">{t("2. Primeiro comentário incivilizado")}</h2>
+                    <h2 className="text-2xl font-semibold dark:text-gray-100">{t("3. Primeiro comentário incivilizado")}</h2>
                     <i className="fas fa-chevron-down text-gray-500"></i>
                 </div>
                 <div className="accordion-content mt-4">
@@ -66,7 +115,7 @@ export function Introduction() {
 
             <div className="section-card  rounded-lg shadow-md p-6">
                 <div className="flex items-center justify-between cursor-pointer accordion-header">
-                    <h2 className="text-2xl font-semibold dark:text-gray-100">{t("3. Configurando seu Token Pessoal do GitHub")}</h2>
+                    <h2 className="text-2xl font-semibold dark:text-gray-100">{t("4. Configurando seu Token Pessoal do GitHub")}</h2>
                     <i className="fas fa-chevron-down text-gray-500"></i>
                 </div>
                 <div className="accordion-content mt-4">
@@ -85,7 +134,7 @@ export function Introduction() {
 
             <div className="section-card bg-white rounded-lg shadow-md p-6">
                 <div className="flex items-center justify-between cursor-pointer accordion-header">
-                    <h2 className="text-2xl font-semibold dark:text-gray-800 ">{t("4. Edição de sugestões & reavaliação")}</h2>
+                    <h2 className="text-2xl font-semibold dark:text-gray-800 ">{t("5. Edição de sugestões & reavaliação")}</h2>
                     <i className="fas fa-chevron-down text-gray-500"></i>
                 </div>
                 <div className="accordion-content mt-4">
@@ -121,7 +170,7 @@ export function Introduction() {
 
             <div className="section-card bg-white rounded-lg shadow-md p-6">
                 <div className="flex items-center justify-between cursor-pointer accordion-header">
-                    <h2 className="text-2xl font-semibold dark:text-gray-800">{t("5. Explorando a Dashboard")}</h2>
+                    <h2 className="text-2xl font-semibold dark:text-gray-800">{t("6. Explorando a Dashboard")}</h2>
                     <i className="fas fa-chevron-down text-gray-500"></i>
                 </div>
                 <div className="accordion-content mt-4">
