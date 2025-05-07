@@ -23,6 +23,7 @@ import {
 
 export function RadarFlagsChart({ repo }: { repo?: string }) {
   const [period, setPeriod] = useState("24h");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const token = localStorage.getItem("access_token");
 
   const { data, isLoading } = useQuery<RadarFlagsItem[]>({
@@ -52,7 +53,7 @@ export function RadarFlagsChart({ repo }: { repo?: string }) {
 
   const apiData: RadarFlagsItem[] = data || [];
 
-  const radarData = defaultCategories.map((category) => {
+  const radarData = selectedCategories.map((category) => {
     const found = apiData.find(
       (item) => item.category?.toLowerCase() === category?.toLowerCase()
     );
@@ -64,7 +65,15 @@ export function RadarFlagsChart({ repo }: { repo?: string }) {
 
   const containerClass = isLoading ? "filter blur-sm transition duration-300" : "";
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories(prev =>
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
 
   return (
     <div className="border p-4 rounded shadow mb-8">
@@ -97,11 +106,29 @@ export function RadarFlagsChart({ repo }: { repo?: string }) {
                 stroke="#8884d8"
                 fill="#8884d8"
                 fillOpacity={0.4}
+                animationDuration={500}
+                animationBegin={0}
+                animationEasing="ease-out"
               />
               <Tooltip />
             </RadarChart>
           </ResponsiveContainer>
         )}
+      </div>
+      <div className="mt-4 flex justify-center flex-wrap gap-2">
+        {defaultCategories.map((category) => (
+          <button
+            key={category}
+            onClick={() => toggleCategory(category)}
+            className={`px-3 py-1 rounded-full cursor-pointer text-sm transition-all duration-300 ease-in-out transform hover:scale-105 ${
+              selectedCategories.includes(category)
+                ? "bg-primary text-primary-foreground shadow-md"
+                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            }`}
+          >
+            {category.replace(/_/g, " ")}
+          </button>
+        ))}
       </div>
     </div>
   );
