@@ -54,7 +54,7 @@ export function RadarFlagsChart({ repo }: { repo?: string }) {
 
   const radarData = defaultCategories.map((category) => {
     const found = apiData.find(
-      (item) => item.category.toLowerCase() === category.toLowerCase()
+      (item) => item.category?.toLowerCase() === category?.toLowerCase()
     );
     return {
       category,
