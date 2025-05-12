@@ -61,7 +61,7 @@ export function Introduction() {
             </div>
 
             <div className="section-card  rounded-lg shadow-md p-6">
-                <div className="flex items-center justify-between cursor-pointer accordion-header">
+                <div className="flex items-center justify-between  cursor-pointer accordion-header">
                     <h2 className="text-2xl font-semibold dark:text-gray-100">{t("3. Configurando seu Token Pessoal do GitHub")}</h2>
                     <i className="fas fa-chevron-down text-gray-500"></i>
                 </div>
@@ -90,7 +90,7 @@ export function Introduction() {
                         <li>{t("O bot reanalisa o texto editado em busca de traços de incivilidade.")}</li>
                         <li>{t("Existem dois caminhos possíveis:")}</li>
                     </ol>
-                    
+
                     <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="p-4 bg-red-50 rounded-lg">
                             <h3 className="font-semibold text-red-800 mb-2">{t("A. Ainda incivilizado")}</h3>
