@@ -11,9 +11,16 @@ export function FloatingHelpButton() {
   return (
     <motion.button
       onClick={() => navigate("/docs")}
-      initial={{ scale: 1 }}
-      animate={{ scale: [1, 1.1, 1] }}
-      transition={{ duration: 2, repeat: Infinity }}
+      initial={{ y: 0 }}
+      animate={{
+        y: [0, -55, 0],
+        scale: [1, 1.15, 1]
+      }}
+      transition={{
+        duration: 1.5,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }}
       className="
         cursor-pointer
         fixed bottom-6 right-6 z-50
@@ -22,8 +29,7 @@ export function FloatingHelpButton() {
         hover:shadow-lg
         transition duration-300
         shadow-xl
-        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500~
-        ease-in-out delay-150 hover:-translate-y-0.5 hover:scale-105
+        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
       "
       aria-label="Ajuda Peacemaker Bot"
     >
