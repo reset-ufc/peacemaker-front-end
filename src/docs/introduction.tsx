@@ -116,6 +116,7 @@ export function Introduction() {
             <div className="section-card  rounded-lg shadow-md p-6">
                 <div className="flex items-center justify-between cursor-pointer accordion-header">
                     <h2 className="text-2xl font-semibold dark:text-gray-100">{t("4. Configurando seu Token Pessoal do GitHub")}</h2>
+
                     <i className="fas fa-chevron-down text-gray-500"></i>
                 </div>
                 <div className="accordion-content mt-4">

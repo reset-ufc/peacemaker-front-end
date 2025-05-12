@@ -50,7 +50,6 @@ export const env = createEnv({
           : "http://localhost:4173"
       ),
     VITE_PUBLIC_GOOGLE_ANALYTICS_ID: z.string().optional(),
-    VITE_PUBLIC_STATIC_EXPORT: z.string().transform(v => v === "true"),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.
@@ -61,7 +60,6 @@ export const env = createEnv({
     VERCEL_REVALIDATE_TIME: process.env.VERCEL_REVALIDATE_TIME,
     BASE_API_URL: process.env.BASE_API_URL,
     VITE_PUBLIC_BASE_URL: process.env.VITE_PUBLIC_BASE_URL,
-    VITE_PUBLIC_STATIC_EXPORT: process.env.VITE_PUBLIC_STATIC_EXPORT,
     VITE_PUBLIC_GOOGLE_ANALYTICS_ID:
       process.env.VITE_PUBLIC_GOOGLE_ANALYTICS_ID,
   },
