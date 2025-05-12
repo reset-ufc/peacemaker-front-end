@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "pnpm exec tsc -b && pnpm exec vite build",
     "start": "pnpm run build && pnpm run preview",
     "lint": "eslint .",
     "format": "prettier \"**/*.{js,mjs,ts,tsx,md,mdx,json,yml,css}\" --check --cache --cache-strategy=content --cache-location=.prettiercache --write",
