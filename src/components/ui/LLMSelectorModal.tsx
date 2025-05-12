@@ -12,7 +12,7 @@ import {
 import { api } from "@/lib/api";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 
@@ -36,6 +36,7 @@ export function LLMSelectorModal({
   const [models, setModels] = useState<ModelInfo[]>([]);
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [token, setToken] = useState<string>("");
+  const requestInProgressRef = useRef(false);
 
   const fetchModels = useMutation({
     mutationFn: async () => {
@@ -47,9 +48,11 @@ export function LLMSelectorModal({
     },
     onSuccess: (data) => {
       setModels(data.models);
+      requestInProgressRef.current = false;
     },
     onError: (error) => {
       console.error("Failed to fetch models, error: ", error);
+      requestInProgressRef.current = false;
     },
   });
 
@@ -83,10 +86,11 @@ export function LLMSelectorModal({
   });
 
   useEffect(() => {
-    if (open) {
+    if (open && !requestInProgressRef.current) {
+      requestInProgressRef.current = true;
       fetchModels.mutate();
     }
-  }, [fetchModels, open]);
+  }, [open]);
 
   const handleSave = () => {
     prefMutation.mutate();
