@@ -48,11 +48,11 @@ export function CommentModeration({ commentsData }: CommentModerationProps) {
     // Apply category filter
     if (activeFilter !== "all") {
       if (activeFilter === "resolved") {
-        result = result.filter(comment => comment.solutioned);
+        result = result?.filter(comment => comment.solutioned);
       } else {
-        result = result.filter(
+        result = result?.filter(
           comment =>
-            comment.classification.toLowerCase() === activeFilter.toLowerCase()
+            comment?.classification?.toLowerCase() === activeFilter?.toLowerCase()
         );
       }
     }

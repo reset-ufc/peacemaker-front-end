@@ -39,8 +39,10 @@ export function ModerationActivityChart({ repo }: { repo?: string }) {
     },
   });
 
+  console.log(data);
+
   const containerClass = isLoading ? "filter blur-sm transition duration-300" : "";
-  
+
   const { t } = useTranslation()
 
   return (
