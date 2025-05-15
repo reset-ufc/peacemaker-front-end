@@ -87,6 +87,7 @@ export function Header() {
             />
           </motion.div>
 
+         {!hasAuthCookie && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -101,6 +102,7 @@ export function Header() {
               <Link to="/auth/sign-in/github">{t("Sign in")}</Link>
             </Button>
           </motion.div>
+         )}
         </HeaderSide>
       </HeaderNav>
     </HeaderRoot>

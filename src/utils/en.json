@@ -146,5 +146,7 @@
     "Cole o token no campo correspondente no Peacemaker Bot": "Paste the token in the corresponding field in the Peacemaker Bot",
     "Faça login na sua conta Groq": "Log in to your Groq account",
     "Clique em 'Create API Key'": "Click on 'Create API Key'",
-    "Importante: Mantenha seu token em segurança e nunca o compartilhe. Se você suspeitar que seu token foi comprometido, revogue-o imediatamente e gere um novo.": "Important: Keep your token secure and never share it. If you suspect your token has been compromised, revoke it immediately and generate a new one."
+    "Importante: Mantenha seu token em segurança e nunca o compartilhe. Se você suspeitar que seu token foi comprometido, revogue-o imediatamente e gere um novo.": "Important: Keep your token secure and never share it. If you suspect your token has been compromised, revoke it immediately and generate a new one.",
+    "4. Configurando seu Token Pessoal do GitHub": "4. Configuring your Personal GitHub Token",
+    "5. Edição de sugestões & reavaliação": "5. Editing suggestions & reevaluation"
 }
