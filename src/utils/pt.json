@@ -68,13 +68,11 @@
     "Incivilized comments on issues and pull requests": "Comentários incivilizados em problemas e solicitações de pull",
     "Moderation Activity": "Atividade de moderação",
     "Comments and Flags over time": "Comentários e flags ao longo do tempo",
-    "Recent Flagged Comments": "Comentários recentemente flagrados",
     "Incivility Categories": "Categorias de incividade",
     "Distribution by classification": "Distribuição por classificação",
     "Moderation Actions": "Ações de moderação",
     "Distribution of actions taken": "Distribuição de ações tomadas",
     "Pull Request Incivility Over Time": "Incividade em solicitações de pull ao longo do tempo",
-    "Incivilized comments on pull requests": "Comentários incivilizados em solicitações de pull",
     "Ajuda & Onboarding do Peacemaker Bot": "Ajuda & Onboarding do Peacemaker Bot",
     "Aprenda, passo a passo, como começar a usar o": "Aprenda, passo a passo, como começar a usar o ",
     "para monitorar e manter a civilidade nos seus repositórios GitHub.": "para monitorar e manter a civilidade nos seus repositórios GitHub.",
@@ -152,6 +150,8 @@
     "incivilities": "incivilidades",
     "Total": "Total",
     "Week": "Semana",
-    "of": "de"
+    "of": "de",
+    "4. Configurando seu Token Pessoal do GitHub": "4. Configurando seu Token Pessoal do GitHub",
+    "5. Edição de sugestões & reavaliação": "5. Edição de sugestões & reavaliação"
 }
 
