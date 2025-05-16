@@ -5,6 +5,7 @@ import { api } from "@/lib/api";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 export function ThresholdSelectorModal({
@@ -14,6 +15,7 @@ export function ThresholdSelectorModal({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
+  const { t } = useTranslation();
   const [threshold, setThreshold] = useState<string>("0.6");
 
   const prefMutation = useMutation({
@@ -32,18 +34,18 @@ export function ThresholdSelectorModal({
     onSuccess: () => {
       onOpenChange(false);
       setThreshold("0.6");
-      toast.success("Threshold atualizado com sucesso!");
+      toast.success(t("Threshold updated successfully!"));
     },
     onError: (err) => {
       console.error("Erro ao salvar threshold:", err);
-      toast.error("Erro ao salvar threshold");
+      toast.error(t("Error saving threshold"));
     },
   });
 
   const handleSave = () => {
     const numThreshold = parseFloat(threshold);
     if (isNaN(numThreshold) || numThreshold < 0.4 ||numThreshold > 1.0) {
-      toast.error("O threshold deve estar entre 0.4 e 1.0");
+      toast.error(t("The threshold must be between 0.4 and 1.0"));
       return;
     }
     onOpenChange(false);
@@ -65,16 +67,16 @@ export function ThresholdSelectorModal({
         >
           <div className="border-b pb-4 mb-4">
             <Dialog.Title className="text-lg font-semibold">
-              Configurar Threshold
+              {t("Configure Threshold")}
             </Dialog.Title>
             <Dialog.Description className="text-sm text-muted-foreground">
-              Defina o nível de confiança para as respostas do sistema.
+              {t("Set the confidence level for system responses.")}
             </Dialog.Description>
           </div>
 
           <div className="space-y-4">
             <div>
-              <Label className="block text-sm font-medium">Threshold</Label>
+              <Label className="block text-sm font-medium">{t("Threshold")}</Label>
               <Input
                 type="number"
                 min="0.4"
@@ -83,28 +85,22 @@ export function ThresholdSelectorModal({
                 value={threshold}
                 onChange={(e) => setThreshold(e.target.value)}
                 className="w-full mt-1"
-                placeholder="Digite um valor entre 0.4 e 1.0"
+                placeholder={t("Enter a value between 0.4 and 1.0")}
               />
             </div>
 
             <div className="text-sm text-muted-foreground space-y-2">
             <p>
-              <span className="font-medium">Threshold baixo (ex: 0.4):</span>{" "}
-              O sistema será mais permissivo, sinalizando mais comentários como “incivilizados” e disparando sugestões.
-              Isso aumenta a cobertura (menos falsos negativos), mas você terá mais falsos positivos —
-              comentários relativamente inofensivos podem receber sugestões desnecessárias.
+              <span className="font-medium">{t("Low threshold (e.g.: 0.4):")}</span>{" "}
+              {t("The system will be more permissive, flagging more comments as \"uncivilized\" and triggering suggestions. This increases coverage (fewer false negatives), but you'll have more false positives — relatively harmless comments may receive unnecessary suggestions.")}
             </p>
             <p>
-              <span className="font-medium">Threshold médio (ex: 0.6):</span>{" "}
-              Valor padrão equilibrado entre sensibilidade e precisão.
-              A maioria dos comentários claramente tóxicos será detectada, sem sobrecarregar o fluxo com sugestões em
-              casos duvidosos.
+              <span className="font-medium">{t("Medium threshold (e.g.: 0.6):")}</span>{" "}
+              {t("Default balanced value between sensitivity and precision. Most clearly toxic comments will be detected, without overloading the flow with suggestions in doubtful cases.")}
             </p>
             <p>
-              <span className="font-medium">Threshold alto (ex: 0.8–1.0):</span>{" "}
-              O sistema exige alta confiança para classificar “incivilidade”.
-              Isso reduz falsos positivos (apenas o conteúdo realmente problemático é sinalizado),
-              mas pode deixar passar comentários moderadamente tóxicos (falsos negativos).
+              <span className="font-medium">{t("High threshold (e.g.: 0.8–1.0):")}</span>{" "}
+              {t("The system requires high confidence to classify \"incivility\". This reduces false positives (only truly problematic content is flagged), but may miss moderately toxic comments (false negatives).")}
             </p>
             </div>
           </div>
@@ -114,7 +110,7 @@ export function ThresholdSelectorModal({
               onClick={handleSave}
               disabled={prefMutation.status === "pending"}
             >
-              {prefMutation.status === "pending" ? "Salvando..." : "Salvar"}
+              {prefMutation.status === "pending" ? t("Saving...") : t("Save")}
             </Button>
           </div>
         </Dialog.Content>

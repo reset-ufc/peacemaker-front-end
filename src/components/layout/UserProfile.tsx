@@ -1,5 +1,6 @@
 import { LogOutIcon, Settings2Icon } from "lucide-react"; // ou qualquer outro ícone
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ import { LLMSelectorModal } from "../ui/LLMSelectorModal";
 import { ThresholdSelectorModal } from "../ui/ThresholdSelectorModal";
 
 export function UserProfile() {
+  const { t } = useTranslation();
   const auth = useAuthentication();
   const user = localStorage.getItem("user")!;
   const profile = JSON.parse(user) as Profile;
@@ -32,7 +34,7 @@ export function UserProfile() {
         <DropdownMenuTrigger asChild>
           <Button variant='ghost' className='h-auto p-0 hover:bg-transparent'>
             <Avatar>
-              <AvatarImage src={profile.avatar_url} alt='Profile image' />
+              <AvatarImage src={profile.avatar_url} alt={t('Profile image')} />
               <AvatarFallback>KK</AvatarFallback>
             </Avatar>
           </Button>
@@ -41,15 +43,15 @@ export function UserProfile() {
           <DropdownMenuGroup>
             <DropdownMenuItem onClick={() => setOpenLLM(true)}>
               <Settings2Icon className='size-4 opacity-60' aria-hidden='true' />
-              <span>Selecionar LLM</span>
+              <span>{t('Select LLM')}</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setOpenGH(true)}>
               <GitHubIcon className="size-4 opacity-60" aria-hidden="true" />
-              <span>GitHub Token</span>
+              <span>{t('GitHub Token')}</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setOpenThreshold(true)}>
               <Settings2Icon className="size-4 opacity-60" aria-hidden="true" />
-              <span>Threshold</span>
+              <span>{t('Threshold')}</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
 
@@ -57,7 +59,7 @@ export function UserProfile() {
 
           <DropdownMenuItem onClick={auth.logout}>
             <LogOutIcon size={16} className='opacity-60' aria-hidden='true' />
-            <span>Logout</span>
+            <span>{t('Logout')}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

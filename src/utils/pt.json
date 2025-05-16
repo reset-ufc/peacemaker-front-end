@@ -152,6 +152,40 @@
     "Week": "Semana",
     "of": "de",
     "4. Configurando seu Token Pessoal do GitHub": "4. Configurando seu Token Pessoal do GitHub",
-    "5. Edição de sugestões & reavaliação": "5. Edição de sugestões & reavaliação"
+    "5. Edição de sugestões & reavaliação": "5. Edição de sugestões & reavaliação",
+
+    "Profile image": "Imagem de perfil",
+    "Select LLM": "Selecionar LLM",
+    "GitHub Token": "Token do GitHub",
+    "Threshold": "Limiar",
+    "Logout": "Sair",
+
+    "GitHub Personal Token": "Token Pessoal do GitHub",
+    "Enter a GitHub personal access token (with comments scope).": "Insira um token de acesso pessoal do GitHub (com escopo de comentários).",
+    "Token": "Token",
+    "Saving...": "Salvando...",
+    "Save": "Salvar",
+    "GitHub token saved successfully!": "Token do GitHub salvo com sucesso!",
+    "Failed to save token. Try again.": "Falha ao salvar token. Tente novamente.",
+    "Enter a valid token": "Informe um token válido",
+
+    "Choose the model and enter your token to use the LLM.": "Escolha o modelo e insira seu token para usar a LLM.",
+    "Model": "Modelo",
+    "Select a model": "Selecione um modelo",
+    "Your personal token": "Seu token pessoal",
+    "Preference saved successfully!": "Preferência salva com sucesso!",
+
+    "Configure Threshold": "Configurar Limiar",
+    "Set the confidence level for system responses.": "Defina o nível de confiança para as respostas do sistema.",
+    "Enter a value between 0.4 and 1.0": "Digite um valor entre 0.4 e 1.0",
+    "Low threshold (e.g.: 0.4):": "Limiar baixo (ex: 0.4):",
+    "The system will be more permissive, flagging more comments as \"uncivilized\" and triggering suggestions. This increases coverage (fewer false negatives), but you'll have more false positives — relatively harmless comments may receive unnecessary suggestions.": "O sistema será mais permissivo, sinalizando mais comentários como \"incivilizados\" e disparando sugestões. Isso aumenta a cobertura (menos falsos negativos), mas você terá mais falsos positivos — comentários relativamente inofensivos podem receber sugestões desnecessárias.",
+    "Medium threshold (e.g.: 0.6):": "Limiar médio (ex: 0.6):",
+    "Default balanced value between sensitivity and precision. Most clearly toxic comments will be detected, without overloading the flow with suggestions in doubtful cases.": "Valor padrão equilibrado entre sensibilidade e precisão. A maioria dos comentários claramente tóxicos será detectada, sem sobrecarregar o fluxo com sugestões em casos duvidosos.",
+    "High threshold (e.g.: 0.8–1.0):": "Limiar alto (ex: 0.8–1.0):",
+    "The system requires high confidence to classify \"incivility\". This reduces false positives (only truly problematic content is flagged), but may miss moderately toxic comments (false negatives).": "O sistema exige alta confiança para classificar \"incivilidade\". Isso reduz falsos positivos (apenas o conteúdo realmente problemático é sinalizado), mas pode deixar passar comentários moderadamente tóxicos (falsos negativos).",
+    "Threshold updated successfully!": "Limiar atualizado com sucesso!",
+    "Error saving threshold": "Erro ao salvar limiar",
+    "The threshold must be between 0.4 and 1.0": "O limiar deve estar entre 0.4 e 1.0"
 }
 

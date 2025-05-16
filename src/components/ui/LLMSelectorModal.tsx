@@ -13,6 +13,7 @@ import { api } from "@/lib/api";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 
@@ -33,6 +34,7 @@ export function LLMSelectorModal({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
+  const { t } = useTranslation();
   const [models, setModels] = useState<ModelInfo[]>([]);
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [token, setToken] = useState<string>("");
@@ -78,7 +80,7 @@ export function LLMSelectorModal({
       setToken("");
       setModels([]);
 
-      toast.success("Preferência salva com sucesso!");
+      toast.success(t("Preference saved successfully!"));
     },
     onError: (err) => {
       console.error("Erro ao salvar preferência:", err);
@@ -111,23 +113,23 @@ export function LLMSelectorModal({
         >
           <div className="border-b pb-4 mb-4">
             <Dialog.Title className="text-lg font-semibold">
-              Selecionar LLM
+              {t("Select LLM")}
             </Dialog.Title>
             <Dialog.Description className="text-sm text-muted-foreground">
-              Escolha o modelo e insira seu token para usar a LLM.
+              {t("Choose the model and enter your token to use the LLM.")}
             </Dialog.Description>
           </div>
 
           <div className="space-y-4">
             <div>
-              <Label className="block text-sm font-medium">Modelo</Label>
+              <Label className="block text-sm font-medium">{t("Model")}</Label>
                 <Select
                   value={selectedModel}
                   onValueChange={setSelectedModel}
                   // disabled={fetchModels.status === 'pending'}
                 >
                   <SelectTrigger className="w-full mt-1">
-                    <SelectValue placeholder="Selecione um modelo" />
+                    <SelectValue placeholder={t("Select a model")} />
                   </SelectTrigger>
                   <SelectContent>
                     {models.map((m) => (
@@ -148,9 +150,9 @@ export function LLMSelectorModal({
             </div>
 
             <div>
-              <Label className="block text-sm font-medium">Token</Label>
+              <Label className="block text-sm font-medium">{t("Token")}</Label>
               <Input
-                placeholder="Seu token pessoal"
+                placeholder={t("Your personal token")}
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
                 className="w-full mt-1"
@@ -163,7 +165,7 @@ export function LLMSelectorModal({
               onClick={handleSave}
               disabled={!selectedModel || prefMutation.status === "pending"}
             >
-              {prefMutation.status === "pending" ? "Salvando..." : "Salvar"}
+              {prefMutation.status === "pending" ? t("Saving...") : t("Save")}
             </Button>
           </div>
         </Dialog.Content>

@@ -8,6 +8,7 @@ import { api } from "@/lib/api";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 export function GitHubTokenModal({
@@ -17,6 +18,7 @@ export function GitHubTokenModal({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const { t } = useTranslation();
   const [token, setToken] = useState("");
   const mutation = useMutation({
     mutationFn: async (newToken: string) => {
@@ -28,18 +30,18 @@ export function GitHubTokenModal({
       );
     },
     onSuccess: () => {
-      toast.success("GitHub token salvo com sucesso!");
+      toast.success(t("GitHub token saved successfully!"));
       setToken("");
       onOpenChange(false);
     },
     onError: () => {
-      toast.error("Falha ao salvar token. Tente novamente.");
+      toast.error(t("Failed to save token. Try again."));
     },
   });
 
   const handleSave = () => {
     if (!token.trim()) {
-      toast.error("Informe um token válido");
+      toast.error(t("Enter a valid token"));
       return;
     }
     mutation.mutate(token);
@@ -60,17 +62,17 @@ export function GitHubTokenModal({
         >
           <div className="border-b pb-4 mb-4">
             <Dialog.Title className="text-lg font-semibold">
-              GitHub Personal Token
+              {t("GitHub Personal Token")}
             </Dialog.Title>
             <Dialog.Description className="text-sm text-muted-foreground">
-              Insira um token de acesso pessoal do GitHub (com escopo de comentários).
+              {t("Enter a GitHub personal access token (with comments scope).")}
             </Dialog.Description>
           </div>
 
           <div className="space-y-4">
             <div>
               <Label htmlFor="github-token" className="block text-sm font-medium">
-                Token
+                {t("Token")}
               </Label>
               <Input
                 id="github-token"
@@ -89,7 +91,7 @@ export function GitHubTokenModal({
               disabled={mutation.isPending}
               variant="default"
             >
-              {mutation.isPending ? "Salvando..." : "Salvar"}
+              {mutation.isPending ? t("Saving...") : t("Save")}
             </Button>
           </div>
         </Dialog.Content>
