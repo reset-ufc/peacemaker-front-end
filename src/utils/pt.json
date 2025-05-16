@@ -144,6 +144,14 @@
     "Cole o token no campo correspondente no Peacemaker Bot": "Cole o token no campo correspondente no Peacemaker Bot",
     "Faça login na sua conta Groq": "Faça login na sua conta Groq",
     "Clique em 'Create API Key'": "Clique em 'Create API Key'",
-    "Importante: Mantenha seu token em segurança e nunca o compartilhe. Se você suspeitar que seu token foi comprometido, revogue-o imediatamente e gere um novo.": "Importante: Mantenha seu token em segurança e nunca o compartilhe. Se você suspeitar que seu token foi comprometido, revogue-o imediatamente e gere um novo."
+    "Importante: Mantenha seu token em segurança e nunca o compartilhe. Se você suspeitar que seu token foi comprometido, revogue-o imediatamente e gere um novo.": "Importante: Mantenha seu token em segurança e nunca o compartilhe. Se você suspeitar que seu token foi comprometido, revogue-o imediatamente e gere um novo.",
+    "Incivilidades em Issues": "Incivilidades em Issues",
+    "Comentários incivilizados em issues (últimas 4 semanas)": "Comentários incivilizados em issues (últimas 4 semanas)",
+    "Incivilidades em Pull Requests": "Incivilidades em Pull Requests",
+    "Comentários incivilizados em PRs (últimas 4 semanas)": "Comentários incivilizados em PRs (últimas 4 semanas)",
+    "incivilities": "incivilidades",
+    "Total": "Total",
+    "Week": "Semana",
+    "of": "de"
 }
 

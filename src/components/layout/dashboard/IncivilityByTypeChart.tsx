@@ -3,6 +3,7 @@ import { Loader } from "@/components/ui/loadingSpinner";
 import { api } from "@/lib/api";
 import { IncivilityData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 interface IncivilityByTypeChartProps {
@@ -25,6 +26,7 @@ export function IncivilityByTypeChart({
   stopColor,
 }: IncivilityByTypeChartProps) {
   const token = localStorage.getItem("access_token");
+  const { t } = useTranslation();
 
   const { data, isLoading } = useQuery<IncivilityData[]>({
     queryKey: ["incivilities-by-type", repo, type],
@@ -63,10 +65,10 @@ export function IncivilityByTypeChart({
               <XAxis dataKey="week" stroke="#6b7280" />
               <YAxis stroke="#6b7280" allowDecimals={false} />
               <Tooltip
-                formatter={(value: any) => [`${value} incivilidades`, 'Total']}
+                formatter={(value: number) => [`${value} ${t('incivilities')}`, t('Total')]}
                 labelFormatter={(label: string) => {
                   const [year, week] = label.split("-");
-                  return `Semana ${week} de ${year}`;
+                  return `${t('Week')} ${week} ${t('of')} ${year}`;
                 }}
               />
               <Area type="monotone" dataKey="count" stroke={strokeColor} fill={`url(#${gradientId})`} />

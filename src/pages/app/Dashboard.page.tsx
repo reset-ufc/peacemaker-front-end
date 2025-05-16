@@ -8,10 +8,12 @@ import { RecentFlaggedComments } from "@/components/layout/dashboard/RecentFlagg
 import { RepositorySidebar } from "@/components/layout/dashboard/RepositorySideBar";
 import ToggleButton from "@/components/layout/dashboard/ToogleButton";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export function DashboardPage() {
   const [selectedRepo, setSelectedRepo] = useState("all");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { t } = useTranslation();
 
   return (
     <div className="flex h-[calc(100vh-4rem)]">
@@ -45,8 +47,8 @@ export function DashboardPage() {
             <IncivilityByTypeChart
               repo={selectedRepo}
               type="issue"
-              title="Incivilidades em Issues"
-              description="Comentários incivilizados em issues (últimas 4 semanas)"
+              title={t("Incivilidades em Issues")}
+              description={t("Comentários incivilizados em issues (últimas 4 semanas)")}
               gradientId="issuesGradient"
               strokeColor="#34d399"
               stopColor="#34d399"
@@ -54,8 +56,8 @@ export function DashboardPage() {
             <IncivilityByTypeChart
               repo={selectedRepo}
               type="pull_request"
-              title="Incivilidades em Pull Requests"
-              description="Comentários incivilizados em PRs (últimas 4 semanas)"
+              title={t("Incivilidades em Pull Requests")}
+              description={t("Comentários incivilizados em PRs (últimas 4 semanas)")}
               gradientId="prGradient"
               strokeColor="#fbbf24"
               stopColor="#fbbf24"
