@@ -46,7 +46,7 @@ export function DashboardCards({ repo }: DashboardCardsProps) {
     <div className={containerClass}>
       <div className="border rounded shadow">
         <div className="flex items-center p-3 border-b">
-          <span className="mr-2 font-medium">Período:</span>
+          <span className="mr-2 font-medium">{t("Período")}:</span>
           <Select value={period} onValueChange={setPeriod}>
             <SelectTrigger className="w-32">
               <SelectValue placeholder="Select" />
