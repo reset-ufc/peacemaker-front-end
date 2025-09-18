@@ -52,7 +52,8 @@ export function CommentModeration({ commentsData }: CommentModerationProps) {
       } else {
         result = result?.filter(
           comment =>
-            comment?.classification?.toLowerCase() === activeFilter?.toLowerCase()
+            comment?.classification?.toLowerCase() ===
+            activeFilter?.toLowerCase()
         );
       }
     }

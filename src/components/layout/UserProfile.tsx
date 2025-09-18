@@ -1,5 +1,6 @@
-import { LogOutIcon, Settings2Icon } from "lucide-react"; // ou qualquer outro ícone
 import { useState } from "react";
+
+import { LogOutIcon, Settings2Icon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuthentication } from "@/hooks/use-authentication";
 import { Profile } from "@/types";
+
 import { GitHubIcon } from "../svg/Github";
 import { GitHubTokenModal } from "../ui/GithubTokenModal";
 import { LLMSelectorModal } from "../ui/LLMSelectorModal";
@@ -34,7 +36,7 @@ export function UserProfile() {
         <DropdownMenuTrigger asChild>
           <Button variant='ghost' className='h-auto p-0 hover:bg-transparent'>
             <Avatar>
-              <AvatarImage src={profile.avatar_url} alt={t('Profile image')} />
+              <AvatarImage src={profile.avatar_url} alt={t("Profile image")} />
               <AvatarFallback>KK</AvatarFallback>
             </Avatar>
           </Button>
@@ -43,15 +45,15 @@ export function UserProfile() {
           <DropdownMenuGroup>
             <DropdownMenuItem onClick={() => setOpenLLM(true)}>
               <Settings2Icon className='size-4 opacity-60' aria-hidden='true' />
-              <span>{t('Select LLM')}</span>
+              <span>{t("Select LLM")}</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setOpenGH(true)}>
-              <GitHubIcon className="size-4 opacity-60" aria-hidden="true" />
-              <span>{t('GitHub Token')}</span>
+              <GitHubIcon className='size-4 opacity-60' aria-hidden='true' />
+              <span>{t("GitHub Token")}</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setOpenThreshold(true)}>
-              <Settings2Icon className="size-4 opacity-60" aria-hidden="true" />
-              <span>{t('Threshold')}</span>
+              <Settings2Icon className='size-4 opacity-60' aria-hidden='true' />
+              <span>{t("Threshold")}</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
 
@@ -59,14 +61,17 @@ export function UserProfile() {
 
           <DropdownMenuItem onClick={auth.logout}>
             <LogOutIcon size={16} className='opacity-60' aria-hidden='true' />
-            <span>{t('Logout')}</span>
+            <span>{t("Logout")}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
       <LLMSelectorModal open={openLLM} onOpenChange={setOpenLLM} />
       <GitHubTokenModal open={openGH} onOpenChange={setOpenGH} />
-      <ThresholdSelectorModal open={openThreshold} onOpenChange={setOpenThreshold} />
+      <ThresholdSelectorModal
+        open={openThreshold}
+        onOpenChange={setOpenThreshold}
+      />
     </>
   );
 }

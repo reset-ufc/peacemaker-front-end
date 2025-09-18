@@ -2,12 +2,13 @@ import { memo } from "react";
 
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { enUS } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import type { Comment, CommentState } from "@/types";
-import { useTranslation } from "react-i18next";
+
 interface CommentListProps {
   comments: Comment[];
   selectedId: string;
@@ -60,7 +61,7 @@ export const CommentList = memo(function CommentList({
     );
   }
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   if (comments.length === 0) {
     return (

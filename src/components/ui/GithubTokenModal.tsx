@@ -1,15 +1,17 @@
 // components/ui/GitHubTokenModal.tsx
-"use client";
+import { useState } from "react";
+
+import * as Dialog from "@radix-ui/react-dialog";
+import { useMutation } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { api } from "@/lib/api";
-import * as Dialog from "@radix-ui/react-dialog";
-import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+
+// components/ui/GitHubTokenModal.tsx
 
 export function GitHubTokenModal({
   open,
@@ -50,46 +52,49 @@ export function GitHubTokenModal({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 " />
+        <Dialog.Overlay className='fixed inset-0 ' />
         <Dialog.Content
-          className="
-            fixed top-1/2 left-1/2
+          className='
+            bg-card text-card-foreground fixed
+            top-1/2 left-1/2
             w-full max-w-sm
             -translate-x-1/2 -translate-y-1/2
-            bg-card text-card-foreground
-            rounded-lg shadow-lg p-6
-          "
+            rounded-lg p-6 shadow-lg
+          '
         >
-          <div className="border-b pb-4 mb-4">
-            <Dialog.Title className="text-lg font-semibold">
+          <div className='mb-4 border-b pb-4'>
+            <Dialog.Title className='text-lg font-semibold'>
               {t("GitHub Personal Token")}
             </Dialog.Title>
-            <Dialog.Description className="text-sm text-muted-foreground">
+            <Dialog.Description className='text-muted-foreground text-sm'>
               {t("Enter a GitHub personal access token (with comments scope).")}
             </Dialog.Description>
           </div>
 
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <div>
-              <Label htmlFor="github-token" className="block text-sm font-medium">
+              <Label
+                htmlFor='github-token'
+                className='block text-sm font-medium'
+              >
                 {t("Token")}
               </Label>
               <Input
-                id="github-token"
-                type="password"
-                placeholder="ghp_********************************"
+                id='github-token'
+                type='password'
+                placeholder='ghp_********************************'
                 value={token}
-                onChange={(e) => setToken(e.target.value)}
-                className="w-full mt-1"
+                onChange={e => setToken(e.target.value)}
+                className='mt-1 w-full'
               />
             </div>
           </div>
 
-          <div className="border-t pt-4 mt-4 flex justify-end">
+          <div className='mt-4 flex justify-end border-t pt-4'>
             <Button
               onClick={handleSave}
               disabled={mutation.isPending}
-              variant="default"
+              variant='default'
             >
               {mutation.isPending ? t("Saving...") : t("Save")}
             </Button>

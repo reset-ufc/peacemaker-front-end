@@ -1,8 +1,8 @@
-"use client";
+import { useEffect, useState } from "react";
 
 import { useMutation } from "@tanstack/react-query";
 import { Check, Edit, ThumbsDown, ThumbsUp, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Comment, Suggestion } from "@/types";
-import { useTranslation } from "react-i18next";
 
 interface SuggestionListProps {
   suggestions: Suggestion[];
@@ -27,15 +26,20 @@ export function SuggestionList({
   comment,
   suggestionAcceptedId,
 }: SuggestionListProps) {
-  const [selectedSuggestionId, setSelectedSuggestionId] = useState<string | null>(null);
+  const [selectedSuggestionId, setSelectedSuggestionId] = useState<
+    string | null
+  >(null);
   const [localSuggestions, setLocalSuggestions] = useState(suggestions);
   const [editedContent, setEditedContent] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isContentEdited, setIsContentEdited] = useState<boolean>(false);
 
   const [showFeedback, setShowFeedback] = useState<boolean>(false);
-  const [feedbackType, setFeedbackType] = useState<"positive" | "negative" | null>(null);
-  const [feedbackJustification, setFeedbackJustification] = useState<string>("");
+  const [feedbackType, setFeedbackType] = useState<
+    "positive" | "negative" | null
+  >(null);
+  const [feedbackJustification, setFeedbackJustification] =
+    useState<string>("");
 
   const [showRejectModal, setShowRejectModal] = useState<boolean>(false);
   const [showNeedsAttentionModal, setShowNeedsAttentionModal] = useState(false);
@@ -103,11 +107,15 @@ export function SuggestionList({
   const rejectSuggestionMutation = useMutation({
     mutationFn: async (suggestionId: string) => {
       const token = localStorage.getItem("access_token");
-      const response = await api.patch(`api/suggestions/${suggestionId}/reject`, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.patch(
+        `api/suggestions/${suggestionId}/reject`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     },
     onSuccess: () => {
@@ -145,8 +153,8 @@ export function SuggestionList({
     onSuccess: () => {
       toast.success("Feedback sent");
 
-      setLocalSuggestions((prev) =>
-        prev.filter((s) => s._id !== selectedSuggestionId)
+      setLocalSuggestions(prev =>
+        prev.filter(s => s._id !== selectedSuggestionId)
       );
       setShowFeedback(false);
       setSelectedSuggestionId(null);
@@ -190,7 +198,9 @@ export function SuggestionList({
   const handleCancelEdit = () => {
     setIsEditing(false);
     if (selectedSuggestionId) {
-      const suggestion = localSuggestions.find(s => s._id === selectedSuggestionId);
+      const suggestion = localSuggestions.find(
+        s => s._id === selectedSuggestionId
+      );
       if (suggestion) {
         setEditedContent(suggestion.content);
       }
@@ -229,17 +239,19 @@ export function SuggestionList({
     feedbackMutation.mutate();
   };
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <div className='flex flex-col'>
-      {(showFirstEditModal && !comment.suggestion_id) && (
-       <div className="fixed inset-0 z-50 bg-opacity-100 flex items-center justify-center">
-          <div className="bg-card text-card-foreground p-6 rounded-lg shadow-lg max-w-sm text-center">
-            <h2 className="text-xl font-bold mb-4">⚠️ Atenção!</h2>
-            <p className="mb-6">
-              Você editou esta sugestão pela primeira vez.<br/>
-              Ainda demonstra traços de incivilidade.<br/>
+      {showFirstEditModal && !comment.suggestion_id && (
+        <div className='bg-opacity-100 fixed inset-0 z-50 flex items-center justify-center'>
+          <div className='bg-card text-card-foreground max-w-sm rounded-lg p-6 text-center shadow-lg'>
+            <h2 className='mb-4 text-xl font-bold'>⚠️ Atenção!</h2>
+            <p className='mb-6'>
+              Você editou esta sugestão pela primeira vez.
+              <br />
+              Ainda demonstra traços de incivilidade.
+              <br />
               Por favor, revise bem antes de enviar outra edição.
             </p>
             <Button onClick={() => setShowFirstEditModal(false)}>
@@ -249,14 +261,19 @@ export function SuggestionList({
         </div>
       )}
 
-      {(showNeedsAttentionModal && !comment.suggestion_id) && (
-        <div className="fixed inset-0 z-50 bg-opacity-100 flex items-center justify-center">
-          <div className="bg-card text-card-foreground p-6 rounded-lg shadow-lg max-w-lg text-center">
-            <h2 className="text-xl font-bold mb-4">⛔ Atenção!</h2>
-            <p className="mb-6">
-              Você editou esta sugestão {comment.editAttempts} vezes e ela continua com traços de incivilidade.<br/>
-              Entendemos que você pode ter tentado melhorar a sugestão, mas ainda assim ela não atende aos padrões de civilidade.<br/>
-              Desta vez deixamos você enviar a edição, sem sugestões.<br/>
+      {showNeedsAttentionModal && !comment.suggestion_id && (
+        <div className='bg-opacity-100 fixed inset-0 z-50 flex items-center justify-center'>
+          <div className='bg-card text-card-foreground max-w-lg rounded-lg p-6 text-center shadow-lg'>
+            <h2 className='mb-4 text-xl font-bold'>⛔ Atenção!</h2>
+            <p className='mb-6'>
+              Você editou esta sugestão {comment.editAttempts} vezes e ela
+              continua com traços de incivilidade.
+              <br />
+              Entendemos que você pode ter tentado melhorar a sugestão, mas
+              ainda assim ela não atende aos padrões de civilidade.
+              <br />
+              Desta vez deixamos você enviar a edição, sem sugestões.
+              <br />
               Por favor, revise cuidadosamente antes de enviar outra edição.
             </p>
             <Button onClick={() => setShowNeedsAttentionModal(false)}>
@@ -266,17 +283,26 @@ export function SuggestionList({
         </div>
       )}
       {showRejectModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-opacity-100 z-50">
-          <div className="bg-card text-card-foreground p-6 rounded shadow-lg max-w-sm w-full">
-            <h2 className="text-xl font-bold mb-4">Confirm Rejection</h2>
-            <p className="mb-4">
-              Are you sure you want to reject this suggestion? This action cannot be undone.
+        <div className='bg-opacity-100 fixed inset-0 z-50 flex items-center justify-center'>
+          <div className='bg-card text-card-foreground w-full max-w-sm rounded p-6 shadow-lg'>
+            <h2 className='mb-4 text-xl font-bold'>Confirm Rejection</h2>
+            <p className='mb-4'>
+              Are you sure you want to reject this suggestion? This action
+              cannot be undone.
             </p>
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" className="cursor-pointer" onClick={handleCancelReject}>
+            <div className='flex justify-end gap-2'>
+              <Button
+                variant='outline'
+                className='cursor-pointer'
+                onClick={handleCancelReject}
+              >
                 Cancel
               </Button>
-              <Button variant="destructive" className="cursor-pointer" onClick={handleConfirmReject}>
+              <Button
+                variant='destructive'
+                className='cursor-pointer'
+                onClick={handleConfirmReject}
+              >
                 Confirm Reject
               </Button>
             </div>
@@ -294,61 +320,59 @@ export function SuggestionList({
         handleFeedbackSubmit={handleFeedbackSubmit}
       />
 
-      {
-        comment.needsAttention ? (
-          <h2 className='mb-2 text-xl font-semibold pl-3'>{t("Personal Correction")}</h2>
-        ) : (
-          <h2 className='mb-2 text-xl font-semibold pl-3'>{t("Correction Suggestions")}</h2>
-        )
-      }
+      {comment.needsAttention ? (
+        <h2 className='mb-2 pl-3 text-xl font-semibold'>
+          {t("Personal Correction")}
+        </h2>
+      ) : (
+        <h2 className='mb-2 pl-3 text-xl font-semibold'>
+          {t("Correction Suggestions")}
+        </h2>
+      )}
 
-      {
-        comment.needsAttention && (
-          <div className='space-y-3 pl-2 pr-2 pb-5'>
-            <Card
-              className={cn(
-                "p-2 transition-colors",
-              )}
-              onClick={() => {}}
-            >
-              <CardContent className='p-2'>
-                <Textarea
-                  value={editedContent}
-                  onChange={e => {
-                    setEditedContent(e.target.value);
-                    if (e.target.value === "") {
-                      setIsContentEdited(false);
-                    }
+      {comment.needsAttention && (
+        <div className='space-y-3 pr-2 pb-5 pl-2'>
+          <Card className={cn("p-2 transition-colors")} onClick={() => {}}>
+            <CardContent className='p-2'>
+              <Textarea
+                value={editedContent}
+                onChange={e => {
+                  setEditedContent(e.target.value);
+                  if (e.target.value === "") {
+                    setIsContentEdited(false);
+                  }
+                }}
+                onClick={e => e.stopPropagation()}
+                className='min-h-[100px] w-full outline-none'
+              />
+            </CardContent>
+            <CardFooter className='flex justify-end gap-2 p-3 pt-0'>
+              <>
+                <Button
+                  variant='outline'
+                  onClick={e => {
+                    e.stopPropagation();
+                    handleAccept();
                   }}
-                  onClick={e => e.stopPropagation()}
-                  className='min-h-[100px] w-full outline-none'
-                />
-              </CardContent>
-              <CardFooter className='flex justify-end gap-2 p-3 pt-0'>
-                  <>
-                    <Button
-                      variant='outline'
-                      onClick={e => {
-                        e.stopPropagation();
-                        handleAccept();
-                      }}
-                    >
-                      <Check className='size-4' />
-                      Submit
-                    </Button>
-                  </>
-              </CardFooter>
-            </Card>
-          </div>
-        )
-      }
+                >
+                  <Check className='size-4' />
+                  Submit
+                </Button>
+              </>
+            </CardFooter>
+          </Card>
+        </div>
+      )}
       <Separator className='mb-4' />
 
       <div className='space-y-3 px-2 pb-5'>
         {localSuggestions.map(suggestion => {
           const isSelected = selectedSuggestionId === suggestion._id;
           const isAccepted = suggestionAcceptedId === suggestion._id;
-          const isDisabled = (!!suggestionAcceptedId && suggestionAcceptedId !== suggestion._id) || comment.needsAttention;
+          const isDisabled =
+            (!!suggestionAcceptedId &&
+              suggestionAcceptedId !== suggestion._id) ||
+            comment.needsAttention;
 
           return (
             <Card
@@ -438,11 +462,13 @@ export function SuggestionList({
                         }}
                       >
                         <Check className='size-4' />
-                        {acceptSuggestionMutation.isPending ? "Verificando token…" : "Accept suggestion"}
+                        {acceptSuggestionMutation.isPending
+                          ? "Verificando token…"
+                          : "Accept suggestion"}
                       </Button>
                       <Button
                         variant='destructive'
-                        className="cursor-pointer"
+                        className='cursor-pointer'
                         onClick={e => {
                           e.stopPropagation();
                           handleOpenRejectModal();

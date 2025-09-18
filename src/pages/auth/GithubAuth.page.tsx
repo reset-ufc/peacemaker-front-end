@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { LoginButton } from "@/components/layout/LoginButton";
-import { env } from "@/env.mjs";
 import { api } from "@/lib/api";
 
 export function GithubAuthPage() {
@@ -13,7 +12,7 @@ export function GithubAuthPage() {
     const fetchUrl = async () => {
       const request = await api.get<{ url: string }>("/api/oauth/github", {
         params: {
-          redirect_uri: `${env.VITE_PUBLIC_BASE_URL}/auth/sign-in/github/callback`,
+          redirect_uri: `${import.meta.env.VITE_APP_URL}/auth/sign-in/github/callback`,
           client_type: "extension",
         },
       });

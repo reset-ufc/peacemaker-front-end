@@ -1,4 +1,11 @@
 // components/LLMSelectorModal.tsx
+import { useEffect, useRef, useState } from "react";
+
+import * as Dialog from "@radix-ui/react-dialog";
+import { useMutation } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,12 +17,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { api } from "@/lib/api";
-import * as Dialog from "@radix-ui/react-dialog";
-import { useMutation } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
-
 
 interface ModelInfo {
   name: string;
@@ -48,11 +49,11 @@ export function LLMSelectorModal({
       });
       return response.data as ModelResponse;
     },
-    onSuccess: (data) => {
+    onSuccess: data => {
       setModels(data.models);
       requestInProgressRef.current = false;
     },
-    onError: (error) => {
+    onError: error => {
       console.error("Failed to fetch models, error: ", error);
       requestInProgressRef.current = false;
     },
@@ -65,7 +66,8 @@ export function LLMSelectorModal({
         "/api/llms/preference",
         {
           llm_id: selectedModel,
-          ...(models.find((m: ModelInfo) => m.name === selectedModel)?.provider === "openai"
+          ...(models.find((m: ModelInfo) => m.name === selectedModel)
+            ?.provider === "openai"
             ? { openai_api_key: token }
             : { groq_api_key: token }),
         },
@@ -82,7 +84,7 @@ export function LLMSelectorModal({
 
       toast.success(t("Preference saved successfully!"));
     },
-    onError: (err) => {
+    onError: err => {
       console.error("Erro ao salvar preferência:", err);
     },
   });
@@ -101,66 +103,69 @@ export function LLMSelectorModal({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+        <Dialog.Overlay className='fixed inset-0 bg-black/50' />
         <Dialog.Content
-          className="
-            fixed top-1/2 left-1/2
+          className='
+            bg-card text-card-foreground fixed
+            top-1/2 left-1/2
             w-full max-w-md
             -translate-x-1/2 -translate-y-1/2
-            bg-card text-card-foreground
-            rounded-lg shadow-lg p-6
-          "
+            rounded-lg p-6 shadow-lg
+          '
         >
-          <div className="border-b pb-4 mb-4">
-            <Dialog.Title className="text-lg font-semibold">
+          <div className='mb-4 border-b pb-4'>
+            <Dialog.Title className='text-lg font-semibold'>
               {t("Select LLM")}
             </Dialog.Title>
-            <Dialog.Description className="text-sm text-muted-foreground">
+            <Dialog.Description className='text-muted-foreground text-sm'>
               {t("Choose the model and enter your token to use the LLM.")}
             </Dialog.Description>
           </div>
 
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <div>
-              <Label className="block text-sm font-medium">{t("Model")}</Label>
-                <Select
-                  value={selectedModel}
-                  onValueChange={setSelectedModel}
-                  // disabled={fetchModels.status === 'pending'}
-                >
-                  <SelectTrigger className="w-full mt-1">
-                    <SelectValue placeholder={t("Select a model")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {models.map((m) => (
-
-                      <SelectItem
-                        key={m.name}
-                        value={m.name}
-                        disabled={["llama-guard-3-8b", "gemma2-9b-it", "llama-3.1-8b-instant"].includes(m.name)}
-                      >
-                        {m.name}{" "}
-                        <span className="text-xs text-muted-foreground">
-                          ({m.provider})
-                        </span>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <Label className='block text-sm font-medium'>{t("Model")}</Label>
+              <Select
+                value={selectedModel}
+                onValueChange={setSelectedModel}
+                // disabled={fetchModels.status === 'pending'}
+              >
+                <SelectTrigger className='mt-1 w-full'>
+                  <SelectValue placeholder={t("Select a model")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {models.map(m => (
+                    <SelectItem
+                      key={m.name}
+                      value={m.name}
+                      disabled={[
+                        "llama-guard-3-8b",
+                        "gemma2-9b-it",
+                        "llama-3.1-8b-instant",
+                      ].includes(m.name)}
+                    >
+                      {m.name}{" "}
+                      <span className='text-muted-foreground text-xs'>
+                        ({m.provider})
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
-              <Label className="block text-sm font-medium">{t("Token")}</Label>
+              <Label className='block text-sm font-medium'>{t("Token")}</Label>
               <Input
                 placeholder={t("Your personal token")}
                 value={token}
-                onChange={(e) => setToken(e.target.value)}
-                className="w-full mt-1"
+                onChange={e => setToken(e.target.value)}
+                className='mt-1 w-full'
               />
             </div>
           </div>
 
-          <div className="border-t pt-4 mt-4 flex justify-end">
+          <div className='mt-4 flex justify-end border-t pt-4'>
             <Button
               onClick={handleSave}
               disabled={!selectedModel || prefMutation.status === "pending"}

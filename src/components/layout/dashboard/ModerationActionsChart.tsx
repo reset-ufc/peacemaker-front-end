@@ -1,14 +1,6 @@
-import { Loader } from "@/components/ui/loadingSpinner";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { api } from "@/lib/api";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import {
   Cell,
@@ -18,6 +10,16 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
+
+import { Loader } from "@/components/ui/loadingSpinner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { api } from "@/lib/api";
 
 const PIE_COLORS = ["#f87171", "#60a5fa", "#fbbf24", "#34d399"];
 
@@ -43,43 +45,55 @@ export function ModerationActionsChart({ repo }: { repo?: string }) {
     },
   });
 
-  const containerClass = isLoading ? "filter blur-sm transition duration-300" : "";
+  const containerClass = isLoading
+    ? "filter blur-sm transition duration-300"
+    : "";
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col items-center border p-4 rounded shadow mb-8">
-      <div className="flex items-center justify-between w-full mb-4">
+    <div className='mb-8 flex flex-col items-center rounded border p-4 shadow'>
+      <div className='mb-4 flex w-full items-center justify-between'>
         <div>
-          <h3 className="text-lg font-semibold">{t("Moderation Actions")}</h3>
-          <p className="text-sm text-muted-foreground">{t("Distribution of actions taken")}</p>
+          <h3 className='text-lg font-semibold'>{t("Moderation Actions")}</h3>
+          <p className='text-muted-foreground text-sm'>
+            {t("Distribution of actions taken")}
+          </p>
         </div>
         <Select value={period} onValueChange={setPeriod}>
-          <SelectTrigger className="w-32">
-            <SelectValue placeholder="Select period" />
+          <SelectTrigger className='w-32'>
+            <SelectValue placeholder='Select period' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="24h">24h</SelectItem>
-            <SelectItem value="7d">7d</SelectItem>
-            <SelectItem value="30d">30d</SelectItem>
-            <SelectItem value="1y">1y</SelectItem>
+            <SelectItem value='24h'>24h</SelectItem>
+            <SelectItem value='7d'>7d</SelectItem>
+            <SelectItem value='30d'>30d</SelectItem>
+            <SelectItem value='1y'>1y</SelectItem>
           </SelectContent>
         </Select>
       </div>
-      <div className={containerClass} style={{ width: 300, height: 300, position: "relative" }}>
-        {isLoading ? <Loader /> : (
+      <div
+        className={containerClass}
+        style={{ width: 300, height: 300, position: "relative" }}
+      >
+        {isLoading ? (
+          <Loader />
+        ) : (
           <ResponsiveContainer>
             <PieChart>
               <Pie
                 data={data?.data}
-                dataKey="value"
-                nameKey="name"
+                dataKey='value'
+                nameKey='name'
                 innerRadius={80}
                 outerRadius={100}
                 label
               >
                 {data?.data.map((_, index) => (
-                  <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={PIE_COLORS[index % PIE_COLORS.length]}
+                  />
                 ))}
               </Pie>
               <Tooltip />
@@ -87,9 +101,9 @@ export function ModerationActionsChart({ repo }: { repo?: string }) {
             </PieChart>
           </ResponsiveContainer>
         )}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-          <span className="text-2xl font-bold">{data?.total}</span>
-          <p className="text-sm text-muted-foreground">Total Actions</p>
+        <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center'>
+          <span className='text-2xl font-bold'>{data?.total}</span>
+          <p className='text-muted-foreground text-sm'>Total Actions</p>
         </div>
       </div>
     </div>

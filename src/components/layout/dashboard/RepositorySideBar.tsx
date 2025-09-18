@@ -1,12 +1,14 @@
+import { useMemo, useState } from "react";
+
+import { useQuery } from "@tanstack/react-query";
+import { LoaderIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Repository } from "@/types";
-import { useQuery } from "@tanstack/react-query";
-import { LoaderIcon } from "lucide-react";
-import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+
 interface RepositorySidebarProps {
   selectedRepo: string;
   onChange: (repo: string) => void;
@@ -16,7 +18,7 @@ export function RepositorySidebar({
   selectedRepo,
   onChange,
 }: RepositorySidebarProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { data, isLoading, isError, error } = useQuery<Repository[]>({
     queryKey: ["repositories"],
     queryFn: async () => {
@@ -44,46 +46,45 @@ export function RepositorySidebar({
 
   if (isLoading) {
     return (
-      <div className="flex h-full w-full items-center justify-center">
-        <LoaderIcon className="size-8 animate-spin" />
+      <div className='flex h-full w-full items-center justify-center'>
+        <LoaderIcon className='size-8 animate-spin' />
       </div>
     );
   }
   if (isError) {
     return (
-      <div className="flex h-full w-full items-center justify-center">
+      <div className='flex h-full w-full items-center justify-center'>
         <p>Error: {(error as Error).message}</p>
       </div>
     );
   }
 
-
   return (
-    <aside className="w-64 border-r p-4  flex flex-col">
-      <h2 className="mb-3 text-lg font-semibold">{t("Repositories")}</h2>
-      <div className="flex-1 space-y-2 overflow-y-auto">
+    <aside className='flex w-64 flex-col  border-r p-4'>
+      <h2 className='mb-3 text-lg font-semibold'>{t("Repositories")}</h2>
+      <div className='flex-1 space-y-2 overflow-y-auto'>
         <Button
-          variant="ghost"
+          variant='ghost'
           className={cn(
             "w-full justify-start text-left",
             selectedRepo === "all" &&
-              "rounded-md bg-gradient-to-r hover:text-white from-purple-500 to-purple-600 text-white"
+              "rounded-md bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:text-white"
           )}
           onClick={() => onChange("all")}
         >
-          {t("All repositories")}   
+          {t("All repositories")}
         </Button>
 
-        {pagedData.map((repo) => {
+        {pagedData.map(repo => {
           const isSelected = selectedRepo === repo.gh_repository_id;
           return (
             <Button
               key={repo.gh_repository_id}
-              variant="ghost"
+              variant='ghost'
               className={cn(
                 "w-full justify-start text-left",
                 isSelected
-                  ? "rounded-md hover:text-white bg-gradient-to-r from-purple-500 to-purple-600 text-white"
+                  ? "rounded-md bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:text-white"
                   : "hover:bg-muted/50"
               )}
               onClick={() => onChange(repo.gh_repository_id)}
@@ -94,23 +95,23 @@ export function RepositorySidebar({
         })}
       </div>
 
-      <div className="mt-4 flex items-center justify-between">
+      <div className='mt-4 flex items-center justify-between'>
         <Button
-          variant="outline"
-          size="sm"
+          variant='outline'
+          size='sm'
           disabled={page === 0}
-          onClick={() => setPage((p) => Math.max(0, p - 1))}
+          onClick={() => setPage(p => Math.max(0, p - 1))}
         >
           Previous
         </Button>
-        <span className="text-sm text-muted-foreground">
+        <span className='text-muted-foreground text-sm'>
           {page + 1} / {totalPages || 1}
         </span>
         <Button
-          variant="outline"
-          size="sm"
+          variant='outline'
+          size='sm'
           disabled={page + 1 >= totalPages}
-          onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+          onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
         >
           Next
         </Button>

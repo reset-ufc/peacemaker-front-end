@@ -2,18 +2,33 @@ import { memo, useCallback } from "react";
 
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { enUS } from "date-fns/locale";
-import { AlertTriangle, ChevronRight, Clock, ExternalLink, FileText, Github, Reply, User } from "lucide-react";
+import {
+  AlertTriangle,
+  ChevronRight,
+  Clock,
+  ExternalLink,
+  FileText,
+  Github,
+  Reply,
+  User,
+} from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import type { Comment, CommentState, Suggestion } from "@/types";
 
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useTranslation } from "react-i18next";
 import { SuggestionList } from "./SuggestionList";
+
 interface CommentDetailProps {
   comment: Comment;
   showDetails: boolean;
@@ -55,10 +70,10 @@ export const CommentDetail = memo(function CommentDetail({
   }, []);
 
   const getToxicityColor = (score: number) => {
-    if (score < 0.3) return "bg-green-500"
-    if (score < 0.7) return "bg-yellow-500"
-    return "bg-red-500"
-  }
+    if (score < 0.3) return "bg-green-500";
+    if (score < 0.7) return "bg-yellow-500";
+    return "bg-red-500";
+  };
 
   const getFormattedTime = useCallback((dateString: string) => {
     try {
@@ -71,7 +86,7 @@ export const CommentDetail = memo(function CommentDetail({
 
   const toxicityLevel = getToxicityLevel(comment.toxicity_score);
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <div className='flex h-full flex-col'>
@@ -127,11 +142,16 @@ export const CommentDetail = memo(function CommentDetail({
           <Badge variant='outline'>{comment.classification}</Badge>
           {(comment.parent || comment.parentType) && (
             <Badge variant='outline'>
-              {comment.parentType ? comment.parentType : String(comment.parent?.type)}
+              {comment.parentType
+                ? comment.parentType
+                : String(comment.parent?.type)}
             </Badge>
           )}
           {comment.editAttempts >= 1 && (
-            <Badge variant='outline' className='border-red-500/20 bg-red-500/10 text-red-500'>
+            <Badge
+              variant='outline'
+              className='border-red-500/20 bg-red-500/10 text-red-500'
+            >
               ⚠️ Needs Attention
             </Badge>
           )}
@@ -163,154 +183,197 @@ export const CommentDetail = memo(function CommentDetail({
 
             {/* Original Comment */}
             <div className='mb-4 overflow-x-auto'>
-                <div className="flex flex-col gap-2 ml-2">
-                  <span className="text-muted-foreground">{t("Original Comment")}:</span>
-                  <pre className='font-sans text-base whitespace-pre-wrap'>
-                    {comment.content}
-                  </pre>
-                </div>
+              <div className='ml-2 flex flex-col gap-2'>
+                <span className='text-muted-foreground'>
+                  {t("Original Comment")}:
+                </span>
+                <pre className='font-sans text-base whitespace-pre-wrap'>
+                  {comment.content}
+                </pre>
+              </div>
 
               {/* Show Details Button - More Discrete */}
               <Button
                 variant='ghost'
                 size='sm'
-                className='cursor-pointer mt-4 rounded-lg'
+                className='mt-4 cursor-pointer rounded-lg'
                 onClick={onToggleDetails}
               >
-                <span>{showDetails ? t("Hide details") : t("Show details")}</span>
+                <span>
+                  {showDetails ? t("Hide details") : t("Show details")}
+                </span>
                 <ChevronRight
                   className={`h-3 w-3 transition-transform ${showDetails ? "rotate-180" : ""}`}
                 />
               </Button>
             </div>
             {/* Sidebar with Details */}
-                {showDetails && (
-                  <div className="p-4">
-                    <div className="grid gap-6 md:grid-cols-2">
-                      {/* User Information */}
-                      <div className="space-y-4">
-                        <div className="rounded-lg border bg-card p-3 shadow-sm">
-                          <h4 className="mb-2 flex items-center gap-2 text-xs font-medium uppercase text-muted-foreground">
-                            <User className="h-3.5 w-3.5" />
-                            {t("User")}
-                          </h4>
-                          <div className="flex items-center gap-3">
-                            <Avatar className="h-8 w-8 ring-2 ring-primary/10">
-                              <div className="flex h-full w-full items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
-                                {comment.gh_comment_sender_login.charAt(0).toUpperCase()}
-                              </div>
-                            </Avatar>
-                            <div>
-                              <div className="font-medium">{comment.gh_comment_sender_login}</div>
-                              <div className="text-xs text-muted-foreground">GitHub User</div>
-                            </div>
+            {showDetails && (
+              <div className='p-4'>
+                <div className='grid gap-6 md:grid-cols-2'>
+                  {/* User Information */}
+                  <div className='space-y-4'>
+                    <div className='bg-card rounded-lg border p-3 shadow-sm'>
+                      <h4 className='text-muted-foreground mb-2 flex items-center gap-2 text-xs font-medium uppercase'>
+                        <User className='h-3.5 w-3.5' />
+                        {t("User")}
+                      </h4>
+                      <div className='flex items-center gap-3'>
+                        <Avatar className='ring-primary/10 h-8 w-8 ring-2'>
+                          <div className='bg-primary text-primary-foreground flex h-full w-full items-center justify-center rounded-full text-xs'>
+                            {comment.gh_comment_sender_login
+                              .charAt(0)
+                              .toUpperCase()}
                           </div>
-                        </div>
-
-                        {/* Repository Information */}
-                        <div className="rounded-lg border bg-card p-3 shadow-sm">
-                          <h4 className="mb-2 flex items-center gap-2 text-xs font-medium uppercase text-muted-foreground">
-                            <Github className="h-3.5 w-3.5" />
-                            {t("Repository")}
-                          </h4>
-                          <div className="space-y-1">
-                            <div className="font-medium">{comment.gh_repository_name}</div>
-                            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                              <span>{comment.gh_repository_owner}</span>
-                            </div>
+                        </Avatar>
+                        <div>
+                          <div className='font-medium'>
+                            {comment.gh_comment_sender_login}
                           </div>
-                        </div>
-
-                        {/* Date Information */}
-                        <div className="rounded-lg border bg-card p-3 shadow-sm">
-                          <h4 className="mb-2 flex items-center gap-2 text-xs font-medium uppercase text-muted-foreground">
-                            <Clock className="h-3.5 w-3.5" />
-                            {t("DATE")}
-                          </h4>
-                          <div className="space-y-1">
-                            <div className="font-medium">{getFormattedDate(comment.created_at)}</div>
-                            <div className="text-xs text-muted-foreground">{getFormattedTime(comment.created_at)}</div>
+                          <div className='text-muted-foreground text-xs'>
+                            GitHub User
                           </div>
                         </div>
                       </div>
+                    </div>
 
-                      <div className="space-y-4">
-                        {/* Toxicity Score */}
-                        <div className="rounded-lg border bg-card p-3 shadow-sm">
-                          <h4 className="mb-2 flex items-center gap-2 text-xs font-medium uppercase text-muted-foreground">
-                            <AlertTriangle className="h-3.5 w-3.5" />
-                            {t("Toxicity Score")}
-                          </h4>
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                              <Badge
-                                variant={
-                                  comment.toxicity_score > 0.7
-                                    ? "destructive"
-                                    : comment.toxicity_score > 0.3
-                                      ? "secondary"
-                                      : "default"
-                                }
-                              >
-                                {getToxicityLevel(comment.toxicity_score)}
-                              </Badge>
-                              <span className="text-sm font-medium">{Math.round(comment.toxicity_score * 100)}%</span>
-                            </div>
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Progress
-                                     value={comment.toxicity_score * 100}
-                                     className="h-2"
-                                     indicatorClassName={cn("transition-all", getToxicityColor(comment.toxicity_score))}
-                                    />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Toxicity: {Math.round(comment.toxicity_score * 100)}%</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </div>
+                    {/* Repository Information */}
+                    <div className='bg-card rounded-lg border p-3 shadow-sm'>
+                      <h4 className='text-muted-foreground mb-2 flex items-center gap-2 text-xs font-medium uppercase'>
+                        <Github className='h-3.5 w-3.5' />
+                        {t("Repository")}
+                      </h4>
+                      <div className='space-y-1'>
+                        <div className='font-medium'>
+                          {comment.gh_repository_name}
                         </div>
+                        <div className='text-muted-foreground flex items-center gap-1 text-xs'>
+                          <span>{comment.gh_repository_owner}</span>
+                        </div>
+                      </div>
+                    </div>
 
-                        {/* Parent Information (if exists) */}
-                        {comment.parent && (
-                          <div className="rounded-lg border bg-card p-3 shadow-sm">
-                            <h4 className="mb-2 flex items-center gap-2 text-xs font-medium uppercase text-muted-foreground">
-                              <FileText className="h-3.5 w-3.5" />
-                              {t("Related")} {comment.parent.type}
-                            </h4>
-                            <div className="space-y-3">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-1.5">
-                                  <span className="font-medium">#{comment.parent.gh_parent_number}</span>
-                                  <Badge variant={comment.parent.is_open === "open" ? "outline" : "secondary"}>
-                                    {comment.parent.is_open}
-                                  </Badge>
-                                </div>
-                              </div>
-                              <div className="text-sm line-clamp-2">{comment.parent.title}</div>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Original Comment Link */}
-                        <div className="rounded-lg border bg-card p-3 shadow-sm">
-                          <h4 className="mb-2 flex items-center gap-2 text-xs font-medium uppercase text-muted-foreground">
-                            <Github className="h-3.5 w-3.5" />
-                            {t("Original Comment")}
-                          </h4>
-                          <Button variant="outline" size="sm" className="w-full justify-between" asChild>
-                            <a href={comment.comment_html_url} target="_blank" rel="noreferrer">
-                              <span>{t("View on GitHub")}</span>
-                              <ExternalLink className="h-3.5 w-3.5" />
-                            </a>
-                          </Button>
+                    {/* Date Information */}
+                    <div className='bg-card rounded-lg border p-3 shadow-sm'>
+                      <h4 className='text-muted-foreground mb-2 flex items-center gap-2 text-xs font-medium uppercase'>
+                        <Clock className='h-3.5 w-3.5' />
+                        {t("DATE")}
+                      </h4>
+                      <div className='space-y-1'>
+                        <div className='font-medium'>
+                          {getFormattedDate(comment.created_at)}
+                        </div>
+                        <div className='text-muted-foreground text-xs'>
+                          {getFormattedTime(comment.created_at)}
                         </div>
                       </div>
                     </div>
                   </div>
-                )}
+
+                  <div className='space-y-4'>
+                    {/* Toxicity Score */}
+                    <div className='bg-card rounded-lg border p-3 shadow-sm'>
+                      <h4 className='text-muted-foreground mb-2 flex items-center gap-2 text-xs font-medium uppercase'>
+                        <AlertTriangle className='h-3.5 w-3.5' />
+                        {t("Toxicity Score")}
+                      </h4>
+                      <div className='space-y-2'>
+                        <div className='flex items-center justify-between'>
+                          <Badge
+                            variant={
+                              comment.toxicity_score > 0.7
+                                ? "destructive"
+                                : comment.toxicity_score > 0.3
+                                  ? "secondary"
+                                  : "default"
+                            }
+                          >
+                            {getToxicityLevel(comment.toxicity_score)}
+                          </Badge>
+                          <span className='text-sm font-medium'>
+                            {Math.round(comment.toxicity_score * 100)}%
+                          </span>
+                        </div>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Progress
+                                value={comment.toxicity_score * 100}
+                                className='h-2'
+                                indicatorClassName={cn(
+                                  "transition-all",
+                                  getToxicityColor(comment.toxicity_score)
+                                )}
+                              />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>
+                                Toxicity:{" "}
+                                {Math.round(comment.toxicity_score * 100)}%
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    </div>
+
+                    {/* Parent Information (if exists) */}
+                    {comment.parent && (
+                      <div className='bg-card rounded-lg border p-3 shadow-sm'>
+                        <h4 className='text-muted-foreground mb-2 flex items-center gap-2 text-xs font-medium uppercase'>
+                          <FileText className='h-3.5 w-3.5' />
+                          {t("Related")} {comment.parent.type}
+                        </h4>
+                        <div className='space-y-3'>
+                          <div className='flex items-center justify-between'>
+                            <div className='flex items-center gap-1.5'>
+                              <span className='font-medium'>
+                                #{comment.parent.gh_parent_number}
+                              </span>
+                              <Badge
+                                variant={
+                                  comment.parent.is_open === "open"
+                                    ? "outline"
+                                    : "secondary"
+                                }
+                              >
+                                {comment.parent.is_open}
+                              </Badge>
+                            </div>
+                          </div>
+                          <div className='line-clamp-2 text-sm'>
+                            {comment.parent.title}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Original Comment Link */}
+                    <div className='bg-card rounded-lg border p-3 shadow-sm'>
+                      <h4 className='text-muted-foreground mb-2 flex items-center gap-2 text-xs font-medium uppercase'>
+                        <Github className='h-3.5 w-3.5' />
+                        {t("Original Comment")}
+                      </h4>
+                      <Button
+                        variant='outline'
+                        size='sm'
+                        className='w-full justify-between'
+                        asChild
+                      >
+                        <a
+                          href={comment.comment_html_url}
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          <span>{t("View on GitHub")}</span>
+                          <ExternalLink className='h-3.5 w-3.5' />
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Edited Content (if available) */}
             {commentState?.editedContent && (

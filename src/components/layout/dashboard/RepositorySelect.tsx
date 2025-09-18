@@ -1,7 +1,14 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { api } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { LoaderIcon } from "lucide-react";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { api } from "@/lib/api";
 
 interface Repository {
   gh_repository_id: string;
@@ -13,7 +20,10 @@ interface RepositorySelectProps {
   onChange: (repo: string) => void;
 }
 
-export function RepositorySelect({ selectedRepo, onChange }: RepositorySelectProps) {
+export function RepositorySelect({
+  selectedRepo,
+  onChange,
+}: RepositorySelectProps) {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["repositories"],
     queryFn: async () => {
@@ -26,7 +36,7 @@ export function RepositorySelect({ selectedRepo, onChange }: RepositorySelectPro
   });
 
   if (isLoading) {
-    return <LoaderIcon className="size-4 animate-spin" />;
+    return <LoaderIcon className='size-4 animate-spin' />;
   }
   if (isError) {
     return <div>Error: {(error as Error).message}</div>;
@@ -34,12 +44,12 @@ export function RepositorySelect({ selectedRepo, onChange }: RepositorySelectPro
 
   return (
     <Select value={selectedRepo} onValueChange={onChange}>
-      <SelectTrigger className="w-40">
-        <SelectValue placeholder="All repositories" />
+      <SelectTrigger className='w-40'>
+        <SelectValue placeholder='All repositories' />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="all">All repositories</SelectItem>
-        {data?.map((repo) => (
+        <SelectItem value='all'>All repositories</SelectItem>
+        {data?.map(repo => (
           <SelectItem key={repo.gh_repository_id} value={repo.gh_repository_id}>
             {repo.name}
           </SelectItem>

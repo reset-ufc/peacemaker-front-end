@@ -1,12 +1,13 @@
-import { motion, useInView } from "framer-motion"
-import { useRef } from "react"
-import { useTranslation } from "react-i18next"
+import { useRef } from "react";
+
+import { motion, useInView } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 type TeamMember = {
-  name: string
-  role: string
-  imageUrl: string
-}
+  name: string;
+  role: string;
+  imageUrl: string;
+};
 
 const team: Array<TeamMember> = [
   {
@@ -49,41 +50,48 @@ const team: Array<TeamMember> = [
     role: "Develop Advocate",
     imageUrl: "https://avatars.githubusercontent.com/u/11181914?v=4",
   },
-]
+];
 
 export function Team() {
-  const containerRef = useRef(null)
-  const titleRef = useRef(null)
-  const isInView = useInView(containerRef, { once: true, amount: 0.2 })
-  const isTitleInView = useInView(titleRef, { once: true, amount: 0.5 })
+  const containerRef = useRef(null);
+  const titleRef = useRef(null);
+  const isInView = useInView(containerRef, { once: true, amount: 0.2 });
+  const isTitleInView = useInView(titleRef, { once: true, amount: 0.5 });
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
-    <section className="relative py-24 sm:py-32 overflow-hidden" ref={containerRef}>
+    <section
+      className='relative overflow-hidden py-24 sm:py-32'
+      ref={containerRef}
+    >
       {/* Background elements */}
-      <motion.div className="absolute inset-0 -z-10 opacity-[0.08]">
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-gradient-to-r from-violet-600 to-purple-500 blur-3xl" />
-        <div className="absolute bottom-1/3 left-1/3 w-64 h-64 rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-700 blur-3xl" />
+      <motion.div className='absolute inset-0 -z-10 opacity-[0.08]'>
+        <div className='absolute top-1/4 right-1/4 h-96 w-96 rounded-full bg-gradient-to-r from-violet-600 to-purple-500 blur-3xl' />
+        <div className='absolute bottom-1/3 left-1/3 h-64 w-64 rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-700 blur-3xl' />
       </motion.div>
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto grid gap-x-8 gap-y-20 xl:grid-cols-3">
+      <div className='mx-auto max-w-7xl px-6 lg:px-8'>
+        <div className='mx-auto grid gap-x-8 gap-y-20 xl:grid-cols-3'>
           <motion.div
             ref={titleRef}
-            className="max-w-2xl"
+            className='max-w-2xl'
             initial={{ opacity: 0, y: 40 }}
-            animate={isTitleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+            animate={
+              isTitleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }
+            }
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
-              animate={isTitleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              animate={
+                isTitleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+              }
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
+              className='text-foreground text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl'
             >
-              <span className="inline-block">{t("Our")}</span>{" "}
-              <span className="inline-block bg-gradient-to-r from-violet-600 to-purple-500 bg-clip-text text-transparent">
+              <span className='inline-block'>{t("Our")}</span>{" "}
+              <span className='inline-block bg-gradient-to-r from-violet-600 to-purple-500 bg-clip-text text-transparent'>
                 {t("Team")}
               </span>
             </motion.h2>
@@ -92,15 +100,17 @@ export function Team() {
               initial={{ opacity: 0 }}
               animate={isTitleInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-muted-foreground mt-6 text-lg leading-8"
+              className='text-muted-foreground mt-6 text-lg leading-8'
             >
-              {t("We are a team of passionate and dedicated individuals who are committed to making a positive impact on the world through their work. We believe in the power of technology to bring people together and create a better future.")}
+              {t(
+                "We are a team of passionate and dedicated individuals who are committed to making a positive impact on the world through their work. We believe in the power of technology to bring people together and create a better future."
+              )}
             </motion.p>
           </motion.div>
 
           <motion.ul
-            className="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2"
-            initial="hidden"
+            className='grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2'
+            initial='hidden'
             animate={isInView ? "visible" : "hidden"}
             variants={{
               hidden: { opacity: 0 },
@@ -112,41 +122,45 @@ export function Team() {
               },
             }}
           >
-            {team.map((person) => (
+            {team.map(person => (
               <motion.li
                 key={person.name}
                 variants={{
                   hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+                  },
                 }}
                 whileHover={{ y: -5 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <div className="group relative flex items-center gap-x-6 rounded-2xl border border-violet-500/10 bg-card/50 backdrop-blur-sm p-4 shadow-md hover:shadow-xl transition-all duration-300">
+                <div className='group bg-card/50 relative flex items-center gap-x-6 rounded-2xl border border-violet-500/10 p-4 shadow-md backdrop-blur-sm transition-all duration-300 hover:shadow-xl'>
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    className="relative"
+                    className='relative'
                   >
                     <img
                       alt={`Photo of ${person.name}`}
                       src={person.imageUrl || "/placeholder.svg"}
-                      className="h-20 w-20 rounded-full object-cover border-2 border-violet-500/20 shadow-md group-hover:border-violet-500/40 transition-all duration-300"
+                      className='h-20 w-20 rounded-full border-2 border-violet-500/20 object-cover shadow-md transition-all duration-300 group-hover:border-violet-500/40'
                     />
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-violet-600/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className='absolute inset-0 rounded-full bg-gradient-to-br from-violet-600/20 to-purple-500/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
                   </motion.div>
 
                   <div>
-                    <h3 className="text-foreground text-lg leading-7 font-semibold tracking-tight group-hover:text-violet-500 transition-colors duration-300">
+                    <h3 className='text-foreground text-lg leading-7 font-semibold tracking-tight transition-colors duration-300 group-hover:text-violet-500'>
                       {person.name}
                     </h3>
-                    <p className="text-violet-500 text-sm leading-6 font-medium mt-1 flex items-center">
-                      <span className="inline-block w-2 h-2 rounded-full bg-gradient-to-r from-violet-600 to-purple-500 mr-2"></span>
+                    <p className='mt-1 flex items-center text-sm leading-6 font-medium text-violet-500'>
+                      <span className='mr-2 inline-block h-2 w-2 rounded-full bg-gradient-to-r from-violet-600 to-purple-500'></span>
                       {person.role}
                     </p>
                   </div>
 
-                  <motion.div className="absolute -z-10 inset-0 rounded-2xl bg-gradient-to-br from-violet-600/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <motion.div className='absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-violet-600/5 to-purple-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
                 </div>
               </motion.li>
             ))}
@@ -154,5 +168,5 @@ export function Team() {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -23,12 +23,16 @@ export function MetricCard({
   }
 
   return (
-    <div className='flex items-start gap-4 p-3 border-r last:border-r-0'>
+    <div className='flex items-start gap-4 border-r p-3 last:border-r-0'>
       <div className='flex flex-col'>
-        <span className='text-muted-foreground text-sm max-w-[200px]'>{label}</span>
+        <span className='text-muted-foreground max-w-[200px] text-sm'>
+          {label}
+        </span>
         <span className='text-2xl font-bold'>{value}</span>
         {description && (
-          <span className='text-muted-foreground text-xs min-w-[140px]'>{description}</span>
+          <span className='text-muted-foreground min-w-[140px] text-xs'>
+            {description}
+          </span>
         )}
         {variation !== undefined && (
           <span className={cn("text-xs font-medium", variationColor)}>

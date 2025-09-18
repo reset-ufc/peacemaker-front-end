@@ -1,4 +1,17 @@
 // src/components/layout/dashboard/RadarFlagsChart.tsx
+import { useState } from "react";
+
+import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import {
+  PolarAngleAxis,
+  PolarGrid,
+  Radar,
+  RadarChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+
 import { Loader } from "@/components/ui/loadingSpinner";
 import {
   Select,
@@ -9,17 +22,6 @@ import {
 } from "@/components/ui/select";
 import { api } from "@/lib/api";
 import { RadarFlagsItem } from "@/types";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import {
-  PolarAngleAxis,
-  PolarGrid,
-  Radar,
-  RadarChart,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
 
 export function RadarFlagsChart({ repo }: { repo?: string }) {
   const [period, setPeriod] = useState("24h");
@@ -53,9 +55,9 @@ export function RadarFlagsChart({ repo }: { repo?: string }) {
 
   const apiData: RadarFlagsItem[] = data || [];
 
-  const radarData = selectedCategories.map((category) => {
+  const radarData = selectedCategories.map(category => {
     const found = apiData.find(
-      (item) => item.category?.toLowerCase() === category?.toLowerCase()
+      item => item.category?.toLowerCase() === category?.toLowerCase()
     );
     return {
       category,
@@ -63,7 +65,9 @@ export function RadarFlagsChart({ repo }: { repo?: string }) {
     };
   });
 
-  const containerClass = isLoading ? "filter blur-sm transition duration-300" : "";
+  const containerClass = isLoading
+    ? "filter blur-sm transition duration-300"
+    : "";
 
   const { t } = useTranslation();
 
@@ -76,51 +80,57 @@ export function RadarFlagsChart({ repo }: { repo?: string }) {
   };
 
   return (
-    <div className="border p-4 rounded shadow mb-8">
-      <div className="flex items-center justify-between mb-4">
+    <div className='mb-8 rounded border p-4 shadow'>
+      <div className='mb-4 flex items-center justify-between'>
         <div>
-          <h3 className="text-lg font-semibold mb-1">{t("Incivility Categories")}</h3>
-          <p className="text-sm text-muted-foreground">{t("Distribution by classification")}</p>
+          <h3 className='mb-1 text-lg font-semibold'>
+            {t("Incivility Categories")}
+          </h3>
+          <p className='text-muted-foreground text-sm'>
+            {t("Distribution by classification")}
+          </p>
         </div>
         <Select value={period} onValueChange={setPeriod}>
-          <SelectTrigger className="w-32">
-            <SelectValue placeholder="Select period" />
+          <SelectTrigger className='w-32'>
+            <SelectValue placeholder='Select period' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="24h">24h</SelectItem>
-            <SelectItem value="7d">7d</SelectItem>
-            <SelectItem value="30d">30d</SelectItem>
-            <SelectItem value="1y">1y</SelectItem>
+            <SelectItem value='24h'>24h</SelectItem>
+            <SelectItem value='7d'>7d</SelectItem>
+            <SelectItem value='30d'>30d</SelectItem>
+            <SelectItem value='1y'>1y</SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div className={containerClass} style={{ width: "100%", height: 300 }}>
-        {isLoading ? <Loader /> : (
+        {isLoading ? (
+          <Loader />
+        ) : (
           <ResponsiveContainer>
             <RadarChart data={radarData}>
               <PolarGrid />
-              <PolarAngleAxis dataKey="category" stroke="#6b7280" />
+              <PolarAngleAxis dataKey='category' stroke='#6b7280' />
               <Radar
-                name="Incivility"
-                dataKey="value"
-                stroke="#8884d8"
-                fill="#8884d8"
+                name='Incivility'
+                dataKey='value'
+                stroke='#8884d8'
+                fill='#8884d8'
                 fillOpacity={0.4}
                 animationDuration={500}
                 animationBegin={0}
-                animationEasing="ease-out"
+                animationEasing='ease-out'
               />
               <Tooltip />
             </RadarChart>
           </ResponsiveContainer>
         )}
       </div>
-      <div className="mt-4 flex justify-center flex-wrap gap-2">
-        {defaultCategories.map((category) => (
+      <div className='mt-4 flex flex-wrap justify-center gap-2'>
+        {defaultCategories.map(category => (
           <button
             key={category}
             onClick={() => toggleCategory(category)}
-            className={`px-3 py-1 rounded-full cursor-pointer text-sm transition-all duration-300 ease-in-out transform hover:scale-105 ${
+            className={`transform cursor-pointer rounded-full px-3 py-1 text-sm transition-all duration-300 ease-in-out hover:scale-105 ${
               selectedCategories.includes(category)
                 ? "bg-primary text-primary-foreground shadow-md"
                 : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
