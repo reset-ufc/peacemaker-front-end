@@ -1,11 +1,8 @@
-import mdx from '@mdx-js/rollup';
+import mdx from "@mdx-js/rollup";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import * as dotenv from "dotenv";
 import path from "node:path";
 import { defineConfig } from "vite";
-
-dotenv.config();
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -13,12 +10,9 @@ export default defineConfig({
     react(),
     tailwindcss(),
     mdx({
-      providerImportSource: '@mdx-js/react',
+      providerImportSource: "@mdx-js/react",
     }),
   ],
-  define: {
-    "process.env": process.env,
-  },
 
   build: {
     cssMinify: "esbuild",
